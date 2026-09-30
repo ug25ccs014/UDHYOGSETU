@@ -1,5 +1,6 @@
 'use client'
 
+import PageHeader from '@/components/PageHeader'
 import { useParams } from 'next/navigation'
 import { Compass, Loader2, Landmark, RefreshCw } from 'lucide-react'
 import { useService } from '@/hooks/useApi'
@@ -69,19 +70,7 @@ export default function ServiceDetailPage() {
     <div className="space-y-6">
       <Breadcrumbs items={[{ label: 'Explore Services', href: '/dashboard/explore' }, { label: service.name }]} />
       <div className="flex items-start justify-between flex-wrap gap-4">
-        <div>
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center">
-              <Compass className="w-6 h-6 text-blue-600" />
-            </div>
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900 capitalize">{service.name}</h1>
-              <p className="mt-1 text-gray-600 capitalize">
-                {service.category} · {service.authority}
-              </p>
-            </div>
-          </div>
-        </div>
+        <PageHeader icon={Compass} capitalize title={service.name} purpose={`${service.category} · ${service.authority}`} />
         <div className="flex flex-wrap gap-2">
           {service.is_demo && <Badge variant="warning">Prototype</Badge>}
           <Badge variant="info">{service.integration?.label || String(service.application_mode).replace('_', ' ')}</Badge>

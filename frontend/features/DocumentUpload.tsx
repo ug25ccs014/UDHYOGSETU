@@ -78,7 +78,7 @@ export function DocumentUploadComponent({ projectId, onUploadComplete }: Documen
       </div>
 
       {uploading && (
-        <div className="flex items-center gap-2 text-sm text-blue-600 px-4 py-3 bg-blue-50 border border-blue-200 rounded-lg">
+        <div className="flex items-center gap-2 text-sm text-blue-600 px-4 py-3 bg-blue-50 border border-blue-200 rounded-xl">
           <Loader2 className="w-4 h-4 animate-spin" />
           Uploading documents... This may take a moment.
         </div>
@@ -94,7 +94,7 @@ export function DocumentUploadComponent({ projectId, onUploadComplete }: Documen
               return (
                 <div
                   key={index}
-                  className="flex items-center justify-between p-4 bg-white border border-gray-200 rounded-lg"
+                  className="flex items-center justify-between p-4 bg-white border border-gray-200 rounded-xl"
                 >
                   <div className="flex items-center space-x-3 min-w-0">
                     <FileText className="w-5 h-5 text-gray-500 shrink-0" />

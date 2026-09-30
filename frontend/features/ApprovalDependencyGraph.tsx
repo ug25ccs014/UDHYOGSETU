@@ -32,7 +32,7 @@ interface DependencyGraphProps {
 type RoadmapView = 'roadmap' | 'map'
 
 const STATUS_META: Record<string, { label: string; dot: string; border: string; bg: string }> = {
-  APPROVED: { label: 'Approved', dot: 'bg-emerald-500', border: 'border-emerald-200', bg: 'bg-emerald-50' },
+  APPROVED: { label: 'Approved', dot: 'bg-teal-600', border: 'border-teal-100', bg: 'bg-teal-50' },
   SUBMITTED: { label: 'Submitted', dot: 'bg-blue-500', border: 'border-blue-200', bg: 'bg-blue-50' },
   UNDER_REVIEW: { label: 'Under review', dot: 'bg-amber-500', border: 'border-amber-200', bg: 'bg-amber-50' },
   QUERY_RAISED: { label: 'Query raised', dot: 'bg-red-500', border: 'border-red-200', bg: 'bg-red-50' },
@@ -42,10 +42,10 @@ const STATUS_META: Record<string, { label: string; dot: string; border: string; 
 }
 
 const EXECUTION_META: Record<string, { label: string; className: string }> = {
-  READY: { label: 'Ready', className: 'bg-green-100 text-green-800' },
+  READY: { label: 'Ready', className: 'bg-teal-100 text-teal-700' },
   BLOCKED: { label: 'Blocked', className: 'bg-slate-100 text-slate-700' },
   IN_PROGRESS: { label: 'In progress', className: 'bg-blue-100 text-blue-800' },
-  COMPLETED: { label: 'Completed', className: 'bg-emerald-100 text-emerald-800' },
+  COMPLETED: { label: 'Completed', className: 'bg-teal-100 text-teal-700' },
 }
 
 function statusMeta(status: string) {
@@ -204,18 +204,18 @@ export function ApprovalDependencyGraph({ projectId }: DependencyGraphProps) {
               UDYOGSETU uses configured approval dependencies and processing durations to show which approvals can be prepared in parallel and which ones must wait for another approval.
             </p>
           </div>
-          <div className="flex rounded-lg border border-gray-200 bg-white p-1">
+          <div className="flex rounded-xl border border-gray-200 bg-white p-1">
             <button
               type="button"
               onClick={() => setView('roadmap')}
-              className={`rounded-md px-3 py-2 text-sm font-medium ${view === 'roadmap' ? 'bg-blue-600 text-white' : 'text-gray-600 hover:bg-gray-50'}`}
+              className={`rounded-lg px-3 py-2 text-sm font-medium ${view === 'roadmap' ? 'bg-blue-600 text-white' : 'text-gray-600 hover:bg-gray-50'}`}
             >
               Roadmap
             </button>
             <button
               type="button"
               onClick={() => setView('map')}
-              className={`rounded-md px-3 py-2 text-sm font-medium ${view === 'map' ? 'bg-blue-600 text-white' : 'text-gray-600 hover:bg-gray-50'}`}
+              className={`rounded-lg px-3 py-2 text-sm font-medium ${view === 'map' ? 'bg-blue-600 text-white' : 'text-gray-600 hover:bg-gray-50'}`}
             >
               Dependency Map
             </button>
@@ -235,7 +235,7 @@ export function ApprovalDependencyGraph({ projectId }: DependencyGraphProps) {
         <>
           <div className="rounded-xl border border-blue-200 bg-blue-50 p-4 sm:p-5">
             <div className="flex items-start gap-3">
-              <div className="rounded-lg bg-blue-600 p-2 text-white">
+              <div className="rounded-xl bg-blue-600 p-2 text-white">
                 <Zap className="h-5 w-5" />
               </div>
               <div>
@@ -251,7 +251,7 @@ export function ApprovalDependencyGraph({ projectId }: DependencyGraphProps) {
           {criticalNames.length > 0 && (
             <div className="rounded-xl border border-yellow-200 bg-yellow-50 p-4 sm:p-5">
               <div className="flex items-start gap-3">
-                <div className="rounded-lg bg-yellow-400 p-2 text-yellow-950">
+                <div className="rounded-xl bg-yellow-400 p-2 text-yellow-950">
                   <GitBranch className="h-5 w-5" />
                 </div>
                 <div className="min-w-0">
@@ -282,7 +282,7 @@ export function ApprovalDependencyGraph({ projectId }: DependencyGraphProps) {
                         {group.can_run_in_parallel ? 'These approvals can be prepared in parallel because they have no unmet dependency between them.' : 'This stage contains a dependency chain that must be respected.'}
                       </p>
                     </div>
-                    <span className={`inline-flex w-fit items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold ${group.can_run_in_parallel ? 'bg-green-100 text-green-800' : 'bg-slate-100 text-slate-700'}`}>
+                    <span className={`inline-flex w-fit items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold ${group.can_run_in_parallel ? 'bg-teal-100 text-teal-700' : 'bg-slate-100 text-slate-700'}`}>
                       {group.can_run_in_parallel ? <Zap className="h-3.5 w-3.5" /> : <LockKeyhole className="h-3.5 w-3.5" />}
                       {group.can_run_in_parallel ? 'Parallel' : 'Dependency stage'}
                     </span>
@@ -347,10 +347,10 @@ export function ApprovalDependencyGraph({ projectId }: DependencyGraphProps) {
                     return (
                       <div key={item.id} className="grid grid-cols-[210px_1fr] items-center gap-3">
                         <div className="truncate text-sm text-gray-700" title={item.name}>{item.name}</div>
-                        <div className="relative h-9 rounded-lg bg-slate-100">
+                        <div className="relative h-9 rounded-xl bg-slate-100">
                           <div className="absolute inset-y-0 left-0 w-px bg-slate-300" />
                           <div
-                            className={`absolute inset-y-1 flex items-center rounded-md px-2 text-[10px] font-semibold ${item.critical ? 'bg-yellow-400 text-yellow-950' : 'bg-blue-500 text-white'}`}
+                            className={`absolute inset-y-1 flex items-center rounded-lg px-2 text-[10px] font-semibold ${item.critical ? 'bg-yellow-400 text-yellow-950' : 'bg-blue-500 text-white'}`}
                             style={{ left: `${Math.min(left, 97)}%`, width: `${Math.max(Math.min(width, 100 - Math.min(left, 97)), 2)}%` }}
                             title={`${item.name}: day ${item.start_day}–${item.finish_day}`}
                           >
@@ -396,10 +396,10 @@ export function ApprovalDependencyGraph({ projectId }: DependencyGraphProps) {
 
 function Metric({ label, value, icon: Icon, emphasis = false }: { label: string; value: string | number; icon: React.ElementType; emphasis?: boolean }) {
   return (
-    <div className={`rounded-xl border p-3 sm:p-4 ${emphasis ? 'border-green-200 bg-green-50' : 'border-gray-200 bg-white'}`}>
-      <Icon className={`h-4 w-4 ${emphasis ? 'text-green-700' : 'text-blue-600'}`} />
+    <div className={`rounded-xl border p-3 sm:p-4 ${emphasis ? 'border-teal-100 bg-teal-50' : 'border-gray-200 bg-white'}`}>
+      <Icon className={`h-4 w-4 ${emphasis ? 'text-teal-700' : 'text-blue-600'}`} />
       <p className="mt-2 text-[11px] font-medium uppercase tracking-wide text-gray-500">{label}</p>
-      <p className={`mt-1 text-lg font-bold sm:text-xl ${emphasis ? 'text-green-800' : 'text-gray-900'}`}>{value}</p>
+      <p className={`mt-1 text-lg font-bold sm:text-xl ${emphasis ? 'text-teal-700' : 'text-gray-900'}`}>{value}</p>
     </div>
   )
 }

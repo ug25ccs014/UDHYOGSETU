@@ -1,5 +1,7 @@
 'use client'
 
+import { useLanguage } from '@/lib/language'
+import PageHeader from '@/components/PageHeader'
 import { useMemo, useState } from 'react'
 import Link from 'next/link'
 import {
@@ -138,24 +140,24 @@ function SchemeCard({ projectId, scheme }: { projectId: string; scheme: Incentiv
 
       <CardContent className="space-y-5">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-          <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
+          <div className="rounded-xl border border-gray-200 bg-gray-50 p-4">
             <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">Readiness</p>
             <p className="mt-1 text-2xl font-bold text-gray-900">{scheme.readiness_score}%</p>
             <p className="mt-1 text-xs text-gray-600">Preparation completeness</p>
           </div>
-          <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
+          <div className="rounded-xl border border-gray-200 bg-gray-50 p-4">
             <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">Documents</p>
             <p className="mt-1 text-2xl font-bold text-gray-900">{documentReady}/{documentRequired}</p>
             <p className="mt-1 text-xs text-gray-600">Required documents ready</p>
           </div>
-          <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
+          <div className="rounded-xl border border-gray-200 bg-gray-50 p-4">
             <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">Application period</p>
             <p className="mt-1 text-sm font-semibold text-gray-900 line-clamp-2">{scheme.application_period || 'Not configured'}</p>
             <p className="mt-1 text-xs text-gray-600">Confirm current official window</p>
           </div>
         </div>
 
-        <div className="rounded-lg border border-blue-100 bg-blue-50 p-4">
+        <div className="rounded-xl border border-blue-100 bg-blue-50 p-4">
           <div className="flex items-start gap-3">
             <Sparkles className="w-5 h-5 text-blue-600 mt-0.5" />
             <div>
@@ -174,7 +176,7 @@ function SchemeCard({ projectId, scheme }: { projectId: string; scheme: Incentiv
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {scheme.eligibility.criteria.map((criterion) => (
-              <div key={criterion.key} className="rounded-lg border border-gray-200 p-4">
+              <div key={criterion.key} className="rounded-xl border border-gray-200 p-4">
                 <div className="flex items-center justify-between gap-3">
                   <p className="text-sm font-medium text-gray-900">{criterion.label}</p>
                   <Badge variant={criterionVariant(criterion.status)}>{criterion.status.replace('_', ' ')}</Badge>
@@ -193,7 +195,7 @@ function SchemeCard({ projectId, scheme }: { projectId: string; scheme: Incentiv
             </Link>
           </div>
           {scheme.required_documents.length === 0 ? (
-            <div className="rounded-lg border border-dashed border-gray-300 p-5 text-sm text-gray-600">
+            <div className="rounded-xl border border-dashed border-gray-300 p-5 text-sm text-gray-600">
               No required documents are configured for this catalogue entry.
             </div>
           ) : (
@@ -201,7 +203,7 @@ function SchemeCard({ projectId, scheme }: { projectId: string; scheme: Incentiv
               {scheme.required_documents.map((doc) => {
                 const effectiveSelected = selected.includes(doc.document_id || '')
                 return (
-                  <div key={`${scheme.scheme_id}-${doc.requirement}`} className="rounded-lg border border-gray-200 p-4">
+                  <div key={`${scheme.scheme_id}-${doc.requirement}`} className="rounded-xl border border-gray-200 p-4">
                     <div className="flex items-start gap-3">
                       <div className="pt-0.5">
                         {doc.status === 'READY' && doc.document_id ? (
@@ -254,7 +256,7 @@ function SchemeCard({ projectId, scheme }: { projectId: string; scheme: Incentiv
             <div className="space-y-2">
               {scheme.benefits.map((benefit) => (
                 <div key={benefit} className="flex items-start gap-2 text-sm text-gray-700">
-                  <BadgeCheck className="w-4 h-4 text-green-600 mt-0.5 shrink-0" />
+                  <BadgeCheck className="w-4 h-4 text-teal-600 mt-0.5 shrink-0" />
                   {benefit}
                 </div>
               ))}
@@ -281,7 +283,7 @@ function SchemeCard({ projectId, scheme }: { projectId: string; scheme: Incentiv
                   <input
                     value={externalReference}
                     onChange={(event) => setExternalReference(event.target.value)}
-                    className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm"
+                    className="mt-1 w-full rounded-xl border border-gray-300 px-3 py-2 text-sm"
                     placeholder="e.g. acknowledgement number"
                   />
                 </div>
@@ -328,6 +330,7 @@ function SchemeCard({ projectId, scheme }: { projectId: string; scheme: Incentiv
 }
 
 export default function IncentiveReadinessCenter() {
+  const { t } = useLanguage()
   const params = useParams()
   const projectId = params.projectId as string
   const { data: project, isLoading: projectLoading } = useProject(projectId)
@@ -361,28 +364,17 @@ export default function IncentiveReadinessCenter() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
-          <div>
-            <div className="flex items-center gap-2 flex-wrap">
-              <h1 className="text-3xl font-bold text-gray-900">Incentive Application Readiness</h1>
-              <Badge variant="info">Advisory</Badge>
-            </div>
-            <p className="mt-2 text-gray-600">
-              Prepare scheme applications using your project profile and reusable documents without repeatedly entering the same information.
-            </p>
-            <p className="mt-2 text-xs text-gray-500">
-              Project: {project?.name || data.project_name}
-            </p>
-          </div>
+      <PageHeader
+        icon={Gift}
+        step={t('pg.incStep', { name: project?.name || data.project_name })}
+        title={t('pg.incTitle')}
+        purpose={t('pg.incPurpose')}
+        action={
           <Link href={`/dashboard/${projectId}`}>
-            <Button variant="outline" size="sm">
-              <ArrowUpRight className="w-4 h-4 mr-2" />
-              Command Center
-            </Button>
+            <Button variant="outline" size="sm"><ArrowUpRight className="w-4 h-4" /> {t('pg.commandCenter')}</Button>
           </Link>
-        </div>
-      </div>
+        }
+      />
 
       <div className="rounded-xl border border-blue-100 bg-blue-50 p-5">
         <div className="flex items-start gap-3">

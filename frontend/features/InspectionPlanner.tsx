@@ -1,5 +1,7 @@
 'use client'
 
+import { useLanguage } from '@/lib/language'
+import PageHeader from '@/components/PageHeader'
 import { useMemo, useState } from 'react'
 import Link from 'next/link'
 import {
@@ -96,7 +98,7 @@ function VisitCard({ visit, officerMode, onStatus, onReschedule, onChecklistTogg
         </div>
 
         {visit.assigned_officer_name && (
-          <div className="rounded-lg bg-gray-50 border border-gray-200 p-3 text-sm">
+          <div className="rounded-xl bg-gray-50 border border-gray-200 p-3 text-sm">
             <span className="text-gray-500">Assigned officer: </span>
             <span className="font-medium text-gray-900">{visit.assigned_officer_name}</span>
           </div>
@@ -106,7 +108,7 @@ function VisitCard({ visit, officerMode, onStatus, onReschedule, onChecklistTogg
           <p className="text-sm font-semibold text-gray-900 mb-2">Applications covered</p>
           <div className="space-y-2">
             {visit.approvals.map((approval) => (
-              <div key={approval.id} className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 rounded-lg border border-gray-100 p-3">
+              <div key={approval.id} className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 rounded-xl border border-gray-100 p-3">
                 <div>
                   <p className="text-sm font-medium text-gray-900">{approval.name}</p>
                   <p className="text-xs text-gray-500">{approval.department} · {approval.application_id}</p>
@@ -118,7 +120,7 @@ function VisitCard({ visit, officerMode, onStatus, onReschedule, onChecklistTogg
         </div>
 
         {visit.checklist.length > 0 && (
-          <div className="rounded-lg border border-gray-200 p-3">
+          <div className="rounded-xl border border-gray-200 p-3">
             <div className="flex items-center gap-2 mb-2">
               <ShieldCheck className="w-4 h-4 text-blue-600" />
               <p className="text-sm font-semibold text-gray-900">Inspection checklist</p>
@@ -132,7 +134,7 @@ function VisitCard({ visit, officerMode, onStatus, onReschedule, onChecklistTogg
                   disabled={!officerMode || visit.status !== 'SCHEDULED'}
                   className="flex w-full items-start gap-2 text-left text-sm text-gray-700 disabled:cursor-default"
                 >
-                  {item.completed ? <CheckCircle2 className="w-4 h-4 text-green-600 mt-0.5" /> : <span className="mt-1 h-2 w-2 rounded-full bg-gray-300" />}
+                  {item.completed ? <CheckCircle2 className="w-4 h-4 text-teal-600 mt-0.5" /> : <span className="mt-1 h-2 w-2 rounded-full bg-gray-300" />}
                   <span className={item.completed ? 'line-through text-gray-500' : ''}>{item.label}</span>
                 </button>
               ))}
@@ -141,7 +143,7 @@ function VisitCard({ visit, officerMode, onStatus, onReschedule, onChecklistTogg
         )}
 
         {visit.coordination_note && (
-          <div className="rounded-lg bg-blue-50 border border-blue-100 p-3 text-sm text-blue-900">
+          <div className="rounded-xl bg-blue-50 border border-blue-100 p-3 text-sm text-blue-900">
             <div className="flex items-start gap-2">
               <Users className="w-4 h-4 mt-0.5" />
               <span>{visit.coordination_note}</span>
@@ -152,11 +154,11 @@ function VisitCard({ visit, officerMode, onStatus, onReschedule, onChecklistTogg
         {officerMode && visit.status === 'SCHEDULED' && onStatus && (
           <div className="space-y-3">
             {editing && setEditStart && setEditEnd && onSaveReschedule && onCancelReschedule && (
-              <div className="rounded-lg border border-blue-100 bg-blue-50 p-3">
+              <div className="rounded-xl border border-blue-100 bg-blue-50 p-3">
                 <p className="text-xs font-semibold uppercase tracking-wide text-blue-900">Reschedule visit</p>
                 <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <input type="datetime-local" value={editStart} onChange={(e) => setEditStart(e.target.value)} className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm" />
-                  <input type="datetime-local" value={editEnd} onChange={(e) => setEditEnd(e.target.value)} className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm" />
+                  <input type="datetime-local" value={editStart} onChange={(e) => setEditStart(e.target.value)} className="rounded-xl border border-gray-300 bg-white px-3 py-2 text-sm" />
+                  <input type="datetime-local" value={editEnd} onChange={(e) => setEditEnd(e.target.value)} className="rounded-xl border border-gray-300 bg-white px-3 py-2 text-sm" />
                 </div>
                 <div className="mt-3 flex flex-wrap gap-2">
                   <Button size="sm" onClick={onSaveReschedule}>Save new time</Button>
@@ -184,6 +186,7 @@ function VisitCard({ visit, officerMode, onStatus, onReschedule, onChecklistTogg
 }
 
 export default function InspectionPlanner() {
+  const { t } = useLanguage()
   const user = getSessionUser()
   const officerMode = ['OFFICER', 'ADMIN'].includes((user?.role || '').toUpperCase())
 
@@ -310,25 +313,19 @@ export default function InspectionPlanner() {
 
   return (
     <div className="space-y-8">
-      <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Inspection Planner</h1>
-          <p className="mt-1 text-gray-600">
-            {officerMode
-              ? 'Schedule, coordinate and track on-site visits across inspection-requiring approvals.'
-              : 'See scheduled site visits and prepare the documents your inspector may need.'}
-          </p>
-        </div>
-        <div className="flex gap-2">
-          <Badge variant="outline">Prototype scheduling</Badge>
-          <Badge variant="outline">No live government API required</Badge>
-        </div>
-      </div>
+      <PageHeader
+        icon={CalendarDays}
+        title={t('pg.inspTitle')}
+        purpose={officerMode
+          ? t('pg.inspOfficer')
+          : t('pg.inspUser')}
+        action={<><Badge variant="outline">Prototype scheduling</Badge><Badge variant="outline">No live government API required</Badge></>}
+      />
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <Card><CardContent className="p-5"><p className="text-sm text-gray-500">Upcoming visits</p><p className="mt-1 text-3xl font-bold text-blue-600">{upcomingVisits.length}</p></CardContent></Card>
-        <Card><CardContent className="p-5"><p className="text-sm text-gray-500">Coordinated visits</p><p className="mt-1 text-3xl font-bold text-green-600">{coordinatedCount}</p></CardContent></Card>
-        <Card><CardContent className="p-5"><p className="text-sm text-gray-500">Open coordination opportunities</p><p className="mt-1 text-3xl font-bold text-amber-600">{suggestions.length}</p></CardContent></Card>
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
+        <Card><CardContent className="p-5"><p className="text-sm text-gray-500">Upcoming visits</p><p className="mt-1 text-3xl font-extrabold tracking-tight text-blue-600">{upcomingVisits.length}</p></CardContent></Card>
+        <Card><CardContent className="p-5"><p className="text-sm text-gray-500">Coordinated visits</p><p className="mt-1 text-3xl font-extrabold tracking-tight text-teal-600">{coordinatedCount}</p></CardContent></Card>
+        <Card><CardContent className="p-5"><p className="text-sm text-gray-500">Open coordination opportunities</p><p className="mt-1 text-3xl font-extrabold tracking-tight text-amber-600">{suggestions.length}</p></CardContent></Card>
       </div>
 
       {officerMode && suggestions.length > 0 && (
@@ -368,12 +365,12 @@ export default function InspectionPlanner() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <label className="text-sm font-medium text-gray-700">Start<input type="datetime-local" value={start} onChange={(e) => setStart(e.target.value)} className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2" /></label>
-              <label className="text-sm font-medium text-gray-700">End<input type="datetime-local" value={end} onChange={(e) => setEnd(e.target.value)} className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2" /></label>
-              <label className="text-sm font-medium text-gray-700">Assigned officer<select value={officerId} onChange={(e) => setOfficerId(e.target.value)} className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2"><option value="">Assign to me</option>{officers.map((o: any) => <option key={o.id} value={o.id}>{o.name} · {o.email}</option>)}</select></label>
-              <label className="text-sm font-medium text-gray-700">Location<input value={location} onChange={(e) => setLocation(e.target.value)} className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2" /></label>
+              <label className="text-sm font-medium text-gray-700">Start<input type="datetime-local" value={start} onChange={(e) => setStart(e.target.value)} className="mt-1 w-full rounded-xl border border-gray-300 px-3 py-2" /></label>
+              <label className="text-sm font-medium text-gray-700">End<input type="datetime-local" value={end} onChange={(e) => setEnd(e.target.value)} className="mt-1 w-full rounded-xl border border-gray-300 px-3 py-2" /></label>
+              <label className="text-sm font-medium text-gray-700">Assigned officer<select value={officerId} onChange={(e) => setOfficerId(e.target.value)} className="mt-1 w-full rounded-xl border border-gray-300 px-3 py-2"><option value="">Assign to me</option>{officers.map((o: any) => <option key={o.id} value={o.id}>{o.name} · {o.email}</option>)}</select></label>
+              <label className="text-sm font-medium text-gray-700">Location<input value={location} onChange={(e) => setLocation(e.target.value)} className="mt-1 w-full rounded-xl border border-gray-300 px-3 py-2" /></label>
             </div>
-            <label className="text-sm font-medium text-gray-700 block">Notes<textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={3} className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2" placeholder="Operational notes for the visit" /></label>
+            <label className="text-sm font-medium text-gray-700 block">Notes<textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={3} className="mt-1 w-full rounded-xl border border-gray-300 px-3 py-2" placeholder="Operational notes for the visit" /></label>
             {error && <p className="text-sm text-red-600">{error}</p>}
             <div className="flex flex-wrap gap-2">
               <Button onClick={submitSchedule} disabled={schedule.isPending}>{schedule.isPending ? 'Scheduling...' : 'Schedule visit'}</Button>

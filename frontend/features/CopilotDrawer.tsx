@@ -133,7 +133,7 @@ export default function CopilotDrawer({ projectId }: CopilotDrawerProps) {
                 onClick={() => setMessages([])}
                 aria-label={t('copilot.clear')}
                 title={t('copilot.clear')}
-                className="grid h-9 w-9 place-items-center rounded-lg text-cream/80 hover:bg-white/10"
+                className="grid h-9 w-9 place-items-center rounded-xl text-cream/80 hover:bg-white/10"
               >
                 <Trash2 className="h-4 w-4" />
               </button>
@@ -142,7 +142,7 @@ export default function CopilotDrawer({ projectId }: CopilotDrawerProps) {
               type="button"
               onClick={() => setOpen(false)}
               aria-label={t('copilot.close')}
-              className="grid h-9 w-9 place-items-center rounded-lg text-cream/80 hover:bg-white/10"
+              className="grid h-9 w-9 place-items-center rounded-xl text-cream/80 hover:bg-white/10"
             >
               <X className="h-5 w-5" />
             </button>

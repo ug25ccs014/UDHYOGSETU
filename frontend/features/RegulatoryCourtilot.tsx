@@ -76,7 +76,7 @@ export function RegulatoryCourtilot({ projectId }: RegulatoryCourtilotProps) {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-4 lg:h-[620px]">
       {/* Chat Panel */}
-      <div className="flex flex-col border border-gray-200 rounded-lg overflow-hidden bg-white h-[65vh] max-h-[620px] lg:h-auto">
+      <div className="flex flex-col border border-gray-200 rounded-xl overflow-hidden bg-white h-[65vh] max-h-[620px] lg:h-auto">
         {/* Messages */}
         <div className="flex-1 overflow-y-auto p-6 space-y-4">
           {messages.length === 0 ? (
@@ -94,7 +94,7 @@ export function RegulatoryCourtilot({ projectId }: RegulatoryCourtilotProps) {
                   <button
                     key={idx}
                     onClick={() => setInput(question)}
-                    className="text-left p-3 border border-gray-200 rounded-lg hover:bg-gray-50 hover:border-blue-300 transition"
+                    className="text-left p-3 border border-gray-200 rounded-xl hover:bg-gray-50 hover:border-blue-300 transition"
                   >
                     <p className="text-sm text-gray-700">{question}</p>
                   </button>
@@ -108,7 +108,7 @@ export function RegulatoryCourtilot({ projectId }: RegulatoryCourtilotProps) {
                 className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
               >
                 <div
-                  className={`max-w-[80%] px-4 py-3 rounded-lg ${
+                  className={`max-w-[80%] px-4 py-3 rounded-xl ${
                     message.type === 'user'
                       ? 'bg-blue-600 text-white rounded-br-none'
                       : 'bg-gray-100 text-gray-900 rounded-bl-none'
@@ -132,7 +132,7 @@ export function RegulatoryCourtilot({ projectId }: RegulatoryCourtilotProps) {
           )}
           {regQuery.isPending && (
             <div className="flex justify-start">
-              <div className="bg-gray-100 px-4 py-3 rounded-lg rounded-bl-none">
+              <div className="bg-gray-100 px-4 py-3 rounded-xl rounded-bl-none">
                 <div className="flex space-x-2">
                   <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
                   <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-100"></div>
@@ -153,7 +153,7 @@ export function RegulatoryCourtilot({ projectId }: RegulatoryCourtilotProps) {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder={t('copilot.phPage')}
-              className="flex-1 px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="flex-1 px-4 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               disabled={regQuery.isPending}
             />
             <Button type="submit" aria-label={t('copilot.sendLabel')} disabled={regQuery.isPending || !input.trim()}>
@@ -171,7 +171,7 @@ export function RegulatoryCourtilot({ projectId }: RegulatoryCourtilotProps) {
       </div>
 
       {/* Sources Panel */}
-      <div className="flex flex-col border border-gray-200 rounded-lg overflow-hidden bg-white max-h-80 lg:max-h-none">
+      <div className="flex flex-col border border-gray-200 rounded-xl overflow-hidden bg-white max-h-80 lg:max-h-none">
         <div className="px-4 py-3 border-b border-gray-200 bg-gray-50">
           <h3 className="font-semibold text-gray-900">{t('copilot.panelTitle')}</h3>
         </div>
@@ -187,7 +187,7 @@ export function RegulatoryCourtilot({ projectId }: RegulatoryCourtilotProps) {
               return unique
                         }, [] as any[])
             .map((source: any, idx: number) => (
-              <div key={idx} className="p-3 border border-gray-200 rounded-lg hover:shadow-md transition">
+              <div key={idx} className="p-3 border border-gray-200 rounded-xl hover:shadow-md transition">
                 <h4 className="font-medium text-gray-900 text-sm">{source.title}</h4>
                 <p className="text-xs text-gray-600 mt-1 truncate">{source.url || t('copilot.noLink')}</p>
                 {source.url ? (
@@ -195,7 +195,7 @@ export function RegulatoryCourtilot({ projectId }: RegulatoryCourtilotProps) {
                     href={source.url}
                     target="_blank"
                     rel="noreferrer"
-                    className="mt-2 inline-flex h-8 w-full items-center justify-center rounded-md border-2 border-gray-300 bg-white px-3 text-sm font-medium text-gray-800 transition-colors hover:border-gray-400 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                    className="mt-2 inline-flex h-8 w-full items-center justify-center rounded-lg border-2 border-gray-300 bg-white px-3 text-sm font-medium text-gray-800 transition-colors hover:border-gray-400 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
                   >
                     {t('copilot.viewSource')}
                   </a>

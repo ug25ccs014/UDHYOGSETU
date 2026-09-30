@@ -22,7 +22,7 @@ export default function DashboardRouteError({ reset }: { error: Error & { digest
             <RefreshCw className="mr-2 h-4 w-4" />
             {t('states.tryAgain')}
           </Button>
-          <Link href="/dashboard" className="inline-flex h-10 items-center justify-center rounded-md border-2 border-gray-300 bg-white px-4 text-base font-medium text-gray-800 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">
+          <Link href="/dashboard" className="inline-flex h-10 items-center justify-center rounded-lg border-2 border-gray-300 bg-white px-4 text-base font-medium text-gray-800 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">
             <Home className="mr-2 h-4 w-4" />
             {t('states.dashboard')}
           </Link>

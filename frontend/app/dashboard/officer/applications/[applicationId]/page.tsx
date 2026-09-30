@@ -1,8 +1,10 @@
 'use client'
 
-import { useParams, useRouter } from 'next/navigation'
+import { useLanguage } from '@/lib/language'
+import PageHeader, { BackLink } from '@/components/PageHeader'
+import { useParams } from 'next/navigation'
 import { useQueryClient } from '@tanstack/react-query'
-import { ArrowLeft, FileText, Loader2, RefreshCw } from 'lucide-react'
+import { FileText, Loader2, RefreshCw } from 'lucide-react'
 import {
   useOfficerApplication,
   useOfficerTransition,
@@ -33,8 +35,8 @@ function statusVariant(status: string): 'success' | 'danger' | 'default' | 'warn
 }
 
 export default function OfficerApplicationDetailPage() {
+  const { t } = useLanguage()
   const params = useParams()
-  const router = useRouter()
   const queryClient = useQueryClient()
   const applicationId = params.applicationId as string
 
@@ -95,18 +97,17 @@ export default function OfficerApplicationDetailPage() {
   return (
     <div className="space-y-6">
       <Breadcrumbs items={[{ label: 'Officer Applications', href: '/dashboard/officer/applications' }, { label: app.approval_name }]} />
-      <Button variant="ghost" size="sm" onClick={() => router.push('/dashboard/officer/applications')}>
-        <ArrowLeft className="w-4 h-4 mr-2" />
-        Back to Review Queue
-      </Button>
+      <BackLink href="/dashboard/officer/applications">{t('pg.backQueue')}</BackLink>
 
-      {actionError && <div role="alert" className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">{actionError}</div>}
+      {actionError && <div role="alert" className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">{actionError}</div>}
 
       <div className="flex items-start justify-between flex-wrap gap-4">
-        <div className="flex items-center gap-2">
-          <h1 className="text-3xl font-bold text-gray-900 capitalize">{app.approval_name}</h1>
-          <Badge variant={statusVariant(app.status)}>{app.status.replace('_', ' ')}</Badge>
-        </div>
+        <PageHeader
+          capitalize
+          title={app.approval_name}
+          purpose={t('pg.officerHint')}
+          badge={<Badge variant={statusVariant(app.status)}>{app.status.replace('_', ' ')}</Badge>}
+        />
         <div className="flex gap-2">
           <Button variant="outline" size="sm" onClick={runSync} disabled={sync.isPending}>
             <RefreshCw className="w-4 h-4 mr-2" />
@@ -116,7 +117,7 @@ export default function OfficerApplicationDetailPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-white border border-gray-200 rounded-lg p-6 space-y-3">
+        <div className="bg-white border border-gray-200 rounded-xl p-6 space-y-3">
           <h3 className="font-semibold text-gray-900">Entrepreneur</h3>
           <p className="font-medium text-gray-900">{app.owner_name}</p>
           <p className="text-sm text-gray-600">{app.owner_email}</p>
@@ -129,7 +130,7 @@ export default function OfficerApplicationDetailPage() {
           </div>
         </div>
 
-        <div className="bg-white border border-gray-200 rounded-lg p-6 col-span-2">
+        <div className="bg-white border border-gray-200 rounded-xl p-6 col-span-2">
           <h3 className="font-semibold text-gray-900 mb-3">Government Sync</h3>
           {app.government && (app.government.system || app.government.government_application_id) ? (
             <div className="space-y-2 text-sm">

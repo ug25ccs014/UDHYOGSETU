@@ -30,7 +30,7 @@ export default function GovernmentIntegrationNotice({ integration }: { integrati
       <CardHeader className="pb-3">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <CardTitle className="flex items-center gap-2 text-base">
-            {simulated ? <TestTube2 className="h-5 w-5 text-amber-700" /> : authorized ? <ShieldCheck className="h-5 w-5 text-emerald-700" /> : <Info className="h-5 w-5 text-blue-700" />}
+            {simulated ? <TestTube2 className="h-5 w-5 text-amber-700" /> : authorized ? <ShieldCheck className="h-5 w-5 text-teal-700" /> : <Info className="h-5 w-5 text-blue-700" />}
             Integration handling
           </CardTitle>
           <Badge variant={simulated ? 'warning' : authorized ? 'success' : 'outline'}>
@@ -45,7 +45,7 @@ export default function GovernmentIntegrationNotice({ integration }: { integrati
           <div><span className="text-slate-500">Status</span><div className="font-medium text-slate-900">{integration.status || '—'}</div></div>
         </div>
 
-        <div className="rounded-lg border border-white/80 bg-white/70 p-3 leading-6">
+        <div className="rounded-xl border border-white/80 bg-white/70 p-3 leading-6">
           {integration.note}
         </div>
 

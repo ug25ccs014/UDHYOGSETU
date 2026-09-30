@@ -1,5 +1,7 @@
 'use client'
 
+import { useLanguage } from '@/lib/language'
+import PageHeader from '@/components/PageHeader'
 import { useState } from 'react'
 import Link from 'next/link'
 import { ClipboardList, Loader2, ArrowRight, RefreshCw } from 'lucide-react'
@@ -29,6 +31,7 @@ function statusVariant(status: string): 'success' | 'danger' | 'default' | 'warn
 const filters = ['ALL', 'NOT_STARTED', 'DRAFT', 'SUBMITTED', 'UNDER_REVIEW', 'INSPECTION', 'QUERY_RAISED', 'APPROVED', 'REJECTED']
 
 export default function OfficerApplicationsPage() {
+  const { t } = useLanguage()
   const [status, setStatus] = useState('')
   const [q, setQ] = useState('')
   const { data, isLoading, isError, refetch } = useOfficerApplications({
@@ -40,18 +43,17 @@ export default function OfficerApplicationsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Application Review</h1>
-          <p className="mt-1 text-gray-600">
-            Review and act on applications submitted by entrepreneurs
-          </p>
-        </div>
-        <Button variant="outline" size="sm" onClick={() => refetch()} className="w-full sm:w-auto">
-          <RefreshCw className="w-4 h-4 mr-2" />
-          Refresh
-        </Button>
-      </div>
+      <PageHeader
+        icon={ClipboardList}
+        title={t('pg.reviewTitle')}
+        purpose={t('pg.reviewPurpose')}
+        action={
+          <Button variant="outline" size="sm" onClick={() => refetch()}>
+            <RefreshCw className="w-4 h-4" />
+            {t('pg.refresh')}
+          </Button>
+        }
+      />
 
       <div className="flex flex-wrap gap-2 items-center">
         {filters.map((f) => (
@@ -86,7 +88,7 @@ export default function OfficerApplicationsPage() {
           </CardContent>
         </Card>
       ) : (
-        <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+        <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead className="bg-gray-50 border-b border-gray-200">

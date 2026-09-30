@@ -1,5 +1,6 @@
 'use client'
 
+import PageHeader from '@/components/PageHeader'
 import Link from 'next/link'
 import {
   ArrowRight,
@@ -56,23 +57,23 @@ function ApplicationCard({ application, audience }: { application: SlaRiskApplic
         </div>
 
         <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
-          <div className="rounded-lg bg-gray-50 p-3">
+          <div className="rounded-xl bg-gray-50 p-3">
             <p className="text-xs text-gray-500">Risk score</p>
             <p className="mt-1 text-lg font-semibold text-gray-900">{application.risk_score}/100</p>
           </div>
-          <div className="rounded-lg bg-gray-50 p-3">
+          <div className="rounded-xl bg-gray-50 p-3">
             <p className="text-xs text-gray-500">Remaining</p>
             <p className="mt-1 text-lg font-semibold text-gray-900">
               {application.sla.days_remaining}d
             </p>
           </div>
-          <div className="rounded-lg bg-gray-50 p-3">
+          <div className="rounded-xl bg-gray-50 p-3">
             <p className="text-xs text-gray-500">Query</p>
             <p className="mt-1 text-lg font-semibold text-gray-900">
               {application.signals.query_open_count || '—'}
             </p>
           </div>
-          <div className="rounded-lg bg-gray-50 p-3">
+          <div className="rounded-xl bg-gray-50 p-3">
             <p className="text-xs text-gray-500">Documents</p>
             <p className="mt-1 text-lg font-semibold text-gray-900">
               {application.signals.document_issue_count || '—'}
@@ -80,7 +81,7 @@ function ApplicationCard({ application, audience }: { application: SlaRiskApplic
           </div>
         </div>
 
-        <div className="mt-4 flex flex-col gap-3 rounded-lg border border-gray-100 bg-white">
+        <div className="mt-4 flex flex-col gap-3 rounded-xl border border-gray-100 bg-white">
           <div className="flex items-center justify-between px-4 pt-3">
             <span className="text-sm font-medium text-gray-700">Why this needs attention</span>
             <span className="text-xs text-gray-500">
@@ -149,17 +150,7 @@ export default function SlaRiskCommandCenter({ data, loading, error, title = 'SL
 
   return (
     <div className="space-y-6">
-      <div>
-        <div className="flex flex-wrap items-center gap-3">
-          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-50">
-            <Gauge className="h-6 w-6 text-blue-600" />
-          </div>
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">{title}</h1>
-            <p className="mt-1 text-gray-600">{subtitle}</p>
-          </div>
-        </div>
-      </div>
+      <PageHeader icon={Gauge} title={title} purpose={subtitle} />
 
       <Card className="border-blue-100 bg-blue-50/60">
         <CardContent className="flex flex-col gap-2 p-5 sm:flex-row sm:items-center sm:justify-between">
@@ -177,16 +168,16 @@ export default function SlaRiskCommandCenter({ data, loading, error, title = 'SL
       </Card>
 
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <Card><CardHeader className="p-5 pb-2"><CardTitle className="text-sm text-gray-500">Applications</CardTitle></CardHeader><CardContent className="p-5 pt-1"><p className="text-3xl font-bold text-gray-900">{data.total_applications}</p><p className="mt-1 text-xs text-gray-500">in this view</p></CardContent></Card>
-        <Card><CardHeader className="p-5 pb-2"><CardTitle className="text-sm text-gray-500">High risk</CardTitle></CardHeader><CardContent className="p-5 pt-1"><p className="text-3xl font-bold text-red-600">{data.high_risk}</p><p className="mt-1 text-xs text-gray-500">needs priority review</p></CardContent></Card>
-        <Card><CardHeader className="p-5 pb-2"><CardTitle className="text-sm text-gray-500">SLA at risk</CardTitle></CardHeader><CardContent className="p-5 pt-1"><p className="text-3xl font-bold text-yellow-600">{data.sla_at_risk}</p><p className="mt-1 text-xs text-gray-500">75%+ of window used</p></CardContent></Card>
-        <Card><CardHeader className="p-5 pb-2"><CardTitle className="text-sm text-gray-500">Breached</CardTitle></CardHeader><CardContent className="p-5 pt-1"><p className="text-3xl font-bold text-red-600">{data.sla_breached}</p><p className="mt-1 text-xs text-gray-500">past configured SLA</p></CardContent></Card>
+        <Card><CardHeader className="p-5 pb-2"><CardTitle className="text-sm text-gray-500">Applications</CardTitle></CardHeader><CardContent className="p-5 pt-1"><p className="text-3xl font-extrabold tracking-tight text-gray-900">{data.total_applications}</p><p className="mt-1 text-xs text-gray-500">in this view</p></CardContent></Card>
+        <Card><CardHeader className="p-5 pb-2"><CardTitle className="text-sm text-gray-500">High risk</CardTitle></CardHeader><CardContent className="p-5 pt-1"><p className="text-3xl font-extrabold tracking-tight text-red-600">{data.high_risk}</p><p className="mt-1 text-xs text-gray-500">needs priority review</p></CardContent></Card>
+        <Card><CardHeader className="p-5 pb-2"><CardTitle className="text-sm text-gray-500">SLA at risk</CardTitle></CardHeader><CardContent className="p-5 pt-1"><p className="text-3xl font-extrabold tracking-tight text-yellow-600">{data.sla_at_risk}</p><p className="mt-1 text-xs text-gray-500">75%+ of window used</p></CardContent></Card>
+        <Card><CardHeader className="p-5 pb-2"><CardTitle className="text-sm text-gray-500">Breached</CardTitle></CardHeader><CardContent className="p-5 pt-1"><p className="text-3xl font-extrabold tracking-tight text-red-600">{data.sla_breached}</p><p className="mt-1 text-xs text-gray-500">past configured SLA</p></CardContent></Card>
       </div>
 
       {data.applications.length === 0 ? (
         <Card>
           <CardContent className="py-14 text-center">
-            <CheckCircle2 className="mx-auto h-10 w-10 text-green-600" />
+            <CheckCircle2 className="mx-auto h-10 w-10 text-teal-600" />
             <p className="mt-4 font-medium text-gray-900">No active SLA risk items</p>
             <p className="mt-1 text-sm text-gray-500">Applications will appear here when they have a live SLA or operational risk signal.</p>
           </CardContent>

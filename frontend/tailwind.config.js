@@ -57,3 +57,7 @@ module.exports = {
   },
   plugins: [],
 }
+
+// slate-* / violet-* classes used in older panels follow the theme scales too
+module.exports.theme.extend.colors.slate = module.exports.theme.extend.colors.gray
+module.exports.theme.extend.colors.violet = module.exports.theme.extend.colors.blue

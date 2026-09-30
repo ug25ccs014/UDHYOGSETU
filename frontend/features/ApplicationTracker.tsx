@@ -76,7 +76,7 @@ export function ApplicationTracker({ projectId }: ApplicationTrackerProps) {
 
   const stats = [
     { label: 'Total Applications', value: approvals.length, color: 'text-blue-600' },
-    { label: 'Approved', value: approved, color: 'text-green-600' },
+    { label: 'Approved', value: approved, color: 'text-teal-600' },
     { label: 'Under Review', value: underReview, color: 'text-blue-600' },
     { label: 'Submitted', value: submitted, color: 'text-yellow-600' },
   ]
@@ -85,9 +85,9 @@ export function ApplicationTracker({ projectId }: ApplicationTrackerProps) {
     <div className="space-y-6">
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {stats.map((stat, idx) => (
-          <div key={idx} className="bg-white border border-gray-200 rounded-lg p-5">
+          <div key={idx} className="bg-white border border-gray-200 rounded-xl p-5">
             <div className="text-sm text-gray-600">{stat.label}</div>
-            <div className={`text-3xl font-bold mt-1 ${stat.color}`}>{stat.value}</div>
+            <div className={`text-3xl font-extrabold tracking-tight mt-1 ${stat.color}`}>{stat.value}</div>
           </div>
         ))}
       </div>
@@ -105,7 +105,7 @@ export function ApplicationTracker({ projectId }: ApplicationTrackerProps) {
         ))}
       </div>
 
-      <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+      <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="bg-gray-50 border-b border-gray-200">

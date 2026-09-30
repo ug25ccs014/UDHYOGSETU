@@ -38,7 +38,7 @@ export default function OfflineStatusBanner() {
             {conflictDrafts > 0 ? `${conflictDrafts} draft${conflictDrafts === 1 ? '' : 's'} need conflict review.` : `${pendingDrafts} local draft${pendingDrafts === 1 ? '' : 's'} waiting to sync.`}
           </span>
         </div>
-        <Link href="/dashboard/applications" className="inline-flex h-8 shrink-0 items-center rounded-md border-2 border-gray-300 bg-white px-3 text-sm font-medium text-gray-800 transition-colors hover:border-gray-400 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">Review drafts</Link>
+        <Link href="/dashboard/applications" className="inline-flex h-8 shrink-0 items-center rounded-lg border-2 border-gray-300 bg-white px-3 text-sm font-medium text-gray-800 transition-colors hover:border-gray-400 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">Review drafts</Link>
       </div>
     </div>
   )

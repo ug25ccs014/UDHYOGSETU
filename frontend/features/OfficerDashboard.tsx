@@ -169,7 +169,7 @@ export function OfficerDashboard({ user }: OfficerDashboardProps) {
       <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <div className="flex flex-wrap items-center gap-2">
-            <h1 className="text-3xl font-bold text-gray-900">Officer Command Center</h1>
+            <h1 className="page-title">Officer Command Center</h1>
             <Badge variant="outline">Live operational data</Badge>
           </div>
           <p className="mt-2 text-gray-600">
@@ -223,7 +223,7 @@ export function OfficerDashboard({ user }: OfficerDashboardProps) {
                 <Input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search applicant, company, application..." className="pl-9" />
               </div>
               <div className="flex gap-2">
-                <select value={risk} onChange={(event) => setRisk(event.target.value)} className="min-w-0 flex-1 h-10 rounded-md border border-gray-300 bg-white px-3 text-sm">
+                <select value={risk} onChange={(event) => setRisk(event.target.value)} className="min-w-0 flex-1 h-10 rounded-lg border border-gray-300 bg-white px-3 text-sm">
                   <option value="">All risk</option>
                   <option value="HIGH">High</option>
                   <option value="MEDIUM">Medium</option>
@@ -243,7 +243,7 @@ export function OfficerDashboard({ user }: OfficerDashboardProps) {
 
             {queue.length === 0 ? (
               <div className="py-12 text-center text-gray-600">
-                <CheckCircle2 className="w-10 h-10 mx-auto text-green-500" />
+                <CheckCircle2 className="w-10 h-10 mx-auto text-teal-600" />
                 <p className="mt-3 font-medium text-gray-900">No matching priority cases</p>
                 <p className="mt-1 text-sm">Adjust the filters or open the complete review queue.</p>
               </div>
@@ -280,13 +280,13 @@ export function OfficerDashboard({ user }: OfficerDashboardProps) {
                     </div>
 
                     <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
-                      <div className="rounded-lg bg-gray-50 p-3">
+                      <div className="rounded-xl bg-gray-50 p-3">
                         <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">Key signals</p>
                         <ul className="mt-2 space-y-1 text-sm text-gray-700">
                           {(app.key_risk_factors || []).slice(0, 3).map((factor: string) => <li key={factor}>• {factor}</li>)}
                         </ul>
                       </div>
-                      <div className="rounded-lg bg-gray-50 p-3">
+                      <div className="rounded-xl bg-gray-50 p-3">
                         <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">Recommended action</p>
                         <p className="mt-2 text-sm text-gray-700">{app.recommended_actions?.[0] || 'Review application details.'}</p>
                       </div>
@@ -317,12 +317,12 @@ export function OfficerDashboard({ user }: OfficerDashboardProps) {
               <div className="flex items-center justify-between"><span className="text-sm text-gray-600">Medium risk</span><Badge variant="warning">{overview.medium_risk ?? 0}</Badge></div>
               <div className="flex items-center justify-between"><span className="text-sm text-gray-600">Awaiting applicant</span><Badge variant="outline">{overview.awaiting_applicant ?? 0}</Badge></div>
               <div className="pt-2 border-t border-gray-100 grid grid-cols-2 gap-3">
-                <Link href="/dashboard/inspections" className="rounded-lg border border-gray-200 p-3 hover:bg-gray-50">
+                <Link href="/dashboard/inspections" className="rounded-xl border border-gray-200 p-3 hover:bg-gray-50">
                   <Gauge className="w-5 h-5 text-blue-600" />
                   <p className="mt-2 text-xs text-gray-500">Inspections</p>
                   <p className="font-semibold text-gray-900">{overview.scheduled_inspections ?? 0}</p>
                 </Link>
-                <Link href="/dashboard/grievances" className="rounded-lg border border-gray-200 p-3 hover:bg-gray-50">
+                <Link href="/dashboard/grievances" className="rounded-xl border border-gray-200 p-3 hover:bg-gray-50">
                   <AlertTriangle className="w-5 h-5 text-orange-500" />
                   <p className="mt-2 text-xs text-gray-500">Grievances</p>
                   <p className="font-semibold text-gray-900">{overview.open_grievances ?? 0}</p>
@@ -402,7 +402,7 @@ export function OfficerDashboard({ user }: OfficerDashboardProps) {
               </div>
             ) : (
               <div className="py-12 text-center text-gray-500">
-                <CheckCircle2 className="w-9 h-9 mx-auto text-green-500" />
+                <CheckCircle2 className="w-9 h-9 mx-auto text-teal-600" />
                 <p className="mt-3 font-medium text-gray-900">No active bottleneck signal</p>
               </div>
             )}
@@ -421,7 +421,7 @@ export function OfficerDashboard({ user }: OfficerDashboardProps) {
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-6 gap-3">
             {(data?.distribution || []).map((item: any) => (
-              <div key={item.status} className="rounded-lg border border-gray-200 p-3">
+              <div key={item.status} className="rounded-xl border border-gray-200 p-3">
                 <Badge variant={statusVariant(item.status)}>{String(item.status).split('_').join(' ')}</Badge>
                 <p className="mt-2 text-2xl font-bold text-gray-900">{item.count}</p>
                 <p className="text-xs text-gray-500">{statusTotal ? Math.round((item.count / statusTotal) * 100) : 0}% of total</p>
@@ -431,7 +431,7 @@ export function OfficerDashboard({ user }: OfficerDashboardProps) {
         </CardContent>
       </Card>
 
-      <div className="rounded-lg border border-blue-100 bg-blue-50 p-4 text-sm text-blue-900">
+      <div className="rounded-xl border border-blue-100 bg-blue-50 p-4 text-sm text-blue-900">
         <strong>Operational note:</strong> This dashboard uses UDYOGSETU's configured workflow, SLA and risk data. Risk indicators are predictive assistance for triage, not statutory determinations, official government ratings, or guarantees of processing time.
       </div>
     </div>

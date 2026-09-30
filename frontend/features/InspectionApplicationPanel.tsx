@@ -37,7 +37,7 @@ export default function InspectionApplicationPanel({ applicationId }: { applicat
           <div className="flex gap-2 items-start sm:col-span-2"><MapPin className="w-4 h-4 mt-0.5 text-blue-600" /><span>{active.location || 'Location to be confirmed'}</span></div>
         </div>
         {active.assigned_officer_name && <p className="text-sm text-gray-600">Assigned officer: <span className="font-medium text-gray-900">{active.assigned_officer_name}</span></p>}
-        {active.coordinated && <div className="rounded-lg bg-blue-50 border border-blue-100 p-3 text-sm text-blue-900 flex gap-2"><Users className="w-4 h-4 mt-0.5" /><span>This is a coordinated site visit covering {active.approvals.length} application(s).</span></div>}
+        {active.coordinated && <div className="rounded-xl bg-blue-50 border border-blue-100 p-3 text-sm text-blue-900 flex gap-2"><Users className="w-4 h-4 mt-0.5" /><span>This is a coordinated site visit covering {active.approvals.length} application(s).</span></div>}
         <Link href="/dashboard/inspections" className="inline-flex text-sm font-medium text-blue-600">Open inspection planner →</Link>
       </CardContent>
     </Card>

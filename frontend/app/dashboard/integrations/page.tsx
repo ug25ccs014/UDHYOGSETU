@@ -1,5 +1,7 @@
 'use client'
 
+import { useLanguage } from '@/lib/language'
+import PageHeader from '@/components/PageHeader'
 import { ExternalLink, Info, Loader2, RefreshCw, ShieldCheck, TestTube2 } from 'lucide-react'
 import { useState } from 'react'
 import { useGatewayCatalog, useGatewayHealth } from '@/hooks/useApi'
@@ -22,6 +24,7 @@ function friendlyStatus(item: any) {
 }
 
 export default function IntegrationsPage() {
+  const { t } = useLanguage()
   const [showHealth, setShowHealth] = useState(false)
   const { data, isLoading, isError } = useGatewayCatalog()
   const health = useGatewayHealth(showHealth)
@@ -32,18 +35,17 @@ export default function IntegrationsPage() {
 
   return (
     <div className="space-y-8">
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Government Integrations</h1>
-          <p className="mt-1 max-w-3xl text-gray-600">
-            See exactly how each government service is handled today. Prototype simulations are clearly separated from official external portals and future authorized API connections.
-          </p>
-        </div>
-        <Button variant="outline" onClick={() => setShowHealth((value) => !value)}>
-          <RefreshCw className="mr-2 h-4 w-4" />
-          {showHealth ? 'Hide system checks' : 'Run prototype checks'}
-        </Button>
-      </div>
+      <PageHeader
+        icon={ShieldCheck}
+        title={t('pg.integTitle')}
+        purpose={t('pg.integPurpose')}
+        action={
+          <Button variant="outline" onClick={() => setShowHealth((value) => !value)}>
+            <RefreshCw className="h-4 w-4" />
+            {showHealth ? t('pg.hideChecks') : t('pg.runChecks')}
+          </Button>
+        }
+      />
 
       {data?.disclaimer && (
         <Card className="border-blue-200 bg-blue-50/70">
@@ -54,13 +56,13 @@ export default function IntegrationsPage() {
       )}
 
       {summary && (
-        <div className="grid grid-cols-2 gap-4 lg:grid-cols-6">
-          <Card><CardContent className="p-5"><p className="text-sm text-gray-500">Systems</p><p className="mt-1 text-3xl font-bold">{summary.total_systems}</p></CardContent></Card>
-          <Card><CardContent className="p-5"><p className="text-sm text-gray-500">Configured</p><p className="mt-1 text-3xl font-bold">{summary.configured_systems}</p></CardContent></Card>
-          <Card><CardContent className="p-5"><p className="text-sm text-gray-500">Prototype</p><p className="mt-1 text-3xl font-bold text-amber-700">{summary.simulated_systems}</p></CardContent></Card>
-          <Card><CardContent className="p-5"><p className="text-sm text-gray-500">Authorized</p><p className="mt-1 text-3xl font-bold text-emerald-700">{summary.authorized_systems}</p></CardContent></Card>
-          <Card><CardContent className="p-5"><p className="text-sm text-gray-500">Future API</p><p className="mt-1 text-3xl font-bold text-slate-700">{summary.future_authorized_systems}</p></CardContent></Card>
-          <Card><CardContent className="p-5"><p className="text-sm text-gray-500">External Portal</p><p className="mt-1 text-3xl font-bold text-blue-700">{summary.external_portal_systems}</p></CardContent></Card>
+        <div className="grid grid-cols-2 gap-5 lg:grid-cols-6">
+          <Card><CardContent className="p-5"><p className="text-xs font-extrabold uppercase tracking-wider text-gray-500">Systems</p><p className="mt-1 text-3xl font-extrabold tracking-tight">{summary.total_systems}</p></CardContent></Card>
+          <Card><CardContent className="p-5"><p className="text-xs font-extrabold uppercase tracking-wider text-gray-500">Configured</p><p className="mt-1 text-3xl font-extrabold tracking-tight">{summary.configured_systems}</p></CardContent></Card>
+          <Card><CardContent className="p-5"><p className="text-xs font-extrabold uppercase tracking-wider text-gray-500">Prototype</p><p className="mt-1 text-3xl font-extrabold tracking-tight text-navy-ink">{summary.simulated_systems}</p></CardContent></Card>
+          <Card><CardContent className="p-5"><p className="text-xs font-extrabold uppercase tracking-wider text-gray-500">Authorized</p><p className="mt-1 text-3xl font-extrabold tracking-tight text-teal-700">{summary.authorized_systems}</p></CardContent></Card>
+          <Card><CardContent className="p-5"><p className="text-xs font-extrabold uppercase tracking-wider text-gray-500">Future API</p><p className="mt-1 text-3xl font-extrabold tracking-tight text-gray-600">{summary.future_authorized_systems}</p></CardContent></Card>
+          <Card><CardContent className="p-5"><p className="text-xs font-extrabold uppercase tracking-wider text-gray-500">External Portal</p><p className="mt-1 text-3xl font-extrabold tracking-tight text-blue-700">{summary.external_portal_systems}</p></CardContent></Card>
         </div>
       )}
 
@@ -77,7 +79,7 @@ export default function IntegrationsPage() {
                 <CardHeader>
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-center gap-3">
-                      <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${item.is_simulated ? 'bg-amber-100' : 'bg-blue-50'}`}>
+                      <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${item.is_simulated ? 'bg-amber-100' : 'bg-blue-50'}`}>
                         {item.is_simulated ? <TestTube2 className="h-5 w-5 text-amber-700" /> : <ShieldCheck className="h-5 w-5 text-blue-700" />}
                       </div>
                       <div><CardTitle className="text-base">{item.display_name}</CardTitle><p className="text-xs text-gray-500">{item.system}</p></div>
@@ -90,14 +92,14 @@ export default function IntegrationsPage() {
                     <div><p className="text-gray-500">Provider</p><p className="font-medium">{item.provider}</p></div>
                     <div><p className="text-gray-500">Status</p><p className="font-medium">{friendlyStatus(item)}</p></div>
                   </div>
-                  <div className="rounded-lg bg-gray-50 p-3 leading-6 text-gray-600">{item.note}</div>
+                  <div className="rounded-xl bg-gray-50 p-3 leading-6 text-gray-600">{item.note}</div>
                   <div className="flex flex-wrap gap-2 text-xs text-gray-600">
                     {item.supports_services && <Badge variant="outline">Service discovery</Badge>}
                     {item.supports_status && <Badge variant="outline">Status</Badge>}
                     {item.supports_submission && <Badge variant="outline">Submission</Badge>}
                   </div>
                   {runtime && (
-                    <div className="rounded-lg border border-gray-200 p-3">
+                    <div className="rounded-xl border border-gray-200 p-3">
                       <div className="flex items-center justify-between"><span className="text-gray-500">Prototype runtime</span><Badge variant={runtime.runtime_status === 'HEALTHY' ? 'success' : 'outline'}>{runtime.runtime_status}</Badge></div>
                       <p className="mt-2 text-xs text-gray-500">Availability signal: {runtime.availability_pct}% · Probes: {runtime.probes}</p>
                     </div>

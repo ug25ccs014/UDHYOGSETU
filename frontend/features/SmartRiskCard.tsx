@@ -47,26 +47,26 @@ export default function SmartRiskCard({ applicationId }: { applicationId: string
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-          <div className="rounded-lg bg-gray-50 p-3">
+          <div className="rounded-xl bg-gray-50 p-3">
             <p className="text-xs text-gray-500">Risk score</p>
             <p className="mt-1 text-xl font-bold text-gray-900">{data.risk_score}/100</p>
           </div>
-          <div className="rounded-lg bg-gray-50 p-3">
+          <div className="rounded-xl bg-gray-50 p-3">
             <p className="text-xs text-gray-500">Days remaining</p>
             <p className="mt-1 text-xl font-bold text-gray-900">{data.sla.days_remaining}</p>
           </div>
-          <div className="rounded-lg bg-gray-50 p-3">
+          <div className="rounded-xl bg-gray-50 p-3">
             <p className="text-xs text-gray-500">Open queries</p>
             <p className="mt-1 text-xl font-bold text-gray-900">{data.signals.query_open_count}</p>
           </div>
-          <div className="rounded-lg bg-gray-50 p-3">
+          <div className="rounded-xl bg-gray-50 p-3">
             <p className="text-xs text-gray-500">Doc issues</p>
             <p className="mt-1 text-xl font-bold text-gray-900">{data.signals.document_issue_count}</p>
           </div>
         </div>
 
         <div className="grid gap-4 md:grid-cols-2">
-          <div className="rounded-lg border border-gray-100 p-4">
+          <div className="rounded-xl border border-gray-100 p-4">
             <div className="flex items-center gap-2">
               {data.sla.status === 'BREACHED' ? <AlertTriangle className="h-4 w-4 text-red-600" /> : <Clock3 className="h-4 w-4 text-gray-500" />}
               <p className="text-sm font-semibold text-gray-900">SLA signal</p>
@@ -75,9 +75,9 @@ export default function SmartRiskCard({ applicationId }: { applicationId: string
             {data.sla.deadline && <p className="mt-2 text-xs text-gray-500">Configured deadline: {data.sla.deadline}</p>}
           </div>
 
-          <div className="rounded-lg border border-gray-100 p-4">
+          <div className="rounded-xl border border-gray-100 p-4">
             <div className="flex items-center gap-2">
-              <CheckCircle2 className="h-4 w-4 text-green-600" />
+              <CheckCircle2 className="h-4 w-4 text-teal-600" />
               <p className="text-sm font-semibold text-gray-900">Operational signals</p>
             </div>
             <ul className="mt-2 space-y-1 text-sm text-gray-600">
@@ -89,7 +89,7 @@ export default function SmartRiskCard({ applicationId }: { applicationId: string
         </div>
 
         {data.recommended_actions?.length > 0 && (
-          <div className="rounded-lg bg-blue-50 p-4">
+          <div className="rounded-xl bg-blue-50 p-4">
             <p className="text-sm font-semibold text-blue-950">Suggested next actions</p>
             <ul className="mt-2 space-y-1 text-sm text-blue-900">
               {data.recommended_actions.slice(0, 3).map((action: string) => (

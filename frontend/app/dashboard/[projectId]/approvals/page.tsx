@@ -15,7 +15,7 @@ export default function ProjectApprovalsPage() {
     <div className="space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Approvals</h1>
+          <h1 className="page-title">Approvals</h1>
           <p className="mt-1 max-w-2xl text-gray-600">See what is required, what can move in parallel, and which approval chain drives the estimated project journey.</p>
         </div>
         <div className="flex gap-2">

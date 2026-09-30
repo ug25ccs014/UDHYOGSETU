@@ -1,20 +1,19 @@
 'use client'
 
+import { useLanguage } from '@/lib/language'
+import PageHeader from '@/components/PageHeader'
+import { FileCheck2 } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import DocumentUploadComponent from '@/features/DocumentUpload'
 
 export default function ProjectDocumentsPage() {
+  const { t } = useLanguage()
   const params = useParams()
   const projectId = params.projectId as string
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900">Documents</h1>
-        <p className="mt-1 text-gray-600">
-          Upload your industrial documents for automated validation and field extraction
-        </p>
-      </div>
+      <PageHeader icon={FileCheck2} title={t('pg.docsTitle')} purpose={t('pg.docsPurpose')} />
       <DocumentUploadComponent projectId={projectId} />
     </div>
   )

@@ -1,5 +1,7 @@
 'use client'
 
+import { useLanguage } from '@/lib/language'
+import PageHeader from '@/components/PageHeader'
 import { useEffect, useMemo, useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import {
@@ -84,6 +86,7 @@ function documentStatusVariant(status: string): 'success' | 'warning' | 'danger'
 }
 
 export function BusinessProfile() {
+  const { t } = useLanguage()
   const queryClient = useQueryClient()
   const { data: profile, isLoading: profileLoading, isError: profileError } = useBusinessProfile()
   const { data: vaultData, isLoading: vaultLoading } = useBusinessProfileDocuments()
@@ -229,36 +232,24 @@ export function BusinessProfile() {
 
   return (
     <div className="space-y-8">
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-        <div>
-          <div className="flex items-center gap-2 text-sm text-blue-700 font-medium">
-            <UserRound className="w-4 h-4" />
-            Entrepreneur Profile
-          </div>
-          <h1 className="mt-1 text-3xl font-bold text-gray-900">Business Profile & Data Vault</h1>
-          <p className="mt-2 max-w-3xl text-gray-600">
-            Enter core business information once and reuse it across future approval and compliance
-            journeys.
-          </p>
-        </div>
-        <div className="flex items-center gap-3">
-          <Button
-            variant="outline"
-            onClick={handleVerify}
-            disabled={verifyProfile.isPending}
-          >
-            {verifyProfile.isPending ? (
-              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-            ) : (
-              <RefreshCw className="w-4 h-4 mr-2" />
-            )}
-            Run Prototype Verification
-          </Button>
-          <Button onClick={handleSave} disabled={updateProfile.isPending}>
-            {updateProfile.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-            Save Profile
-          </Button>
-        </div>
+      <PageHeader
+        icon={UserRound}
+        step={t('pg.profStep')}
+        title={t('pg.profTitle')}
+        purpose={t('pg.profPurpose')}
+        action={
+          <>
+            <Button variant="outline" onClick={handleVerify} disabled={verifyProfile.isPending}>
+              {verifyProfile.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />}
+              {t('pg.verify')}
+            </Button>
+            <Button onClick={handleSave} disabled={updateProfile.isPending}>
+              {updateProfile.isPending && <Loader2 className="w-4 h-4 animate-spin" />}
+              {t('pg.saveProfile')}
+            </Button>
+          </>
+        }
+      />
       </div>
 
       <div className="rounded-xl border border-blue-200 bg-blue-50 p-5">
@@ -276,9 +267,9 @@ export function BusinessProfile() {
 
       {message && (
         <div
-          className={`rounded-lg border px-4 py-3 text-sm ${
+          className={`rounded-xl border px-4 py-3 text-sm ${
             saved
-              ? 'border-green-200 bg-green-50 text-green-800'
+              ? 'border-teal-100 bg-teal-50 text-teal-700'
               : 'border-blue-200 bg-blue-50 text-blue-800'
           }`}
         >
@@ -360,7 +351,7 @@ export function BusinessProfile() {
                   return (
                     <div
                       key={item.key}
-                      className="flex flex-col gap-2 rounded-lg border border-gray-200 bg-gray-50 p-3 sm:flex-row sm:items-center sm:justify-between"
+                      className="flex flex-col gap-2 rounded-xl border border-gray-200 bg-gray-50 p-3 sm:flex-row sm:items-center sm:justify-between"
                     >
                       <div>
                         <p className="text-sm font-semibold text-gray-900">{item.label}</p>
@@ -386,7 +377,7 @@ export function BusinessProfile() {
                     onChange={(e) => updateField('registered_address', e.target.value)}
                     rows={3}
                     placeholder="Registered office address"
-                    className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-gray-900 placeholder:text-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="mt-1 w-full rounded-xl border border-gray-300 bg-white px-4 py-2.5 text-gray-900 placeholder:text-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </label>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -411,7 +402,7 @@ export function BusinessProfile() {
             </div>
 
             {missingFields.length > 0 && (
-              <div className="rounded-lg border border-amber-200 bg-amber-50 p-4">
+              <div className="rounded-xl border border-amber-200 bg-amber-50 p-4">
                 <p className="text-sm font-semibold text-amber-900">Complete your profile</p>
                 <p className="mt-1 text-sm text-amber-800">
                   Missing: {missingFields.join(', ')}
@@ -447,7 +438,7 @@ export function BusinessProfile() {
                   style={{ width: `${score}%` }}
                 />
               </div>
-              <div className="mt-5 rounded-lg bg-gray-50 p-3 text-xs text-gray-600">
+              <div className="mt-5 rounded-xl bg-gray-50 p-3 text-xs text-gray-600">
                 <p className="font-semibold text-gray-800">What this unlocks</p>
                 <p className="mt-1">
                   Future approval forms can consume this stable profile without asking you to repeat
@@ -465,7 +456,7 @@ export function BusinessProfile() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="rounded-lg border border-dashed border-gray-300 bg-gray-50 p-4">
+              <div className="rounded-xl border border-dashed border-gray-300 bg-gray-50 p-4">
                 <div className="flex items-center gap-2">
                   <UploadCloud className="h-5 w-5 text-blue-600" />
                   <p className="text-sm font-semibold text-gray-900">Upload a reusable document</p>
@@ -486,7 +477,7 @@ export function BusinessProfile() {
                     </option>
                   ))}
                 </Select>
-                <label className="mt-3 inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50">
+                <label className="mt-3 inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50">
                   {uploadDocument.isPending || addToVault.isPending ? (
                     <Loader2 className="h-4 w-4 animate-spin" />
                   ) : (
@@ -529,7 +520,7 @@ export function BusinessProfile() {
           {vaultLoading ? (
             <div className="py-10 text-center text-sm text-gray-500">Loading document vault...</div>
           ) : vaultDocuments.length === 0 ? (
-            <div className="rounded-lg border border-dashed border-gray-300 py-12 text-center">
+            <div className="rounded-xl border border-dashed border-gray-300 py-12 text-center">
               <FileText className="mx-auto h-8 w-8 text-gray-300" />
               <p className="mt-3 text-sm font-medium text-gray-900">No reusable documents yet</p>
               <p className="mt-1 text-sm text-gray-500">
@@ -539,7 +530,7 @@ export function BusinessProfile() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
               {vaultDocuments.map((doc) => (
-                <div key={doc.id} className="rounded-lg border border-gray-200 p-4">
+                <div key={doc.id} className="rounded-xl border border-gray-200 p-4">
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
                       <p className="truncate font-medium text-gray-900">{doc.file_name}</p>
@@ -591,7 +582,7 @@ export function BusinessProfile() {
               {availableDocuments.map((doc) => (
                 <div key={doc.id} className="flex flex-col gap-3 py-4 sm:flex-row sm:items-center sm:justify-between">
                   <div className="flex min-w-0 items-center gap-3">
-                    <div className="rounded-lg bg-blue-50 p-2">
+                    <div className="rounded-xl bg-blue-50 p-2">
                       <FileText className="h-4 w-4 text-blue-600" />
                     </div>
                     <div className="min-w-0">
@@ -619,7 +610,7 @@ export function BusinessProfile() {
         </CardContent>
       </Card>
 
-      <div className="flex items-start gap-3 rounded-lg border border-gray-200 bg-white p-4 text-xs text-gray-500">
+      <div className="flex items-start gap-3 rounded-xl border border-gray-200 bg-white p-4 text-xs text-gray-500">
         <Building2 className="mt-0.5 h-4 w-4 flex-none text-gray-400" />
         <p>
           The Data Vault does not move or duplicate your source documents. It creates a reusable

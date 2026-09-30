@@ -230,9 +230,9 @@ export function ExploreApply({ service }: ExploreApplyProps) {
 
         {applicability && (
           <div
-            className={`rounded-lg p-4 border ${
+            className={`rounded-xl p-4 border ${
               applicability.status === 'APPLICABLE'
-                ? 'bg-green-50 border-green-200'
+                ? 'bg-teal-50 border-teal-100'
                 : applicability.status === 'NOT_APPLICABLE'
                   ? 'bg-red-50 border-red-200'
                   : 'bg-gray-50 border-gray-200'
@@ -240,7 +240,7 @@ export function ExploreApply({ service }: ExploreApplyProps) {
           >
             <div className="flex items-center gap-2">
               {applicability.status === 'APPLICABLE' ? (
-                <CheckCircle2 className="w-5 h-5 text-green-600" />
+                <CheckCircle2 className="w-5 h-5 text-teal-600" />
               ) : applicability.status === 'NOT_APPLICABLE' ? (
                 <XCircle className="w-5 h-5 text-red-600" />
               ) : (
@@ -250,7 +250,7 @@ export function ExploreApply({ service }: ExploreApplyProps) {
             </div>
             <p className="mt-2 text-sm text-gray-700">{applicability.reason}</p>
             {applicability.matched_conditions.length > 0 && (
-              <ul className="mt-2 space-y-1 text-sm text-green-700">
+              <ul className="mt-2 space-y-1 text-sm text-teal-700">
                 {applicability.matched_conditions.map((m: string, i: number) => (
                   <li key={i}>· {m}</li>
                 ))}
@@ -286,7 +286,7 @@ export function ExploreApply({ service }: ExploreApplyProps) {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {checklist.required_documents && checklist.required_documents.length > 0 && (
-                <div className="rounded-lg bg-gray-50 border border-gray-200 p-4">
+                <div className="rounded-xl bg-gray-50 border border-gray-200 p-4">
                   <p className="text-sm font-semibold text-gray-900 mb-2">Required documents</p>
                   <ul className="space-y-1 text-sm text-gray-700">
                     {checklist.required_documents.map((r: any, i: number) => (
@@ -294,7 +294,7 @@ export function ExploreApply({ service }: ExploreApplyProps) {
                         {attached.some((d: any) =>
                           (d.document_type || '').toLowerCase().includes(r.document_type.toLowerCase()),
                         ) ? (
-                          <CheckCircle2 className="w-4 h-4 text-green-600" />
+                          <CheckCircle2 className="w-4 h-4 text-teal-600" />
                         ) : (
                           <FileText className="w-4 h-4 text-gray-400" />
                         )}
@@ -305,7 +305,7 @@ export function ExploreApply({ service }: ExploreApplyProps) {
                 </div>
               )}
 
-              <div className="rounded-lg bg-gray-50 border border-gray-200 p-4">
+              <div className="rounded-xl bg-gray-50 border border-gray-200 p-4">
                 <p className="text-sm font-semibold text-gray-900 mb-2">Attached documents</p>
                 {attached.length === 0 ? (
                   <p className="text-sm text-gray-500">None yet.</p>
@@ -360,8 +360,8 @@ export function ExploreApply({ service }: ExploreApplyProps) {
             </div>
 
             {submitted && (
-              <div className="rounded-lg bg-green-50 border border-green-200 p-4">
-                <p className="text-sm text-green-800">
+              <div className="rounded-xl bg-teal-50 border border-teal-100 p-4">
+                <p className="text-sm text-teal-700">
                   Application submitted. You can track it under
                 </p>
                 <Link

@@ -2,12 +2,14 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { ClipboardList, Loader2, ArrowRight } from 'lucide-react'
+import { ClipboardList, Loader2, ArrowRight, Plus, Clock, CheckCircle2 } from 'lucide-react'
 import { useApplications } from '@/hooks/useApi'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import OfflineDraftsPanel from '@/features/OfflineDraftsPanel'
+import PageHeader, { StatCard } from '@/components/PageHeader'
+import { useLanguage } from '@/lib/language'
 
 function statusVariant(status: string): 'success' | 'danger' | 'default' | 'warning' | 'info' | 'outline' {
   switch (status) {
@@ -38,6 +40,7 @@ const filters = [
 ]
 
 export default function ApplicationsPage() {
+  const { t, statusLabel } = useLanguage()
   const { data, isLoading, isError, refetch, isFetching } = useApplications()
   const [filter, setFilter] = useState('ALL')
 
@@ -50,47 +53,42 @@ export default function ApplicationsPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900">Applications</h1>
-        <p className="mt-1 text-gray-600">
-          Track every government application you have started or submitted
-        </p>
-      </div>
+      <PageHeader
+        icon={ClipboardList}
+        title={t('pg.appsTitle')}
+        purpose={t('pg.appsPurpose')}
+        action={<Link href="/dashboard/explore"><Button><Plus className="h-4 w-4" /> {t('pg.newApp')}</Button></Link>}
+      />
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-white border border-gray-200 rounded-lg p-5">
-          <div className="text-sm text-gray-600">Total Applications</div>
-          <div className="text-3xl font-bold mt-1 text-blue-600">{applications.length}</div>
-        </div>
-        <div className="bg-white border border-gray-200 rounded-lg p-5">
-          <div className="text-sm text-gray-600">In Progress</div>
-          <div className="text-3xl font-bold mt-1 text-yellow-600">{active}</div>
-        </div>
-        <div className="bg-white border border-gray-200 rounded-lg p-5">
-          <div className="text-sm text-gray-600">Approved</div>
-          <div className="text-3xl font-bold mt-1 text-green-600">{approved}</div>
-        </div>
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
+        <StatCard icon={ClipboardList} label={t('pg.totalApps')} value={applications.length} />
+        <StatCard icon={Clock} tone="bg-sun/30 text-navy-ink" label={t('pg.inProgress')} value={active} hint={t('pg.inProgressHint')} />
+        <StatCard icon={CheckCircle2} tone="bg-teal-100 text-teal-700" label={t('pg.approved')} value={approved} />
       </div>
 
       <OfflineDraftsPanel />
 
       {data?.__offlineCachedAt && (
-        <div className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+        <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
           Showing your latest locally cached application list. Government status updates require an online connection.
         </div>
       )}
 
       <div className="flex flex-wrap gap-2">
-        {filters.map((f) => (
-          <Button
-            key={f}
-            variant={filter === f ? 'default' : 'outline'}
-            size="sm"
-            onClick={() => setFilter(f)}
-          >
-            {f.replace('_', ' ')}
-          </Button>
-        ))}
+        {filters.map((f) => {
+          const count = f === 'ALL' ? applications.length : applications.filter((a) => a.status === f).length
+          return (
+            <Button
+              key={f}
+              variant={filter === f ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => setFilter(f)}
+            >
+              {f === 'ALL' ? t('pg.all') : statusLabel(f)}
+              <span className={`rounded-full px-1.5 text-xs ${filter === f ? 'bg-white/20' : 'bg-gray-100 text-gray-600'}`}>{count}</span>
+            </Button>
+          )
+        })}
       </div>
 
       {isLoading ? (
@@ -117,7 +115,7 @@ export default function ApplicationsPage() {
             <p className="mt-1 text-sm text-gray-600">Start from the service catalogue to create your first application.</p>
             <Link
               href="/dashboard/explore"
-              className="inline-flex mt-4 text-sm font-medium text-blue-600 underline"
+              className="mt-5 inline-flex items-center gap-1 rounded-full bg-navy px-5 py-2 text-sm font-semibold text-cream transition hover:bg-navy-2"
             >
               Explore government services →
             </Link>
@@ -130,23 +128,23 @@ export default function ApplicationsPage() {
           </CardContent>
         </Card>
       ) : (
-        <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+        <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white/90 shadow-card">
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gray-50 border-b border-gray-200">
+              <thead className="border-b border-gray-200 bg-gray-100/70">
                 <tr>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Application</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Department</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Status</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Processed (days)</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900"></th>
+                  <th className="px-6 py-3.5 text-left text-xs font-extrabold uppercase tracking-wider text-gray-500">Application</th>
+                  <th className="px-6 py-3.5 text-left text-xs font-extrabold uppercase tracking-wider text-gray-500">Department</th>
+                  <th className="px-6 py-3.5 text-left text-xs font-extrabold uppercase tracking-wider text-gray-500">Status</th>
+                  <th className="px-6 py-3.5 text-left text-xs font-extrabold uppercase tracking-wider text-gray-500">Processed (days)</th>
+                  <th className="px-6 py-3.5 text-left text-xs font-extrabold uppercase tracking-wider text-gray-500"></th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
                 {filtered.map((app: any) => {
                   const isDraft = app.status === 'NOT_STARTED' || app.status === 'DRAFT'
                   return (
-                    <tr key={app.application_id} className="hover:bg-gray-50">
+                    <tr key={app.application_id} className="transition hover:bg-blue-50/60">
                       <td className="px-6 py-4">
                         <div className="font-medium text-gray-900 capitalize">{app.approval_name}</div>
                         <div className="text-xs text-gray-500">{app.project_name}</div>
@@ -154,7 +152,7 @@ export default function ApplicationsPage() {
                       <td className="px-6 py-4 text-sm text-gray-600">{app.department}</td>
                       <td className="px-6 py-4">
                         <Badge variant={statusVariant(app.status)}>
-                          {app.status.replace('_', ' ')}
+                          {statusLabel(app.status)}
                         </Badge>
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-600">
@@ -165,7 +163,7 @@ export default function ApplicationsPage() {
                       <td className="px-6 py-4 text-right">
                         <Link
                           href={app.status === 'QUERY_RAISED' ? `/dashboard/applications/${app.application_id}/query` : `/dashboard/applications/${app.application_id}`}
-                          className="inline-flex items-center gap-1 text-sm font-medium text-blue-600"
+                          className="inline-flex items-center gap-1 rounded-full bg-navy px-3.5 py-1.5 text-sm font-semibold text-cream transition hover:bg-navy-2"
                         >
                           {app.status === 'QUERY_RAISED' ? 'Resolve query' : isDraft ? 'Continue' : 'Track'}
                           <ArrowRight className="w-4 h-4" />

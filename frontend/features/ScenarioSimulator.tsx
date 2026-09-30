@@ -1,5 +1,6 @@
 'use client'
 
+import AuroraBackground from '@/components/fx/AuroraBackground'
 import { useEffect, useMemo, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import {
@@ -47,7 +48,7 @@ function formatCurrency(value?: number | null) {
 
 function deltaClass(value: number) {
   if (value > 0) return 'text-amber-700'
-  if (value < 0) return 'text-emerald-700'
+  if (value < 0) return 'text-teal-700'
   return 'text-slate-500'
 }
 
@@ -152,24 +153,26 @@ export default function ScenarioSimulator() {
         </Button>
       </div>
 
-      <section className="rounded-2xl border border-slate-200 bg-gradient-to-br from-white to-slate-50 p-5 shadow-sm sm:p-6">
+      <section className="relative isolate overflow-hidden rounded-3xl bg-navy p-6 text-cream shadow-soft sm:p-8">
+        <div className="absolute inset-0 -z-10 opacity-[.10] bg-grid invert" aria-hidden="true" />
+        <AuroraBackground className="-z-10 opacity-40" />
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <div className="flex flex-wrap items-center gap-2">
               <Badge variant="default">Scenario Simulator</Badge>
               <Badge variant="outline">Advisory planning</Badge>
             </div>
-            <h1 className="mt-3 text-2xl font-bold tracking-tight text-slate-950 sm:text-3xl">What happens if your project changes?</h1>
-            <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600">
+            <h1 className="mt-3 text-2xl font-extrabold tracking-tight text-cream sm:text-4xl">What happens if your project changes?</h1>
+            <p className="mt-2 max-w-3xl text-sm leading-6 text-blue-100">
               Test location, sector, investment, capacity, safety and timeline scenarios before making a real project decision.
               UdyogSetu compares the current project against a read-only projected configuration.
             </p>
-            <p className="mt-2 text-xs text-slate-500">Project: {project.name} · {project.company_name}</p>
+            <p className="mt-2 text-xs text-blue-200">Project: {project.name} · {project.company_name}</p>
           </div>
-          <div className="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm">
-            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Current profile</p>
-            <p className="mt-1 font-semibold text-slate-950">{project.location_state || '—'} · {project.sector || '—'}</p>
-            <p className="mt-1 text-xs text-slate-500">₹{formatCurrency(project.investment_amount)} investment · {project.location_district || '—'}</p>
+          <div className="rounded-2xl border border-white/15 bg-white/10 px-4 py-3 text-sm backdrop-blur">
+            <p className="text-xs font-extrabold uppercase tracking-[.16em] text-blue-200">Current profile</p>
+            <p className="mt-1 font-bold text-cream">{project.location_state || '—'} · {project.sector || '—'}</p>
+            <p className="mt-1 text-xs text-blue-200">₹{formatCurrency(project.investment_amount)} investment · {project.location_district || '—'}</p>
           </div>
         </div>
       </section>
@@ -191,7 +194,7 @@ export default function ScenarioSimulator() {
                   className={`w-full rounded-xl border p-3 text-left transition ${active ? 'border-blue-300 bg-blue-50 ring-1 ring-blue-200' : 'border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50'}`}
                 >
                   <div className="flex items-start gap-3">
-                    <div className={`mt-0.5 rounded-lg p-2 ${active ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-600'}`}><Icon className="h-4 w-4" /></div>
+                    <div className={`mt-0.5 rounded-xl p-2 ${active ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-600'}`}><Icon className="h-4 w-4" /></div>
                     <div className="min-w-0 flex-1">
                       <p className="text-sm font-semibold text-slate-950">{scenario.label}</p>
                       <p className="mt-1 text-xs leading-5 text-slate-500">{scenario.description}</p>
@@ -305,13 +308,13 @@ export default function ScenarioSimulator() {
               <CardHeader><CardTitle>Scenario guidance</CardTitle></CardHeader>
               <CardContent className="space-y-3">
                 {result.recommendations.map((recommendation, index) => (
-                  <div key={index} className="flex gap-3 rounded-lg border border-slate-200 bg-white p-3">
+                  <div key={index} className="flex gap-3 rounded-xl border border-slate-200 bg-white p-3">
                     <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-blue-600" />
                     <p className="text-sm leading-5 text-slate-700">{recommendation}</p>
                   </div>
                 ))}
                 {result.changes.risk_indicators.map((indicator, index) => (
-                  <div key={`risk-${index}`} className="flex gap-3 rounded-lg border border-amber-200 bg-amber-50 p-3">
+                  <div key={`risk-${index}`} className="flex gap-3 rounded-xl border border-amber-200 bg-amber-50 p-3">
                     <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-amber-700" />
                     <p className="text-sm leading-5 text-amber-900">{indicator}</p>
                   </div>
@@ -363,16 +366,16 @@ function Metric({ label, before, after, suffix = '' }: { label: string; before: 
 
 function DeltaList({ title, items, variant, empty }: { title: string; items: ScenarioSimulationResponse['changes']['approvals_added']; variant: 'add' | 'remove'; empty: string }) {
   return (
-    <div><div className="mb-2 flex items-center gap-2"><p className="text-sm font-semibold text-slate-950">{title}</p><Badge variant={variant === 'add' ? 'success' : 'outline'}>{items.length}</Badge></div>{items.length ? <div className="space-y-2">{items.map((item) => <div key={item.name} className="rounded-lg border border-slate-200 p-3"><div className="flex items-start justify-between gap-2"><p className="text-sm font-medium text-slate-900">{item.name}</p><span className="text-xs text-slate-500">{item.estimated_processing_days}d</span></div><p className="mt-1 text-xs text-slate-500">{item.department} · {item.risk_level || 'MEDIUM'} risk</p></div>)}</div> : <p className="rounded-lg border border-dashed border-slate-200 p-4 text-xs text-slate-500">{empty}</p>}</div>
+    <div><div className="mb-2 flex items-center gap-2"><p className="text-sm font-semibold text-slate-950">{title}</p><Badge variant={variant === 'add' ? 'success' : 'outline'}>{items.length}</Badge></div>{items.length ? <div className="space-y-2">{items.map((item) => <div key={item.name} className="rounded-xl border border-slate-200 p-3"><div className="flex items-start justify-between gap-2"><p className="text-sm font-medium text-slate-900">{item.name}</p><span className="text-xs text-slate-500">{item.estimated_processing_days}d</span></div><p className="mt-1 text-xs text-slate-500">{item.department} · {item.risk_level || 'MEDIUM'} risk</p></div>)}</div> : <p className="rounded-xl border border-dashed border-slate-200 p-4 text-xs text-slate-500">{empty}</p>}</div>
   )
 }
 
 function SimpleList({ title, items, icon: Icon, empty }: { title: string; items: string[]; icon: any; empty: string }) {
-  return <div><div className="mb-2 flex items-center gap-2"><p className="text-sm font-semibold text-slate-950">{title}</p><Badge variant="outline">{items.length}</Badge></div>{items.length ? <div className="space-y-2">{items.map((item) => <div key={item} className="flex items-center gap-2 rounded-lg border border-slate-200 p-3"><Icon className="h-4 w-4 text-slate-500" /><span className="text-sm text-slate-700">{item}</span></div>)}</div> : <p className="rounded-lg border border-dashed border-slate-200 p-4 text-xs text-slate-500">{empty}</p>}</div>
+  return <div><div className="mb-2 flex items-center gap-2"><p className="text-sm font-semibold text-slate-950">{title}</p><Badge variant="outline">{items.length}</Badge></div>{items.length ? <div className="space-y-2">{items.map((item) => <div key={item} className="flex items-center gap-2 rounded-xl border border-slate-200 p-3"><Icon className="h-4 w-4 text-slate-500" /><span className="text-sm text-slate-700">{item}</span></div>)}</div> : <p className="rounded-xl border border-dashed border-slate-200 p-4 text-xs text-slate-500">{empty}</p>}</div>
 }
 
 function TimelineComparison({ result }: { result: ScenarioSimulationResponse }) {
   const rows = result.roadmap.projected.schedule.slice(0, 12)
   const maxDay = Math.max(result.projected.timeline.parallel_duration_days, 1)
-  return <div className="space-y-2">{rows.map((item: any) => <div key={item.id} className="grid grid-cols-[150px_minmax(0,1fr)_70px] items-center gap-3 text-xs"><div className="truncate font-medium text-slate-800">{item.name}</div><div className="relative h-7 rounded-md bg-slate-100"><div className={`absolute top-1 h-5 rounded ${item.critical ? 'bg-blue-600' : 'bg-slate-300'}`} style={{ left: `${(item.start_day / maxDay) * 100}%`, width: `${Math.max(((item.finish_day - item.start_day) / maxDay) * 100, 2)}%` }} title={`${item.start_day}–${item.finish_day} days`} /></div><div className="text-right text-slate-500">{item.duration_days}d</div></div>)}</div>
+  return <div className="space-y-2">{rows.map((item: any) => <div key={item.id} className="grid grid-cols-[150px_minmax(0,1fr)_70px] items-center gap-3 text-xs"><div className="truncate font-medium text-slate-800">{item.name}</div><div className="relative h-7 rounded-lg bg-slate-100"><div className={`absolute top-1 h-5 rounded ${item.critical ? 'bg-blue-600' : 'bg-slate-300'}`} style={{ left: `${(item.start_day / maxDay) * 100}%`, width: `${Math.max(((item.finish_day - item.start_day) / maxDay) * 100, 2)}%` }} title={`${item.start_day}–${item.finish_day} days`} /></div><div className="text-right text-slate-500">{item.duration_days}d</div></div>)}</div>
 }

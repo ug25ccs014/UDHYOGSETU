@@ -30,7 +30,7 @@ function severityClass(severity: string) {
   switch (severity) {
     case 'error': return 'bg-red-50 text-red-700 border-red-100'
     case 'warning': return 'bg-amber-50 text-amber-700 border-amber-100'
-    case 'success': return 'bg-green-50 text-green-700 border-green-100'
+    case 'success': return 'bg-teal-50 text-teal-700 border-teal-100'
     default: return 'bg-blue-50 text-blue-700 border-blue-100'
   }
 }
@@ -102,7 +102,7 @@ export default function NotificationBell() {
               </div>
             ) : notifications.length === 0 ? (
               <div className="py-10 px-6 text-center">
-                <Check className="mx-auto w-8 h-8 text-green-600" />
+                <Check className="mx-auto w-8 h-8 text-teal-600" />
                 <p className="mt-2 font-medium text-gray-900">{t('bell.caughtUp')}</p>
                 <p className="text-sm text-gray-500 mt-1">{t('bell.caughtUpDesc')}</p>
               </div>

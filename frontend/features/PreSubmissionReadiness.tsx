@@ -126,7 +126,7 @@ export function PreSubmissionReadiness({ applicationId, applicationStatus }: Pre
           <div className="flex items-center gap-3">
             <div className="text-right">
               <p className="text-xs font-medium uppercase tracking-wide text-gray-500">Readiness</p>
-              <p className="text-3xl font-bold text-gray-900">{data.score}%</p>
+              <p className="text-3xl font-extrabold tracking-tight text-gray-900">{data.score}%</p>
             </div>
             <Button variant="outline" size="sm" onClick={() => refetch()} disabled={isFetching}>
               <RefreshCw className={`mr-2 h-4 w-4 ${isFetching ? 'animate-spin' : ''}`} />
@@ -138,31 +138,31 @@ export function PreSubmissionReadiness({ applicationId, applicationStatus }: Pre
 
       <CardContent className="space-y-5 pt-6">
         {!isPreSubmission && (
-          <div className="rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-800">
+          <div className="rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-800">
             This application is already in <span className="font-semibold">{data.application_status.replace('_', ' ')}</span> state; the readiness result is retained as a pre-submission reference.
           </div>
         )}
 
         <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-          <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
+          <div className="rounded-xl border border-gray-200 bg-gray-50 p-4">
             <p className="text-xs uppercase tracking-wide text-gray-500">Profile</p>
             <p className="mt-1 text-2xl font-bold text-gray-900">{data.summary.profile_score}%</p>
           </div>
-          <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
+          <div className="rounded-xl border border-gray-200 bg-gray-50 p-4">
             <p className="text-xs uppercase tracking-wide text-gray-500">Documents</p>
             <p className="mt-1 text-2xl font-bold text-gray-900">
               {data.summary.documents_ready}/{data.summary.required_documents}
             </p>
           </div>
-          <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
+          <div className="rounded-xl border border-gray-200 bg-gray-50 p-4">
             <p className="text-xs uppercase tracking-wide text-gray-500">Blockers</p>
-            <p className={`mt-1 text-2xl font-bold ${blockingIssues.length ? 'text-red-600' : 'text-green-600'}`}>
+            <p className={`mt-1 text-2xl font-bold ${blockingIssues.length ? 'text-red-600' : 'text-teal-600'}`}>
               {blockingIssues.length}
             </p>
           </div>
-          <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
+          <div className="rounded-xl border border-gray-200 bg-gray-50 p-4">
             <p className="text-xs uppercase tracking-wide text-gray-500">Warnings</p>
-            <p className={`mt-1 text-2xl font-bold ${warnings.length ? 'text-amber-600' : 'text-green-600'}`}>
+            <p className={`mt-1 text-2xl font-bold ${warnings.length ? 'text-amber-600' : 'text-teal-600'}`}>
               {warnings.length}
             </p>
           </div>
@@ -172,8 +172,8 @@ export function PreSubmissionReadiness({ applicationId, applicationStatus }: Pre
           {data.checks.map((check) => {
             const Icon = check.status === 'PASS' ? CheckCircle2 : check.status === 'BLOCKED' ? AlertCircle : AlertCircle
             return (
-              <div key={check.key} className="flex items-start gap-3 rounded-lg border border-gray-200 p-4">
-                <Icon className={`mt-0.5 h-5 w-5 ${check.status === 'PASS' ? 'text-green-600' : check.status === 'BLOCKED' ? 'text-red-600' : 'text-amber-600'}`} />
+              <div key={check.key} className="flex items-start gap-3 rounded-xl border border-gray-200 p-4">
+                <Icon className={`mt-0.5 h-5 w-5 ${check.status === 'PASS' ? 'text-teal-600' : check.status === 'BLOCKED' ? 'text-red-600' : 'text-amber-600'}`} />
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-2">
                     <p className="font-semibold text-gray-900">{check.label}</p>
@@ -214,7 +214,7 @@ export function PreSubmissionReadiness({ applicationId, applicationStatus }: Pre
                     <div key={`${item.requirement}-${item.document_id || 'missing'}`} className="flex flex-col gap-3 px-4 py-4 lg:flex-row lg:items-center lg:justify-between">
                       <div className="flex min-w-0 items-start gap-3">
                         {ready ? (
-                          <CheckCircle2 className="mt-0.5 h-5 w-5 flex-none text-green-600" />
+                          <CheckCircle2 className="mt-0.5 h-5 w-5 flex-none text-teal-600" />
                         ) : invalid ? (
                           <FileWarning className="mt-0.5 h-5 w-5 flex-none text-red-600" />
                         ) : (
@@ -286,7 +286,7 @@ export function PreSubmissionReadiness({ applicationId, applicationStatus }: Pre
             {[...blockingIssues, ...warnings].slice(0, 6).map((issue, index) => {
               const Icon = issueIcon(issue.severity)
               return (
-                <div key={`${issue.code}-${index}`} className="flex gap-3 rounded-lg border border-gray-200 bg-white p-3">
+                <div key={`${issue.code}-${index}`} className="flex gap-3 rounded-xl border border-gray-200 bg-white p-3">
                   <Icon className={`mt-0.5 h-5 w-5 flex-none ${issue.severity === 'BLOCKER' ? 'text-red-600' : 'text-amber-600'}`} />
                   <div>
                     <p className="text-sm font-medium text-gray-900">{issue.message}</p>
@@ -299,7 +299,7 @@ export function PreSubmissionReadiness({ applicationId, applicationStatus }: Pre
         )}
 
         {actions.length > 0 && (
-          <div className="rounded-lg border border-blue-100 bg-blue-50 p-4">
+          <div className="rounded-xl border border-blue-100 bg-blue-50 p-4">
             <p className="font-semibold text-blue-900">Recommended next actions</p>
             <div className="mt-3 space-y-2">
               {actions.map((action, index) => (
@@ -323,12 +323,12 @@ export function PreSubmissionReadiness({ applicationId, applicationStatus }: Pre
         {error && <p className="text-sm text-red-600">{error}</p>}
 
         {data.can_submit ? (
-          <div className="flex items-center gap-2 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-800">
+          <div className="flex items-center gap-2 rounded-xl border border-teal-100 bg-teal-50 px-4 py-3 text-sm text-teal-700">
             <CheckCircle2 className="h-5 w-5 flex-none" />
             All blocking pre-submission checks have passed. The application is ready for submission.
           </div>
         ) : isPreSubmission ? (
-          <div className="flex items-start gap-2 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
+          <div className="flex items-start gap-2 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
             <AlertCircle className="mt-0.5 h-5 w-5 flex-none" />
             Submission is blocked until the readiness issues above are resolved.
           </div>

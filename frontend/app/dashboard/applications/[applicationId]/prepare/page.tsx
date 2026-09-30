@@ -17,7 +17,7 @@ export default function ApplicationPreparationPage() {
         Back to Application
       </Button>
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Application Preparation</h1>
+        <h1 className="page-title">Application Preparation</h1>
         <p className="mt-1 max-w-3xl text-gray-600">
           Review reusable business and project information, make application-specific edits, and assemble the document package before submission.
         </p>

@@ -1,5 +1,7 @@
 'use client'
 
+import { useLanguage } from '@/lib/language'
+import PageHeader from '@/components/PageHeader'
 import { useState } from 'react'
 import Link from 'next/link'
 import { Search, Compass, Loader2, ExternalLink } from 'lucide-react'
@@ -24,6 +26,7 @@ function serviceIntegrationLabel(service: any) {
 }
 
 export default function ExplorePage() {
+  const { t } = useLanguage()
   const [q, setQ] = useState('')
   const [category, setCategory] = useState('')
   const [applicationMode, setApplicationMode] = useState('')
@@ -38,15 +41,13 @@ export default function ExplorePage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900">Explore Government Services</h1>
-        <p className="mt-1 text-gray-600">
-          Discover the approvals, registrations and licences you may need — then check
-          applicability and start your application in a few steps.
-        </p>
-      </div>
+      <PageHeader
+        icon={Compass}
+        title={t('pg.exploreTitle')}
+        purpose={t('pg.explorePurpose')}
+      />
 
-      <div className="bg-white border border-gray-200 rounded-lg p-5 space-y-4">
+      <div className="space-y-4 rounded-2xl border border-gray-200 bg-white/90 p-5 shadow-card">
         <div className="flex flex-col md:flex-row gap-4">
           <div className="relative flex-1">
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -112,7 +113,7 @@ export default function ExplorePage() {
                 <Card className="h-full cursor-pointer hover:shadow-md transition">
                   <CardHeader>
                     <div className="flex items-start justify-between mb-2">
-                      <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center">
+                      <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">
                         <ModeIcon className="w-5 h-5 text-blue-600" />
                       </div>
                       {service.is_demo && <Badge variant="warning">Demo</Badge>}

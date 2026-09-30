@@ -26,6 +26,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import type { CommandCenterApproval } from '@/types'
+import AuroraBackground from '@/components/fx/AuroraBackground'
 
 interface Props {
   projectId: string
@@ -108,14 +109,14 @@ function ApprovalCard({ approval, onOpen }: { approval: CommandCenterApproval; o
       </div>
 
       <div className="mt-4 grid grid-cols-2 gap-2 text-xs">
-        <div className="rounded-lg bg-gray-50 p-2.5">
+        <div className="rounded-xl bg-gray-50 p-2.5">
           <p className="text-gray-500">SLA</p>
           <p className="mt-1 font-semibold text-gray-900">{slaStatus || '—'}</p>
           {approval.sla.days_remaining !== null && approval.sla.days_remaining !== undefined && (
             <p className="mt-0.5 text-gray-500">{daysLabel(approval.sla.days_remaining)} remaining</p>
           )}
         </div>
-        <div className="rounded-lg bg-gray-50 p-2.5">
+        <div className="rounded-xl bg-gray-50 p-2.5">
           <p className="text-gray-500">Risk</p>
           <p className={`mt-1 font-semibold ${riskClass}`}>{risk || '—'}</p>
           {approval.risk.score !== null && approval.risk.score !== undefined && (
@@ -133,7 +134,7 @@ function ApprovalCard({ approval, onOpen }: { approval: CommandCenterApproval; o
       </div>
 
       {approval.action.label && (
-        <div className="mt-3 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-700">
+        <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-700">
           <span className="font-semibold">Next:</span> {approval.action.label}
         </div>
       )}
@@ -195,7 +196,9 @@ export function UnifiedCommandCenter({ projectId }: Props) {
 
   return (
     <div className="space-y-6">
-      <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+      <section className="relative isolate overflow-hidden rounded-3xl bg-navy p-6 text-cream shadow-soft sm:p-8">
+        <div className="absolute inset-0 -z-10 opacity-[.10] bg-grid invert" aria-hidden="true" />
+        <AuroraBackground className="-z-10 opacity-40" />
         <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2">
@@ -205,7 +208,7 @@ export function UnifiedCommandCenter({ projectId }: Props) {
               <button
                 type="button"
                 onClick={() => refetch()}
-                className="inline-flex items-center gap-1 rounded-full border border-gray-200 px-2.5 py-1 text-xs font-medium text-gray-600 hover:bg-gray-50"
+                className="inline-flex items-center gap-1 rounded-full border border-white/25 bg-white/10 px-3 py-1 text-xs font-semibold text-cream transition hover:bg-white/20"
                 disabled={isFetching}
               >
                 <RefreshCw className={`h-3.5 w-3.5 ${isFetching ? 'animate-spin' : ''}`} />
@@ -221,43 +224,45 @@ export function UnifiedCommandCenter({ projectId }: Props) {
                 Simulate scenario
               </Button>
             </div>
-            <h1 className="mt-3 text-2xl font-bold tracking-tight text-gray-950 sm:text-3xl">{data.project.name}</h1>
-            <p className="mt-1 text-gray-600">{data.project.company_name} · {data.project.location || 'Location not specified'}</p>
-            <p className="mt-1 text-xs text-gray-500">{data.project.industry || 'Industry'} · {data.project.project_stage || 'Project stage not specified'}</p>
-            {data.__offlineCachedAt && <p className="mt-1 text-xs text-amber-700">Showing the latest locally cached command-center snapshot. Refresh when online for live application data.</p>}
+            <h1 className="mt-3 text-2xl font-extrabold tracking-tight text-cream sm:text-4xl">{data.project.name}</h1>
+            <p className="mt-2 text-blue-100">{data.project.company_name} · {data.project.location || 'Location not specified'}</p>
+            <p className="mt-1 text-xs text-blue-200">{data.project.industry || 'Industry'} · {data.project.project_stage || 'Project stage not specified'}</p>
+            {data.__offlineCachedAt && <p className="mt-2 text-xs text-sun">Showing the latest locally cached command-center snapshot. Refresh when online for live application data.</p>}
           </div>
 
-          <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 lg:min-w-[250px]">
-            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Operational readiness</p>
+          <div className="rounded-2xl border border-white/15 bg-white/10 p-5 backdrop-blur lg:min-w-[280px]">
+            <p className="text-xs font-extrabold uppercase tracking-[.16em] text-blue-200">Operational readiness</p>
             <div className="mt-2 flex items-end justify-between gap-3">
-              <span className="text-4xl font-bold text-slate-950">{overview.project_readiness_score}%</span>
-              <span className="text-xs text-slate-500">Advisory view</span>
+              <span className="text-5xl font-extrabold tracking-tight text-cream">{overview.project_readiness_score}%</span>
+              <span className="text-xs text-blue-200">Advisory view</span>
             </div>
-            <div className="mt-3 h-2 overflow-hidden rounded-full bg-slate-200">
-              <div className="h-full rounded-full bg-slate-700 transition-all" style={{ width: `${overview.project_readiness_score}%` }} />
+            <div className="mt-3 h-2 overflow-hidden rounded-full bg-white/20">
+              <div className="h-full rounded-full bg-sun transition-all" style={{ width: `${overview.project_readiness_score}%` }} />
             </div>
-            <p className="mt-2 text-[11px] leading-4 text-slate-500">Composite operational indicator. It is not a statutory or government score.</p>
+            <p className="mt-2 text-[11px] leading-4 text-blue-200">Composite operational indicator. It is not a statutory or government score.</p>
           </div>
         </div>
       </section>
 
-      <div className="grid grid-cols-2 gap-3 md:grid-cols-4 xl:grid-cols-8">
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
         {([
-          ['Approvals', overview.approval_count, FileCheck2, 'text-blue-700'],
-          ['Approved', overview.approved, CheckCircle2, 'text-green-700'],
-          ['In progress', overview.in_progress, Clock3, 'text-slate-700'],
-          ['Action needed', overview.action_count, AlertTriangle, 'text-amber-700'],
-          ['Queries', overview.queries, LifeBuoy, 'text-orange-700'],
-          ['High risk', overview.high_risk, ShieldAlert, 'text-red-700'],
-          ['Renewals', overview.renewals_due, RefreshCw, 'text-violet-700'],
-          ['Incentives', overview.incentive_matches, Gift, 'text-emerald-700'],
+          ['Approvals', overview.approval_count, FileCheck2, 'bg-blue-100 text-blue-700'],
+          ['Approved', overview.approved, CheckCircle2, 'bg-teal-100 text-teal-700'],
+          ['In progress', overview.in_progress, Clock3, 'bg-gray-100 text-gray-700'],
+          ['Action needed', overview.action_count, AlertTriangle, 'bg-sun/30 text-navy-ink'],
+          ['Queries', overview.queries, LifeBuoy, 'bg-coral/20 text-coral'],
+          ['High risk', overview.high_risk, ShieldAlert, 'bg-red-100 text-red-700'],
+          ['Renewals', overview.renewals_due, RefreshCw, 'bg-blue-100 text-blue-600'],
+          ['Incentives', overview.incentive_matches, Gift, 'bg-teal-100 text-teal-700'],
         ] as [string, number, ElementType, string][]).map(([label, value, I, iconClass]) => {
           return (
-            <Card key={String(label)} className="shadow-none">
-              <CardContent className="p-3.5 sm:p-4">
-                <I className={`h-4 w-4 ${iconClass}`} />
-                <p className="mt-2 text-[11px] font-medium uppercase tracking-wide text-gray-500">{label}</p>
-                <p className="mt-1 text-2xl font-bold text-gray-950">{value}</p>
+            <Card key={String(label)}>
+              <CardContent className="flex items-center gap-3.5 p-4 sm:p-5">
+                <span className={`grid h-11 w-11 flex-none place-items-center rounded-xl ${iconClass}`}><I className="h-5 w-5" /></span>
+                <div className="min-w-0">
+                  <p className="truncate text-xs font-bold uppercase tracking-wider text-gray-500">{label}</p>
+                  <p className="text-3xl font-extrabold leading-tight tracking-tight text-navy">{value}</p>
+                </div>
               </CardContent>
             </Card>
           )
@@ -277,10 +282,10 @@ export function UnifiedCommandCenter({ projectId }: Props) {
           </CardHeader>
           <CardContent>
             {actionCenter.length === 0 ? (
-              <div className="rounded-xl border border-green-200 bg-green-50 p-5 text-center">
-                <CheckCircle2 className="mx-auto h-7 w-7 text-green-700" />
-                <p className="mt-2 font-semibold text-green-900">No immediate action required</p>
-                <p className="mt-1 text-sm text-green-800">Continue routine monitoring across the project domains.</p>
+              <div className="rounded-xl border border-teal-100 bg-teal-50 p-5 text-center">
+                <CheckCircle2 className="mx-auto h-7 w-7 text-teal-700" />
+                <p className="mt-2 font-semibold text-teal-700">No immediate action required</p>
+                <p className="mt-1 text-sm text-teal-700">Continue routine monitoring across the project domains.</p>
               </div>
             ) : (
               <div className="space-y-2.5">
@@ -332,7 +337,7 @@ export function UnifiedCommandCenter({ projectId }: Props) {
                 <MetricTile label="Critical path" value={daysLabel(data.roadmap.critical_path_days)} />
               </div>
               {criticalPath.length > 0 && (
-                <div className="mt-4 rounded-lg border border-yellow-200 bg-yellow-50 p-3 text-xs text-yellow-950">
+                <div className="mt-4 rounded-xl border border-yellow-200 bg-yellow-50 p-3 text-xs text-yellow-950">
                   <div className="flex items-start gap-2">
                     <GitBranch className="mt-0.5 h-4 w-4 shrink-0" />
                     <span><span className="font-semibold">Critical path:</span> {criticalPath.join(' → ')}</span>
@@ -353,7 +358,7 @@ export function UnifiedCommandCenter({ projectId }: Props) {
               <p className="mt-1 text-sm text-gray-500">Every approval, its current state, risk, SLA, readiness and next action.</p>
             </div>
             <div className="relative">
-              <select value={filter} onChange={(event) => setFilter(event.target.value)} className="h-9 appearance-none rounded-lg border border-gray-200 bg-white pl-3 pr-9 text-sm text-gray-700 outline-none focus:border-blue-400">
+              <select value={filter} onChange={(event) => setFilter(event.target.value)} className="h-9 appearance-none rounded-xl border border-gray-200 bg-white pl-3 pr-9 text-sm text-gray-700 outline-none focus:border-blue-400">
                 <option value="ALL">All approvals</option>
                 <option value="ACTION">Needs action</option>
                 <option value="IN_PROGRESS">In progress</option>
@@ -389,10 +394,10 @@ export function UnifiedCommandCenter({ projectId }: Props) {
           <CardContent>
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-3xl font-bold text-gray-950">{data.compliance.score}%</p>
+                <p className="text-3xl font-extrabold tracking-tight text-gray-950">{data.compliance.score}%</p>
                 <p className="mt-1 text-sm text-gray-500">Compliance score</p>
               </div>
-              <ShieldCheck className="h-8 w-8 text-green-700" />
+              <ShieldCheck className="h-8 w-8 text-teal-700" />
             </div>
             <div className="mt-4 grid grid-cols-3 gap-2 text-center text-xs">
               <Stat label="On track" value={data.compliance.on_track} />
@@ -413,7 +418,7 @@ export function UnifiedCommandCenter({ projectId }: Props) {
             ) : (
               <div className="space-y-3">
                 {data.inspections.upcoming.slice(0, 3).map((visit: any) => (
-                  <div key={visit.visit_id} className="rounded-lg border border-gray-200 p-3">
+                  <div key={visit.visit_id} className="rounded-xl border border-gray-200 p-3">
                     <p className="font-semibold text-gray-900">{formatDate(visit.scheduled_start, true)}</p>
                     <p className="mt-1 text-xs text-gray-500">{visit.location || 'Location not specified'}</p>
                     <Badge className="mt-2" variant="info">Scheduled</Badge>
@@ -433,7 +438,7 @@ export function UnifiedCommandCenter({ projectId }: Props) {
             ) : (
               <div className="space-y-3">
                 {data.incentives.top_matches.slice(0, 3).map((match) => (
-                  <div key={match.id} className="rounded-lg border border-gray-200 p-3">
+                  <div key={match.id} className="rounded-xl border border-gray-200 p-3">
                     <div className="flex items-start justify-between gap-2">
                       <p className="font-semibold text-gray-900">{match.name}</p>
                       <Badge variant="success">{match.match_score ?? 0}%</Badge>
@@ -480,16 +485,16 @@ function MetricBar({ label, value, trailing }: { label: string; value: number; t
 
 function MetricTile({ label, value, emphasis = false }: { label: string; value: string; emphasis?: boolean }) {
   return (
-    <div className={`rounded-lg border p-3 ${emphasis ? 'border-green-200 bg-green-50' : 'border-gray-200 bg-gray-50'}`}>
+    <div className={`rounded-xl border p-3 ${emphasis ? 'border-teal-100 bg-teal-50' : 'border-gray-200 bg-gray-50'}`}>
       <p className="text-[10px] font-medium uppercase tracking-wide text-gray-500">{label}</p>
-      <p className={`mt-1 font-bold ${emphasis ? 'text-green-800' : 'text-gray-900'}`}>{value}</p>
+      <p className={`mt-1 font-bold ${emphasis ? 'text-teal-700' : 'text-gray-900'}`}>{value}</p>
     </div>
   )
 }
 
 function Stat({ label, value, danger = false }: { label: string; value: number; danger?: boolean }) {
   return (
-    <div className="rounded-lg bg-gray-50 p-2">
+    <div className="rounded-xl bg-gray-50 p-2">
       <p className="font-semibold text-gray-900">{value}</p>
       <p className={`mt-0.5 ${danger ? 'text-red-600' : 'text-gray-500'}`}>{label}</p>
     </div>
@@ -504,7 +509,7 @@ function Shortcut({ icon, title, text, target }: { icon: ReactNode; title: strin
   const router = useRouter()
   return (
     <button type="button" onClick={() => router.push(target)} className="rounded-xl border border-gray-200 bg-white p-4 text-left transition hover:-translate-y-0.5 hover:border-gray-300 hover:shadow-sm">
-      <div className="flex items-center gap-2 text-blue-700"><span className="rounded-lg bg-blue-50 p-2">{icon}</span><span className="font-semibold text-gray-900">{title}</span></div>
+      <div className="flex items-center gap-2 text-blue-700"><span className="rounded-xl bg-blue-50 p-2">{icon}</span><span className="font-semibold text-gray-900">{title}</span></div>
       <p className="mt-2 text-xs text-gray-500">{text}</p>
     </button>
   )

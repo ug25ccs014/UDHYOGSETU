@@ -1,5 +1,8 @@
 'use client'
 
+import { useLanguage, TKey } from '@/lib/language'
+import PageHeader from '@/components/PageHeader'
+import { Check } from 'lucide-react'
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Loader2 } from 'lucide-react'
@@ -18,6 +21,7 @@ const stepRequiredFields: Record<number, string[]> = {
 }
 
 export default function OnboardingWizard() {
+  const { t } = useLanguage()
   const router = useRouter()
   const [currentStep, setCurrentStep] = useState(0)
   const [error, setError] = useState<string | null>(null)
@@ -95,48 +99,47 @@ export default function OnboardingWizard() {
   }
 
   const inputClass =
-    'mt-1 w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+    'mt-1 w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent'
   const labelClass = 'block text-sm font-medium text-gray-700'
 
   return (
     <div className="max-w-4xl mx-auto">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Start New Project</h1>
-        <p className="mt-2 text-gray-600">
-          Let's set up your industrial project. Answer a few questions to build your approval roadmap.
-        </p>
+        <PageHeader
+          step={t('pg.wizStep', { n: currentStep + 1, name: t(`pg.st${steps[currentStep]}` as TKey) })}
+          title={t('pg.wizTitle')}
+          purpose={t('pg.wizPurpose')}
+        />
       </div>
 
-      <div className="bg-white border border-gray-200 rounded-lg shadow-sm">
-        <div className="p-6 border-b">
-          <div className="flex justify-between gap-1 sm:gap-4 mb-4">
-            {steps.map((label, idx) => (
-              <div key={idx} className="text-center flex-1 min-w-0">
-                <div
-                  aria-label={`Step ${idx + 1}: ${label}`}
-                  className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center mx-auto text-sm sm:text-base transition ${
-                    idx <= currentStep ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-600'
-                  }`}
-                >
-                  {idx + 1}
-                </div>
-                <div className={`hidden sm:block text-xs mt-1.5 truncate ${idx <= currentStep ? 'text-blue-600 font-medium' : 'text-gray-500'}`}>
-                  {label}
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="w-full bg-gray-200 rounded-full h-2">
-            <div
-              className="bg-blue-600 h-2 rounded-full transition-all"
-              style={{ width: `${((currentStep + 1) / 5) * 100}%` }}
-            />
-          </div>
+      <div className="rounded-3xl border border-gray-200 bg-white/95 shadow-soft">
+        <div className="border-b border-gray-200 p-5 sm:p-6">
+          <ol className="flex items-start">
+            {steps.map((label, idx) => {
+              const done = idx < currentStep
+              const now = idx === currentStep
+              return (
+                <li key={idx} className="relative flex min-w-0 flex-1 flex-col items-center text-center">
+                  {idx > 0 && <span className={`absolute right-1/2 top-4 -z-0 h-0.5 w-full ${idx <= currentStep ? 'bg-navy' : 'bg-gray-200'}`} aria-hidden="true" />}
+                  <span
+                    aria-label={`Step ${idx + 1}: ${label}`}
+                    aria-current={now ? 'step' : undefined}
+                    className={`relative z-10 grid h-8 w-8 place-items-center rounded-full text-sm font-extrabold transition sm:h-9 sm:w-9 ${
+                      done ? 'bg-teal text-white' : now ? 'bg-navy text-cream ring-4 ring-sun/60' : 'bg-gray-200 text-gray-600'
+                    }`}
+                  >
+                    {done ? <Check className="h-4 w-4" /> : idx + 1}
+                  </span>
+                  <span className={`mt-1.5 hidden truncate text-xs sm:block ${now ? 'font-bold text-navy' : done ? 'font-semibold text-teal-700' : 'text-gray-500'}`}>{t(`pg.st${label}` as TKey)}</span>
+                </li>
+              )
+            })}
+          </ol>
         </div>
 
-        <div className="p-8">
+        <div className="p-5 sm:p-8">
           {(error || stepError) && (
-            <div className="mb-6 p-3 rounded-lg bg-red-50 border border-red-200 text-sm text-red-700">
+            <div className="mb-6 p-3 rounded-xl bg-red-50 border border-red-200 text-sm text-red-700">
               {error || stepError}
             </div>
           )}
@@ -332,7 +335,7 @@ export default function OnboardingWizard() {
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <label className="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                <label className="flex items-center p-3 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50">
                   <input
                     type="checkbox"
                     name="hazardous_materials"
@@ -342,7 +345,7 @@ export default function OnboardingWizard() {
                   />
                   <span className="text-sm font-medium text-gray-700">Uses Hazardous Materials</span>
                 </label>
-                <label className="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                <label className="flex items-center p-3 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50">
                   <input
                     type="checkbox"
                     name="has_boiler"
@@ -498,7 +501,7 @@ export default function OnboardingWizard() {
                 </div>
               </div>
 
-              <div className="p-4 bg-blue-50 border-l-4 border-blue-600 rounded-lg">
+              <div className="p-4 bg-blue-50 border-l-4 border-blue-600 rounded-xl">
                 <p className="text-sm text-blue-800">
                   <span className="font-semibold">Next:</span> After submission, the system will analyze
                   your project and provide a personalized approval roadmap.

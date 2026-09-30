@@ -43,9 +43,34 @@ npm run dev
   - `app/dashboard/layout.tsx`: sidebar grouped (Start here / My work / Stay on track / More), navy active pill, top bar shows current page title, content capped at `max-w-7xl`, page fade-in on route change
   - `app/dashboard/page.tsx`: header + 3-step quick-start hero, project cards, spotlight capability grid; currency now ₹ (was $)
   - NotificationBell / UnifiedCommandCenter NOT edited (they inherit the remapped colours)
-- [ ] **Step 3 – Project pages**: `app/dashboard/[projectId]/*` (approvals, documents, compliance, copilot, schemes, regulatory, simulate)
-- [ ] **Step 4 – Applications/Explore/Officer pages** + `features/*` used by them
-- [ ] **Step 5 – Remaining dashboard pages** (profile, inspections, sla-risk, grievances, notifications, integrations, demo) + final QA (alignment, mobile, build)
-
-## Per-page "what am I doing?" pattern (use in Steps 2–5)
-Each page starts with: title (`.page-title`) + one-line purpose (`.page-sub`) + a primary action button on the right, then content cards. Multi-step flows show a stepper with "Step X of Y".
+- [x] **Step 3-5 – Theme pass over ALL dashboard pages + feature panels** (DONE, scripted, 44 files in `app/` and `features/`)
+  - every `<h1>` now uses `.page-title`; big stat numbers are extrabold
+  - off-theme green/emerald classes remapped to the teal palette (semantic red/amber kept)
+  - `rounded-lg` -> `rounded-xl`, `rounded-md` -> `rounded-lg` (softer NER-style corners)
+  - colours/borders/cards/buttons/inputs already follow the theme through the remapped Tailwind `blue`/`gray` scale and restyled `components/ui/*`
+  - translation calls (`useLanguage` / `t()`) were NOT touched
+  - stale files removed: `components/fx/IsoStack.tsx`, `components/landing/FeatureBento.tsx`
+- [x] **Step 6a – Hand polish, priority pages** (DONE)
+  - NEW `components/PageHeader.tsx`: `PageHeader` (icon, title, purpose, optional "Step X of Y", action button), `StatCard`, `BackLink`. Use these on every page that is still polished by hand.
+  - `app/dashboard/applications/page.tsx`: PageHeader + "New application" button, icon stat cards, filter chips with counts, statuses via `statusLabel()` (translated), pill action buttons
+  - `app/dashboard/[projectId]/compliance/page.tsx`: PageHeader, redesigned metric cards, navy filter pills
+  - `features/UnifiedCommandCenter.tsx` (project overview): navy hero banner with readiness meter, 8 KPI tiles as 2 rows of 4 with icon chips
+  - `app/dashboard/[projectId]/page.tsx`: BackLink instead of ghost button
+  - `tailwind.config.js`: `slate-*` and `violet-*` now follow the theme scales (older panels pick up the palette)
+- [x] **Step 6b – Hand polish, second batch** (DONE)
+  - `PageHeader` (+ `StatCard`) now on: Explore, Notifications (icon stat cards, navy "Unread only" toggle), Integrations (uppercase mini-labels on the 6 tiles), Officer Application Review
+  - `features/OnboardingWizard.tsx`: "Step X of 5 · name" in the header, connected stepper (done = teal tick, current = navy with yellow ring), rounder card
+  - `ApplicationPreparation` has no step structure in code, so it was left as is
+- [x] **Step 6c – Hand polish, last batch** (DONE)
+  - `PageHeader` now on: Business Profile (buttons moved into header), Inspection Planner, SLA & Risk, Grievances, Incentive Readiness (Schemes), Project Documents, Project Regulatory, Regulatory Updates, Project Copilot
+  - `features/ScenarioSimulator.tsx`: navy hero banner (same style as project overview)
+- [x] **Step 6d – Detail pages** (DONE)
+  - `PageHeader` gained `badge` (status chip next to the title) and `capitalize` props
+  - Now on: Application detail, Explore service detail, Officer application detail (+ `BackLink`), Demo Center
+  - Left as is (already themed): application `prepare` and `query` pages (they render feature panels with their own headers)
+- [x] **Step 8 – Hindi/Marathi for the new UI text** (DONE)
+  - New `pg` section (98 keys) in `locales/en.ts`, `hi.ts`, `mr.ts` (compile-checked: a missing key in hi/mr fails the build)
+  - `t('pg.…')` wired into: Dashboard home (incl. quick-start + 9 tool cards), Applications, Compliance, Notifications, Explore, Integrations, Officer list + detail back link/hint, project overview back link, New-project wizard (title, step label, step names), Business Profile, Inspection Planner, SLA & Risk, Grievances, Incentive Readiness, Documents, Regulatory, Copilot page headers
+  - Still English (not covered): table column headings, empty/error states, card body text inside feature panels, Demo Center, application detail/prepare/query panels
+- [ ] **Step 7 – Final QA (do on your machine)**: `npm ci && npm run build && npm test`; switch language to हिन्दी / मराठी and open each page; check alignment at ~1280px and ~375px. Send screenshots of anything off.
+- [ ] **Deploy**: commit only the changed files, push; Render + Vercel redeploy automatically. No Neon / env changes.

@@ -17,7 +17,7 @@ export default function ApplicationQueryPage() {
         Back to Application
       </Button>
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Query & Response Center</h1>
+        <h1 className="page-title">Query & Response Center</h1>
         <p className="mt-1 text-gray-600">Understand the department query, gather evidence and prepare your response.</p>
       </div>
       <QueryResolutionCenter applicationId={applicationId} />

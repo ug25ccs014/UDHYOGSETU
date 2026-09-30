@@ -1,14 +1,15 @@
 'use client'
 
+import { useLanguage } from '@/lib/language'
+import PageHeader from '@/components/PageHeader'
+import { History } from 'lucide-react'
 import RegulatoryChangeCenter from '@/features/RegulatoryChangeCenter'
 
 export default function RegulatoryUpdatesPage() {
+  const { t } = useLanguage()
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900">Regulatory Updates</h1>
-        <p className="mt-1 text-gray-600">Track version changes in the regulatory knowledge base and see potential project impact.</p>
-      </div>
+      <PageHeader icon={History} title={t('pg.regTitle')} purpose={t('pg.regPurpose')} />
       <RegulatoryChangeCenter />
     </div>
   )

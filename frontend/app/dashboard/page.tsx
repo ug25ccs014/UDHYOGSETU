@@ -1,5 +1,6 @@
 'use client'
 
+import { useLanguage, TKey } from '@/lib/language'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import {
@@ -34,6 +35,7 @@ const capabilities = [
 const tones = ['bg-blue-100 text-blue-600', 'bg-teal-100 text-teal-700', 'bg-sun/30 text-navy-ink', 'bg-coral/20 text-coral']
 
 export default function DashboardHome() {
+  const { t } = useLanguage()
   const router = useRouter()
   const { data, isLoading, isError, refetch, isFetching } = useProjects()
   const projects = Array.isArray(data) ? data : []
@@ -43,11 +45,11 @@ export default function DashboardHome() {
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="page-title">Dashboard</h1>
-          <p className="page-sub">Manage your industrial projects and approvals from one place.</p>
+          <h1 className="page-title">{t('pg.dashTitle')}</h1>
+          <p className="page-sub">{t('pg.dashPurpose')}</p>
         </div>
         <Button onClick={() => router.push('/dashboard/new-project')} className="w-full sm:w-auto">
-          <Plus className="h-4 w-4" /> Start new project
+          <Plus className="h-4 w-4" /> {t('pg.startNew')}
         </Button>
       </div>
 
@@ -58,13 +60,13 @@ export default function DashboardHome() {
           <AuroraBackground className="-z-10 opacity-40" />
           <div className="grid items-center gap-8 lg:grid-cols-[1.1fr_1fr]">
             <div>
-              <div className="eyebrow !text-sun"><span className="pulse-dot" /> Your journey</div>
-              <h2 className="mt-3 text-2xl font-extrabold leading-tight tracking-tight sm:text-3xl">From idea to industry — three simple steps</h2>
+              <div className="eyebrow !text-sun"><span className="pulse-dot" /> {t('pg.yourJourney')}</div>
+              <h2 className="mt-3 text-2xl font-extrabold leading-tight tracking-tight sm:text-3xl">{t('pg.threeSteps')}</h2>
               <p className="mt-3 max-w-md text-blue-100">
-                Answer a few questions about your business and UDYOGSETU builds your approval roadmap instantly.
+                {t('pg.threeStepsSub')}
               </p>
               <Button variant="secondary" size="lg" className="mt-6" onClick={() => router.push('/dashboard/new-project')}>
-                Get started <ArrowRight className="h-4 w-4" />
+                {t('pg.getStarted')} <ArrowRight className="h-4 w-4" />
               </Button>
             </div>
             <ol className="grid gap-3">
@@ -75,8 +77,8 @@ export default function DashboardHome() {
                     <Link href={s.href} className="group flex items-center gap-4 rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur transition hover:bg-white/20">
                       <span className="grid h-10 w-10 flex-none place-items-center rounded-full bg-sun text-sm font-extrabold text-navy-ink">{s.n}</span>
                       <span className="min-w-0 flex-1">
-                        <span className="block font-bold">{s.title}</span>
-                        <span className="block text-sm text-blue-200">{s.desc}</span>
+                        <span className="block font-bold">{t(`pg.qs${s.n}T` as TKey)}</span>
+                        <span className="block text-sm text-blue-200">{t(`pg.qs${s.n}D` as TKey)}</span>
                       </span>
                       <Icon className="h-5 w-5 flex-none text-blue-200 transition group-hover:translate-x-0.5 group-hover:text-sun" />
                     </Link>
@@ -91,7 +93,7 @@ export default function DashboardHome() {
       {/* Projects */}
       <section aria-labelledby="projects-h">
         <div className="mb-4 flex items-center justify-between">
-          <h3 id="projects-h" className="text-lg font-extrabold text-navy">Your projects</h3>
+          <h3 id="projects-h" className="text-lg font-extrabold text-navy">{t('pg.yourProjects')}</h3>
           {projects.length > 0 && <span className="text-sm text-gray-500">{projects.length} total</span>}
         </div>
         {isLoading ? (
@@ -152,13 +154,13 @@ export default function DashboardHome() {
 
       {/* Capabilities */}
       <section aria-labelledby="cap-h">
-        <h3 id="cap-h" className="mb-1 text-lg font-extrabold text-navy">What you can do</h3>
-        <p className="mb-4 text-sm text-gray-500">Jump straight to any tool.</p>
+        <h3 id="cap-h" className="mb-1 text-lg font-extrabold text-navy">{t('pg.whatYouCanDo')}</h3>
+        <p className="mb-4 text-sm text-gray-500">{t('pg.jumpAny')}</p>
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
           {capabilities.map((cap, i) => {
             const Icon = cap.icon
             return (
-              <ScrollReveal key={cap.title} delay={(i % 3) * 0.07} className="h-full">
+              <ScrollReveal key={t(`pg.cap${i}T` as TKey)} delay={(i % 3) * 0.07} className="h-full">
                 <Link href={cap.href} className="group block h-full rounded-[1.25rem] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-cream">
                   <SpotlightCard className="h-full">
                     <div className="flex h-full flex-col p-5">
@@ -167,7 +169,7 @@ export default function DashboardHome() {
                         <ArrowUpRight className="h-4 w-4 text-gray-300 transition group-hover:text-blue-500" aria-hidden="true" />
                       </div>
                       <h4 className="font-bold text-navy">{cap.title}</h4>
-                      <p className="mt-1 text-sm leading-relaxed text-gray-600">{cap.desc}</p>
+                      <p className="mt-1 text-sm leading-relaxed text-gray-600">{t(`pg.cap${i}D` as TKey)}</p>
                     </div>
                   </SpotlightCard>
                 </Link>

@@ -1,5 +1,6 @@
 'use client'
 
+import PageHeader from '@/components/PageHeader'
 import Link from 'next/link'
 import { ArrowRight, CheckCircle2, AlertCircle, FlaskConical, Info, Loader2, RefreshCw, ShieldCheck } from 'lucide-react'
 import { useDemoReadiness } from '@/hooks/useApi'
@@ -28,20 +29,18 @@ export default function DemoCenterPage() {
 
   return (
     <div className="space-y-8">
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-        <div>
-          <div className="inline-flex items-center gap-2 rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-800 ring-1 ring-inset ring-amber-200">
-            <FlaskConical className="h-4 w-4" />
-            SIH prototype demo mode
-          </div>
-          <h1 className="mt-3 text-3xl font-bold text-gray-900">SIH Demo Center</h1>
-          <p className="mt-1 max-w-3xl text-gray-600">Verify the seeded walkthrough before presenting UDYOGSETU. Every check is read-only and uses prototype data; nothing here represents a live government transaction.</p>
-        </div>
-        <Button variant="outline" onClick={() => refetch()} disabled={isFetching}>
-          {isFetching ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <RefreshCw className="mr-2 h-4 w-4" />}
-          Recheck demo
-        </Button>
-      </div>
+      <PageHeader
+        icon={FlaskConical}
+        step="SIH prototype demo mode"
+        title="SIH Demo Center"
+        purpose="Verify the seeded walkthrough before presenting UDYOGSETU. Every check is read-only and uses prototype data; nothing here represents a live government transaction."
+        action={
+          <Button variant="outline" onClick={() => refetch()} disabled={isFetching}>
+            {isFetching ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
+            Recheck demo
+          </Button>
+        }
+      />
 
       {isLoading ? (
         <Card><CardContent className="flex items-center justify-center py-20 text-gray-600"><Loader2 className="mr-2 h-5 w-5 animate-spin" />Checking demo readiness...</CardContent></Card>
@@ -49,7 +48,7 @@ export default function DemoCenterPage() {
         <Card className="border-red-200"><CardContent className="py-16 text-center"><p className="font-medium text-red-900">Demo readiness is unavailable.</p><p className="mt-1 text-sm text-red-700">Make sure the backend is running and the demo database is accessible.</p><Button className="mt-4" variant="outline" onClick={() => refetch()}>Retry</Button></CardContent></Card>
       ) : (
         <>
-          <div className={`rounded-2xl border p-6 ${data?.ready ? 'border-green-200 bg-green-50' : 'border-amber-200 bg-amber-50'}`}>
+          <div className={`rounded-2xl border p-6 ${data?.ready ? 'border-teal-100 bg-teal-50' : 'border-amber-200 bg-amber-50'}`}>
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <p className="text-sm font-semibold uppercase tracking-wide text-gray-600">Demo readiness</p>
@@ -68,7 +67,7 @@ export default function DemoCenterPage() {
               <CardContent className="space-y-3">
                 {(data?.checks || []).map((check: any) => (
                   <div key={check.key} className="flex items-start gap-3 rounded-xl border border-gray-200 p-4">
-                    {check.ok ? <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-green-600" /> : <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-amber-600" />}
+                    {check.ok ? <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-teal-600" /> : <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-amber-600" />}
                     <div className="min-w-0 flex-1"><p className="font-medium text-gray-900">{check.label}</p><p className="mt-1 text-sm text-gray-600">{check.detail}</p></div>
                     <Link href={check.href} className="shrink-0 text-sm font-medium text-blue-700 hover:underline">Open</Link>
                   </div>

@@ -1,5 +1,7 @@
 'use client'
 
+import { useLanguage } from '@/lib/language'
+import PageHeader from '@/components/PageHeader'
 import { useMemo, useState, type ReactNode } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import {
@@ -58,6 +60,7 @@ function lifecycleLabel(status: string) {
 }
 
 export default function ProjectCompliancePage() {
+  const { t } = useLanguage()
   const params = useParams()
   const router = useRouter()
   const projectId = params.projectId as string
@@ -180,29 +183,23 @@ export default function ProjectCompliancePage() {
 
   return (
     <div className="space-y-8">
-      <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-xl bg-green-50 flex items-center justify-center">
-              <ShieldCheck className="w-5 h-5 text-green-700" />
-            </div>
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">Compliance & Renewals</h1>
-              <p className="mt-1 text-gray-600">Track recurring obligations, close compliance tasks, and prepare renewals before they become urgent.</p>
-            </div>
-          </div>
-        </div>
-        <Button variant="outline" onClick={() => dashboard.refetch()} disabled={dashboard.isFetching}>
-          {dashboard.isFetching ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <RefreshCw className="w-4 h-4 mr-2" />}
-          Refresh
-        </Button>
-      </div>
+      <PageHeader
+        icon={ShieldCheck}
+        title={t('pg.complTitle')}
+        purpose={t('pg.complPurpose')}
+        action={
+          <Button variant="outline" onClick={() => dashboard.refetch()} disabled={dashboard.isFetching}>
+            {dashboard.isFetching ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />}
+            {t('pg.refresh')}
+          </Button>
+        }
+      />
 
       {message && (
         <div className="rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-900">{message}</div>
       )}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-5">
         <Metric label="Compliance score" value={`${dashboard.data.score ?? 0}%`} icon={<CheckCircle2 className="w-5 h-5" />} tone="green" />
         <Metric label="On track" value={summary.on_track ?? 0} icon={<CheckCircle2 className="w-5 h-5" />} tone="green" />
         <Metric label="At risk" value={summary.at_risk ?? 0} icon={<AlertTriangle className="w-5 h-5" />} tone="amber" />
@@ -223,7 +220,7 @@ export default function ProjectCompliancePage() {
                   key={value}
                   type="button"
                   onClick={() => setFilter(value)}
-                  className={`rounded-full border px-3 py-1.5 text-xs font-medium ${filter === value ? 'border-blue-300 bg-blue-50 text-blue-700' : 'border-gray-200 bg-white text-gray-600'}`}
+                  className={`rounded-full border px-3.5 py-1.5 text-xs font-bold transition ${filter === value ? 'border-navy bg-navy text-cream' : 'border-gray-200 bg-white text-gray-600 hover:border-blue-300'}`}
                 >
                   {lifecycleLabel(value)}
                 </button>
@@ -338,19 +335,17 @@ export default function ProjectCompliancePage() {
 
 function Metric({ label, value, icon, tone }: { label: string; value: string | number; icon: ReactNode; tone: 'green' | 'amber' | 'red' | 'violet' }) {
   const styles = {
-    green: 'bg-green-50 text-green-700',
-    amber: 'bg-amber-50 text-amber-700',
-    red: 'bg-red-50 text-red-700',
-    violet: 'bg-violet-50 text-violet-700',
+    green: 'bg-teal-100 text-teal-700',
+    amber: 'bg-sun/30 text-navy-ink',
+    red: 'bg-coral/20 text-coral',
+    violet: 'bg-blue-100 text-blue-600',
   }[tone]
   return (
-    <Card>
-      <CardContent className="p-5">
-        <div className={`w-9 h-9 rounded-lg flex items-center justify-center ${styles}`}>{icon}</div>
-        <p className="mt-3 text-xs text-gray-500">{label}</p>
-        <p className="mt-1 text-2xl font-bold text-gray-900">{value}</p>
-      </CardContent>
-    </Card>
+    <div className="rounded-2xl border border-gray-200 bg-white/90 p-5 shadow-card transition duration-200 hover:-translate-y-0.5 hover:shadow-soft">
+      <div className={`grid h-11 w-11 place-items-center rounded-xl ${styles}`}>{icon}</div>
+      <p className="mt-4 text-sm font-semibold text-gray-600">{label}</p>
+      <p className="mt-0.5 text-3xl font-extrabold tracking-tight text-navy">{value}</p>
+    </div>
   )
 }
 
@@ -388,7 +383,7 @@ function RenewalCasePanel({ renewal, vaultDocuments, updateRenewal, onUpdate, on
         </div>
 
         {renewal.document_readiness?.missing?.length > 0 && (
-          <div className="rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
+          <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
             <p className="font-semibold">Documents to review</p>
             <ul className="mt-2 space-y-1 list-disc pl-5">{renewal.document_readiness.missing.map((item: string) => <li key={item}>{item}</li>)}</ul>
           </div>
@@ -399,7 +394,7 @@ function RenewalCasePanel({ renewal, vaultDocuments, updateRenewal, onUpdate, on
             <p className="text-sm font-semibold text-gray-900">Select reusable project documents</p>
             <div className="mt-3 grid gap-2 md:grid-cols-2">
               {vaultDocuments.map((doc: any) => (
-                <label key={doc.id} className="flex items-center gap-3 rounded-lg border border-gray-200 p-3 text-sm">
+                <label key={doc.id} className="flex items-center gap-3 rounded-xl border border-gray-200 p-3 text-sm">
                   <input
                     type="checkbox"
                     checked={selected.has(doc.id)}
@@ -414,15 +409,15 @@ function RenewalCasePanel({ renewal, vaultDocuments, updateRenewal, onUpdate, on
 
         <div>
           <label className="text-sm font-semibold text-gray-900">Case notes</label>
-          <textarea value={notes} onChange={(event) => setNotes(event.target.value)} disabled={!isPreparing} className="mt-2 w-full min-h-24 rounded-lg border border-gray-300 px-3 py-2 text-sm" placeholder="Record preparation notes, external instructions, or evidence references." />
+          <textarea value={notes} onChange={(event) => setNotes(event.target.value)} disabled={!isPreparing} className="mt-2 w-full min-h-24 rounded-xl border border-gray-300 px-3 py-2 text-sm" placeholder="Record preparation notes, external instructions, or evidence references." />
         </div>
 
         {renewal.status === 'READY_FOR_SUBMISSION' && (
-          <div className="rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm text-blue-900">The renewal pack is ready. Submission happens through the relevant external process unless an authorized UDYOGSETU government integration exists.</div>
+          <div className="rounded-xl border border-blue-200 bg-blue-50 p-4 text-sm text-blue-900">The renewal pack is ready. Submission happens through the relevant external process unless an authorized UDYOGSETU government integration exists.</div>
         )}
 
         {renewal.status === 'SUBMITTED_EXTERNALLY' && (
-          <div className="rounded-lg border border-green-200 bg-green-50 p-4 text-sm text-green-900">Recorded as externally submitted. Reference: {renewal.external_reference || 'Not provided'}.</div>
+          <div className="rounded-xl border border-teal-100 bg-teal-50 p-4 text-sm text-teal-700">Recorded as externally submitted. Reference: {renewal.external_reference || 'Not provided'}.</div>
         )}
 
         {renewal.status === 'PREPARING' && (
@@ -434,7 +429,7 @@ function RenewalCasePanel({ renewal, vaultDocuments, updateRenewal, onUpdate, on
 
         {renewal.status === 'READY_FOR_SUBMISSION' && (
           <div className="flex flex-wrap gap-2">
-            <input value={reference} onChange={(event) => setReference(event.target.value)} className="h-9 rounded-md border border-gray-300 px-3 text-sm" placeholder="External reference (optional)" />
+            <input value={reference} onChange={(event) => setReference(event.target.value)} className="h-9 rounded-lg border border-gray-300 px-3 text-sm" placeholder="External reference (optional)" />
             <Button onClick={onSubmitExternally} disabled={updateRenewal.isPending}>Record external submission</Button>
           </div>
         )}
@@ -450,5 +445,5 @@ function RenewalCasePanel({ renewal, vaultDocuments, updateRenewal, onUpdate, on
 }
 
 function Info({ label, value }: { label: string; value: string }) {
-  return <div className="rounded-lg bg-gray-50 p-3"><p className="text-[11px] uppercase tracking-wide text-gray-400">{label}</p><p className="mt-1 text-sm font-medium text-gray-900">{value}</p></div>
+  return <div className="rounded-xl bg-gray-50 p-3"><p className="text-[11px] uppercase tracking-wide text-gray-400">{label}</p><p className="mt-1 text-sm font-medium text-gray-900">{value}</p></div>
 }

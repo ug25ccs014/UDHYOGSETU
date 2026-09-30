@@ -60,7 +60,7 @@ function fieldInput(field: ApplicationPreparationField, value: any, onChange: (v
         onChange={(e) => onChange(e.target.value)}
         rows={3}
         disabled={disabled}
-        className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 outline-none focus:border-transparent focus:ring-2 focus:ring-blue-500"
+        className="mt-1 w-full rounded-xl border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 outline-none focus:border-transparent focus:ring-2 focus:ring-blue-500"
       />
     )
   }
@@ -424,19 +424,19 @@ export function ApplicationPreparation({ applicationId, compact = false }: Props
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-            <div className="rounded-lg border border-gray-200 bg-gray-50 p-3">
+            <div className="rounded-xl border border-gray-200 bg-gray-50 p-3">
               <div className="text-xs text-gray-500">Required fields</div>
               <div className="mt-1 text-xl font-bold text-gray-900">{prep.summary.filled_required_fields}/{prep.summary.required_fields}</div>
             </div>
-            <div className="rounded-lg border border-gray-200 bg-gray-50 p-3">
+            <div className="rounded-xl border border-gray-200 bg-gray-50 p-3">
               <div className="text-xs text-gray-500">Preparation</div>
               <div className="mt-1 text-xl font-bold text-blue-700">{prep.summary.preparation_score}%</div>
             </div>
-            <div className="rounded-lg border border-gray-200 bg-gray-50 p-3">
+            <div className="rounded-xl border border-gray-200 bg-gray-50 p-3">
               <div className="text-xs text-gray-500">Attached docs</div>
               <div className="mt-1 text-xl font-bold text-gray-900">{prep.attached_documents.length}</div>
             </div>
-            <div className="rounded-lg border border-gray-200 bg-gray-50 p-3">
+            <div className="rounded-xl border border-gray-200 bg-gray-50 p-3">
               <div className="text-xs text-gray-500">Readiness</div>
               <div className="mt-1 text-xl font-bold text-gray-900">{prep.summary.readiness_score}%</div>
             </div>
@@ -506,8 +506,8 @@ export function ApplicationPreparation({ applicationId, compact = false }: Props
         </div>
       )}
 
-      {message && <div className="rounded-lg border border-green-200 bg-green-50 p-3 text-sm text-green-800">{message}</div>}
-      {error && <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-800">{error}</div>}
+      {message && <div className="rounded-xl border border-teal-100 bg-teal-50 p-3 text-sm text-teal-700">{message}</div>}
+      {error && <div className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-800">{error}</div>}
 
       <div className="space-y-5">
         {sections.map(([section, fields]) => (
@@ -518,8 +518,8 @@ export function ApplicationPreparation({ applicationId, compact = false }: Props
             <CardContent>
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 {fields.map((field) => (
-                  <div key={field.key} className="rounded-lg border border-gray-200 p-4">
-                    <div className={`flex items-start justify-between gap-2 rounded-md ${field.source_changed ? 'bg-amber-50 p-2' : ''}`}>
+                  <div key={field.key} className="rounded-xl border border-gray-200 p-4">
+                    <div className={`flex items-start justify-between gap-2 rounded-lg ${field.source_changed ? 'bg-amber-50 p-2' : ''}`}>
                       <label className="text-sm font-semibold text-gray-900">
                         {field.label}
                         {field.required && <span className="ml-1 text-red-500">*</span>}
@@ -530,10 +530,10 @@ export function ApplicationPreparation({ applicationId, compact = false }: Props
                       </div>
                     </div>
                     {field.editable ? fieldInput(field, values[field.key], (value) => updateValue(field.key, value), readOnly) : (
-                      <div className="mt-2 rounded-lg bg-gray-50 px-3 py-2 text-sm text-gray-700">{values[field.key] || '—'}</div>
+                      <div className="mt-2 rounded-xl bg-gray-50 px-3 py-2 text-sm text-gray-700">{values[field.key] || '—'}</div>
                     )}
                     {field.source_changed && (
-                      <div className="mt-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-900">
+                      <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-900">
                         <span>Latest source value: </span>
                         <span className="font-semibold">{field.source_value ?? 'Not available'}</span>
                       </div>
@@ -582,9 +582,9 @@ export function ApplicationPreparation({ applicationId, compact = false }: Props
           {prep.attached_documents.length > 0 && (
             <div className="space-y-2">
               {prep.attached_documents.map((doc) => (
-                <div key={doc.id} className="flex items-center justify-between gap-3 rounded-lg border border-green-200 bg-green-50 p-3">
+                <div key={doc.id} className="flex items-center justify-between gap-3 rounded-xl border border-teal-100 bg-teal-50 p-3">
                   <div className="flex min-w-0 items-center gap-3">
-                    <CheckCircle2 className="h-4 w-4 shrink-0 text-green-600" />
+                    <CheckCircle2 className="h-4 w-4 shrink-0 text-teal-600" />
                     <div className="min-w-0">
                       <p className="truncate text-sm font-medium text-gray-900">{doc.file_name}</p>
                       <p className="text-xs text-gray-600">{doc.document_type || 'Document'} · {doc.status}</p>
@@ -600,7 +600,7 @@ export function ApplicationPreparation({ applicationId, compact = false }: Props
             prep.recommended_documents.map((doc) => {
               const alreadyAttached = prep.attached_documents.some((attachedDoc) => attachedDoc.id === doc.document_id)
               return (
-                <div key={doc.document_id} className="flex flex-col gap-3 rounded-lg border border-gray-200 p-3 sm:flex-row sm:items-center sm:justify-between">
+                <div key={doc.document_id} className="flex flex-col gap-3 rounded-xl border border-gray-200 p-3 sm:flex-row sm:items-center sm:justify-between">
                   <div className="flex min-w-0 items-start gap-3">
                     <FileText className="mt-0.5 h-4 w-4 shrink-0 text-gray-400" />
                     <div className="min-w-0">
@@ -621,7 +621,7 @@ export function ApplicationPreparation({ applicationId, compact = false }: Props
               )
             })
           ) : prep.attached_documents.length === 0 ? (
-            <div className="rounded-lg border border-dashed border-gray-300 p-6 text-center text-sm text-gray-600">
+            <div className="rounded-xl border border-dashed border-gray-300 p-6 text-center text-sm text-gray-600">
               <p>No reusable document suggestions are available yet.</p>
               <Link href="/dashboard/profile" className="mt-2 inline-block font-medium text-blue-600 hover:underline">Open your Data Vault →</Link>
             </div>

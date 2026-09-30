@@ -1,5 +1,6 @@
 'use client'
 
+import PageHeader from '@/components/PageHeader'
 import { useParams, useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
@@ -119,23 +120,22 @@ export default function ApplicationDetailPage() {
       </Button>
 
       {application.__offlineCachedAt && (
-        <div className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+        <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
           Showing the latest locally cached application snapshot. Actions that change government or server state remain blocked until you are online.
         </div>
       )}
 
       {transitionError && (
-        <div role="alert" className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">{transitionError}</div>
+        <div role="alert" className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">{transitionError}</div>
       )}
 
       <div className="flex items-start justify-between flex-wrap gap-4">
-        <div>
-          <div className="flex items-center gap-2">
-            <h1 className="text-3xl font-bold text-gray-900 capitalize">{application.approval_name}</h1>
-            <Badge variant={statusVariant(status)}>{status.replace('_', ' ')}</Badge>
-          </div>
-          <p className="mt-1 text-gray-600">{application.department}</p>
-        </div>
+        <PageHeader
+          capitalize
+          title={application.approval_name}
+          purpose={application.department}
+          badge={<Badge variant={statusVariant(status)}>{status.replace('_', ' ')}</Badge>}
+        />
         <div className="flex flex-wrap items-center gap-2">
           {(status === 'NOT_STARTED' || status === 'DRAFT') && (
             <Button size="sm" variant="default" onClick={() => router.push(`/dashboard/applications/${applicationId}/prepare`)}>
@@ -175,7 +175,7 @@ export default function ApplicationDetailPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-white border border-gray-200 rounded-lg p-6 col-span-1">
+        <div className="bg-white border border-gray-200 rounded-xl p-6 col-span-1">
           <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
             <ShieldCheck className="w-5 h-5 text-blue-600" />
             SLA Status
@@ -198,7 +198,7 @@ export default function ApplicationDetailPage() {
           )}
         </div>
 
-        <div className="bg-white border border-gray-200 rounded-lg p-6 col-span-2">
+        <div className="bg-white border border-gray-200 rounded-xl p-6 col-span-2">
           <h3 className="font-semibold text-gray-900 mb-3">Details</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3 text-sm">
             <div className="text-gray-500">Application ID</div>

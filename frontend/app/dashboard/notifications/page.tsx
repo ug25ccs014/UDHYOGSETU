@@ -1,7 +1,9 @@
 'use client'
 
+import { useLanguage } from '@/lib/language'
+import PageHeader, { StatCard } from '@/components/PageHeader'
 import Link from 'next/link'
-import { Bell, Check, ChevronDown, ExternalLink, Inbox, Loader2 } from 'lucide-react'
+import { Bell, Check, ChevronDown, Clock3, ExternalLink, Inbox, Loader2 } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useMarkAllNotificationsRead, useMarkNotificationRead, useNotificationSummary, useNotifications } from '@/hooks/useApi'
 import { Badge } from '@/components/ui/badge'
@@ -52,6 +54,7 @@ function badgeVariant(severity: string): 'success' | 'warning' | 'danger' | 'inf
 }
 
 export default function NotificationsPage() {
+  const { t } = useLanguage()
   const [category, setCategory] = useState('')
   const [severity, setSeverity] = useState('')
   const [unreadOnly, setUnreadOnly] = useState(false)
@@ -83,53 +86,35 @@ export default function NotificationsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center">
-              <Bell className="w-5 h-5 text-blue-600" />
-            </div>
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">Notification Center</h1>
-              <p className="mt-1 text-gray-600">One place for application, SLA, query, inspection, grievance and compliance alerts.</p>
-            </div>
-          </div>
-        </div>
-        <Button variant="outline" onClick={markAllRead} disabled={markAll.isPending || (summary.data?.unread || 0) === 0}>
-          {markAll.isPending ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Check className="w-4 h-4 mr-2" />}
-          Mark all read
-        </Button>
+      <PageHeader
+        icon={Bell}
+        title={t('pg.notifTitle')}
+        purpose={t('pg.notifPurpose')}
+        action={
+          <Button variant="outline" onClick={markAllRead} disabled={markAll.isPending || (summary.data?.unread || 0) === 0}>
+            {markAll.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
+            {t('pg.markAll')}
+          </Button>
+        }
+      />
+
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
+        <StatCard icon={Bell} tone="bg-coral/20 text-coral" label={t('pg.unread')} value={summary.data?.unread ?? '—'} hint={t('pg.needsAttention')} />
+        <StatCard icon={Clock3} tone="bg-blue-100 text-blue-600" label={t('pg.last24')} value={summary.data?.recent_24h ?? '—'} hint={t('pg.recentActivity')} />
+        <StatCard icon={Inbox} tone="bg-teal-100 text-teal-700" label={t('pg.allNotifs')} value={summary.data?.total ?? '—'} hint={t('pg.storedAcct')} />
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="bg-white border border-gray-200 rounded-xl p-5">
-          <p className="text-sm text-gray-500">Unread</p>
-          <p className="mt-1 text-3xl font-bold text-red-600">{summary.data?.unread ?? '—'}</p>
-          <p className="mt-1 text-xs text-gray-500">Needs attention</p>
-        </div>
-        <div className="bg-white border border-gray-200 rounded-xl p-5">
-          <p className="text-sm text-gray-500">Last 24 hours</p>
-          <p className="mt-1 text-3xl font-bold text-blue-600">{summary.data?.recent_24h ?? '—'}</p>
-          <p className="mt-1 text-xs text-gray-500">Recent activity</p>
-        </div>
-        <div className="bg-white border border-gray-200 rounded-xl p-5">
-          <p className="text-sm text-gray-500">All notifications</p>
-          <p className="mt-1 text-3xl font-bold text-gray-900">{summary.data?.total ?? '—'}</p>
-          <p className="mt-1 text-xs text-gray-500">Stored in your account</p>
-        </div>
-      </div>
-
-      <div className="bg-white border border-gray-200 rounded-xl p-4 flex flex-col lg:flex-row gap-3">
-        <select value={category} onChange={(e) => resetAnd(setCategory, e.target.value)} className="h-10 rounded-md border border-gray-300 px-3 text-sm bg-white">
+      <div className="flex flex-col gap-3 rounded-2xl border border-gray-200 bg-white/90 p-4 shadow-card lg:flex-row">
+        <select value={category} onChange={(e) => resetAnd(setCategory, e.target.value)} className="h-10 rounded-lg border border-gray-300 px-3 text-sm bg-white">
           {CATEGORY_OPTIONS.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
         </select>
-        <select value={severity} onChange={(e) => resetAnd(setSeverity, e.target.value)} className="h-10 rounded-md border border-gray-300 px-3 text-sm bg-white">
+        <select value={severity} onChange={(e) => resetAnd(setSeverity, e.target.value)} className="h-10 rounded-lg border border-gray-300 px-3 text-sm bg-white">
           {SEVERITY_OPTIONS.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
         </select>
         <button
           type="button"
           onClick={() => { setUnreadOnly((value) => !value); setOffset(0) }}
-          className={`h-10 inline-flex items-center justify-center px-3 rounded-md border text-sm font-medium ${unreadOnly ? 'bg-blue-50 border-blue-300 text-blue-700' : 'bg-white border-gray-300 text-gray-700'}`}
+          className={`h-10 inline-flex items-center justify-center px-3 rounded-lg border text-sm font-medium ${unreadOnly ? 'bg-navy border-navy text-cream' : 'bg-white border-gray-300 text-gray-700'}`}
         >
           <Inbox className="w-4 h-4 mr-2" />
           Unread only
@@ -155,7 +140,7 @@ export default function NotificationsPage() {
           </div>
         ) : notifications.length === 0 ? (
           <div className="py-20 text-center px-6">
-            <Check className="w-10 h-10 mx-auto text-green-600" />
+            <Check className="w-10 h-10 mx-auto text-teal-600" />
             <h2 className="mt-3 font-semibold text-gray-900">No notifications found</h2>
             <p className="mt-1 text-sm text-gray-500">Try changing your filters or continue your application journey.</p>
           </div>
@@ -164,7 +149,7 @@ export default function NotificationsPage() {
             {notifications.map((item) => (
               <article key={item.id} className={`p-5 sm:p-6 ${item.is_read ? 'bg-white' : 'bg-blue-50/30'}`}>
                 <div className="flex flex-col lg:flex-row lg:items-start gap-4">
-                  <div className={`mt-1 w-10 h-10 shrink-0 rounded-full flex items-center justify-center ${item.severity === 'error' ? 'bg-red-100 text-red-700' : item.severity === 'warning' ? 'bg-amber-100 text-amber-700' : item.severity === 'success' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'}`}>
+                  <div className={`mt-1 w-10 h-10 shrink-0 rounded-full flex items-center justify-center ${item.severity === 'error' ? 'bg-red-100 text-red-700' : item.severity === 'warning' ? 'bg-amber-100 text-amber-700' : item.severity === 'success' ? 'bg-teal-100 text-teal-700' : 'bg-blue-100 text-blue-700'}`}>
                     <Bell className="w-4 h-4" />
                   </div>
                   <div className="min-w-0 flex-1">
@@ -187,7 +172,7 @@ export default function NotificationsPage() {
                       </Button>
                     )}
                     {item.action_path && (
-                      <Link href={item.action_path} onClick={() => !item.is_read && markRead.mutate(item.id)} className="inline-flex h-8 items-center gap-1.5 rounded-md bg-blue-600 px-3 text-sm font-medium text-white hover:bg-blue-700">
+                      <Link href={item.action_path} onClick={() => !item.is_read && markRead.mutate(item.id)} className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-blue-600 px-3 text-sm font-medium text-white hover:bg-blue-700">
                         Open <ExternalLink className="w-3.5 h-3.5" />
                       </Link>
                     )}

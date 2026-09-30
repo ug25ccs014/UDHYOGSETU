@@ -203,7 +203,7 @@ export function QueryResolutionCenter({ applicationId, compact = false }: Props)
     return (
       <Card className="border-slate-200">
         <CardContent className="flex items-start gap-3 py-8">
-          <CheckCircle2 className="mt-0.5 h-5 w-5 text-emerald-600" />
+          <CheckCircle2 className="mt-0.5 h-5 w-5 text-teal-600" />
           <div>
             <p className="font-semibold text-gray-900">No open government query</p>
             <p className="mt-1 text-sm text-gray-600">This application currently has no stored query requiring an applicant response.</p>
@@ -258,9 +258,9 @@ export function QueryResolutionCenter({ applicationId, compact = false }: Props)
         </CardHeader>
         <CardContent className="space-y-3">
           {center.required_evidence.map((item, index) => (
-            <div key={`${item.label}-${index}`} className={`rounded-lg border p-4 ${item.satisfied ? 'border-emerald-200 bg-emerald-50' : 'border-red-200 bg-red-50'}`}>
+            <div key={`${item.label}-${index}`} className={`rounded-xl border p-4 ${item.satisfied ? 'border-teal-100 bg-teal-50' : 'border-red-200 bg-red-50'}`}>
               <div className="flex items-start gap-3">
-                {item.satisfied ? <CheckCircle2 className="mt-0.5 h-5 w-5 text-emerald-600" /> : <AlertCircle className="mt-0.5 h-5 w-5 text-red-600" />}
+                {item.satisfied ? <CheckCircle2 className="mt-0.5 h-5 w-5 text-teal-600" /> : <AlertCircle className="mt-0.5 h-5 w-5 text-red-600" />}
                 <div className="min-w-0 flex-1">
                   <p className="font-medium text-gray-900">{item.label}</p>
                   <p className="mt-1 text-xs text-gray-600">
@@ -289,9 +289,9 @@ export function QueryResolutionCenter({ applicationId, compact = false }: Props)
           {center.attached_documents.length > 0 && (
             <div className="space-y-2">
               {center.attached_documents.map((doc) => (
-                <div key={doc.document_id} className="flex items-center justify-between gap-3 rounded-lg border border-emerald-200 bg-emerald-50 p-3">
+                <div key={doc.document_id} className="flex items-center justify-between gap-3 rounded-xl border border-teal-100 bg-teal-50 p-3">
                   <div className="flex min-w-0 items-center gap-3">
-                    <Paperclip className="h-4 w-4 shrink-0 text-emerald-700" />
+                    <Paperclip className="h-4 w-4 shrink-0 text-teal-700" />
                     <div className="min-w-0">
                       <p className="truncate text-sm font-medium text-gray-900">{doc.file_name}</p>
                       <p className="text-xs text-gray-600">{doc.document_type || 'Document'} · {doc.status}</p>
@@ -312,7 +312,7 @@ export function QueryResolutionCenter({ applicationId, compact = false }: Props)
               <p className="mb-2 text-sm font-semibold text-gray-900">Use an existing project document</p>
               <div className="space-y-2">
                 {center.available_documents.filter((doc) => !attachedIds.has(doc.document_id)).map((doc) => (
-                  <div key={doc.document_id} className="flex items-center justify-between gap-3 rounded-lg border border-gray-200 p-3">
+                  <div key={doc.document_id} className="flex items-center justify-between gap-3 rounded-xl border border-gray-200 p-3">
                     <div className="flex min-w-0 items-center gap-3">
                       <FileText className="h-4 w-4 shrink-0 text-gray-400" />
                       <div className="min-w-0">
@@ -348,7 +348,7 @@ export function QueryResolutionCenter({ applicationId, compact = false }: Props)
           <CardTitle className="text-base">Prepare your response</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="rounded-lg border border-blue-100 bg-blue-50 p-4 text-sm text-blue-950">
+          <div className="rounded-xl border border-blue-100 bg-blue-50 p-4 text-sm text-blue-950">
             <div className="flex items-start gap-2"><Sparkles className="mt-0.5 h-4 w-4 shrink-0" /><div><p className="font-semibold">AI-assisted draft</p><p className="mt-1">The draft below is based only on the stored query and documents identified in this workspace. Review it before recording a response.</p></div></div>
           </div>
 
@@ -365,13 +365,13 @@ export function QueryResolutionCenter({ applicationId, compact = false }: Props)
           />
 
           {center.submitted_response && (
-            <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-950">
+            <div className="rounded-xl border border-teal-100 bg-teal-50 p-4 text-sm text-teal-600">
               <p className="font-semibold">Response recorded on {center.submitted_at ? new Date(center.submitted_at).toLocaleString() : 'the application'}.</p>
               <p className="mt-2 whitespace-pre-wrap">{center.submitted_response}</p>
             </div>
           )}
 
-          {message && <p className="text-sm text-emerald-700">{message}</p>}
+          {message && <p className="text-sm text-teal-700">{message}</p>}
           {error && <p className="text-sm text-red-600">{error}</p>}
 
           {!readOnly && (
@@ -390,7 +390,7 @@ export function QueryResolutionCenter({ applicationId, compact = false }: Props)
             </div>
           )}
 
-          <div className="flex items-start gap-2 rounded-lg border border-slate-200 bg-slate-50 p-3 text-xs text-slate-700">
+          <div className="flex items-start gap-2 rounded-xl border border-slate-200 bg-slate-50 p-3 text-xs text-slate-700">
             <Info className="mt-0.5 h-4 w-4 shrink-0" />
             <p>{center.disclaimer || 'AI assistance is advisory. Review all content before responding to an authority. No external government API is called from this workspace.'}</p>
           </div>
@@ -400,7 +400,7 @@ export function QueryResolutionCenter({ applicationId, compact = false }: Props)
               <p className="text-sm font-semibold text-gray-900">Regulatory sources used for grounding</p>
               <div className="mt-2 space-y-2">
                 {center.regulatory_context.map((source, index) => (
-                  <div key={`${source.title || 'source'}-${index}`} className="rounded-lg border border-gray-200 p-3 text-sm">
+                  <div key={`${source.title || 'source'}-${index}`} className="rounded-xl border border-gray-200 p-3 text-sm">
                     <p className="font-medium text-gray-900">{source.title || 'Regulatory source'}</p>
                     {source.url && <Link className="mt-1 block truncate text-xs text-blue-600 hover:underline" href={source.url} target="_blank">{source.url}</Link>}
                   </div>

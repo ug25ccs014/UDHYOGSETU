@@ -14,7 +14,7 @@ export default function NotFound() {
           <Building2 className="h-8 w-8 text-blue-600" aria-hidden="true" />
         </div>
         <p className="mt-6 text-sm font-semibold uppercase tracking-[0.18em] text-blue-600">404</p>
-        <h1 className="mt-2 text-3xl font-bold text-gray-900">{t('states.notFoundTitle')}</h1>
+        <h1 className="mt-2 page-title">{t('states.notFoundTitle')}</h1>
         <p className="mt-2 text-sm leading-6 text-gray-600">{t('states.notFoundDesc')}</p>
         <Link href="/dashboard" className="mt-6 inline-flex">
           <Button>

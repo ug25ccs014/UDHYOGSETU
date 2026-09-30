@@ -86,17 +86,17 @@ function ChangeCard({
       </div>
 
       <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-3">
-        <div className="rounded-lg bg-gray-50 p-3">
+        <div className="rounded-xl bg-gray-50 p-3">
           <p className="text-xs font-medium uppercase tracking-wide text-gray-500">What changed</p>
           <p className="mt-1 text-sm font-medium text-gray-900">{change.text_change_summary}</p>
         </div>
-        <div className="rounded-lg bg-gray-50 p-3">
+        <div className="rounded-xl bg-gray-50 p-3">
           <p className="text-xs font-medium uppercase tracking-wide text-gray-500">Potentially affected</p>
           <p className="mt-1 text-sm font-medium text-gray-900">
             {change.impact.approval_count} approvals · {change.impact.project_count} projects
           </p>
         </div>
-        <div className="rounded-lg bg-gray-50 p-3">
+        <div className="rounded-xl bg-gray-50 p-3">
           <p className="text-xs font-medium uppercase tracking-wide text-gray-500">Field changes</p>
           <p className="mt-1 text-sm font-medium text-gray-900">{change.changed_field_count}</p>
         </div>
@@ -123,7 +123,7 @@ function DetailPanel({ detail, onClose }: { detail: RegulatoryChangeDetail; onCl
         </Button>
       </CardHeader>
       <CardContent className="space-y-6">
-        <div className="rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
+        <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
           <div className="flex items-start gap-2">
             <Info className="mt-0.5 h-4 w-4 shrink-0" />
             <p>{detail.note}</p>
@@ -154,20 +154,20 @@ function DetailPanel({ detail, onClose }: { detail: RegulatoryChangeDetail; onCl
             <h4 className="font-semibold text-gray-900">Change breakdown</h4>
             <div className="mt-3 space-y-3">
               {detail.change_items.map((item, index) => (
-                <div key={`${item.section}-${index}`} className="rounded-lg border border-gray-200 p-4">
+                <div key={`${item.section}-${index}`} className="rounded-xl border border-gray-200 p-4">
                   <div className="flex flex-wrap items-center gap-2">
                     <Badge variant={changeVariant[item.type] || 'outline'}>{item.type}</Badge>
                     <span className="text-sm font-medium text-gray-900">{item.section}</span>
                   </div>
                   {item.type === 'MODIFIED' ? (
                     <div className="mt-3 grid grid-cols-1 gap-3 md:grid-cols-2">
-                      <div className="rounded-md bg-red-50 p-3">
+                      <div className="rounded-lg bg-red-50 p-3">
                         <p className="text-xs font-semibold uppercase tracking-wide text-red-700">Previous</p>
                         <p className="mt-1 text-sm leading-6 text-red-950">{item.old_text || '—'}</p>
                       </div>
-                      <div className="rounded-md bg-green-50 p-3">
-                        <p className="text-xs font-semibold uppercase tracking-wide text-green-700">Current</p>
-                        <p className="mt-1 text-sm leading-6 text-green-950">{item.new_text || '—'}</p>
+                      <div className="rounded-lg bg-teal-50 p-3">
+                        <p className="text-xs font-semibold uppercase tracking-wide text-teal-700">Current</p>
+                        <p className="mt-1 text-sm leading-6 text-teal-600">{item.new_text || '—'}</p>
                       </div>
                     </div>
                   ) : (
@@ -182,7 +182,7 @@ function DetailPanel({ detail, onClose }: { detail: RegulatoryChangeDetail; onCl
         {detail.changed_fields.length > 0 && (
           <div>
             <h4 className="font-semibold text-gray-900">Metadata changes</h4>
-            <div className="mt-3 overflow-hidden rounded-lg border border-gray-200">
+            <div className="mt-3 overflow-hidden rounded-xl border border-gray-200">
               {detail.changed_fields.map((field) => (
                 <div key={field.field} className="grid grid-cols-[120px_1fr] gap-4 border-b border-gray-100 px-4 py-3 text-sm last:border-b-0">
                   <span className="font-medium capitalize text-gray-600">{field.field.replace(/_/g, ' ')}</span>
@@ -197,7 +197,7 @@ function DetailPanel({ detail, onClose }: { detail: RegulatoryChangeDetail; onCl
           </div>
         )}
 
-        <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
+        <div className="rounded-xl border border-gray-200 bg-gray-50 p-4">
           <div className="flex items-start justify-between gap-4">
             <div>
               <h4 className="font-semibold text-gray-900">Potential impact</h4>
@@ -212,7 +212,7 @@ function DetailPanel({ detail, onClose }: { detail: RegulatoryChangeDetail; onCl
             <Badge variant="outline">{detail.impact.project_count} project{detail.impact.project_count === 1 ? '' : 's'}</Badge>
           </div>
           {detail.impact.current_project && (
-            <div className="mt-3 rounded-md border border-blue-200 bg-blue-50 p-3">
+            <div className="mt-3 rounded-lg border border-blue-200 bg-blue-50 p-3">
               <p className="text-xs font-semibold uppercase tracking-wide text-blue-700">Your project</p>
               <p className="mt-1 font-medium text-blue-950">{detail.impact.current_project.project_name || 'Current project'}</p>
               <p className="mt-1 text-sm text-blue-900">
@@ -233,12 +233,12 @@ function DetailPanel({ detail, onClose }: { detail: RegulatoryChangeDetail; onCl
 
         <div className="flex flex-col gap-3 sm:flex-row">
           {detail.source.url && (
-            <a href={detail.source.url} target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-2 rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">
+            <a href={detail.source.url} target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">
               <ExternalLink className="h-4 w-4" />
               Open source
             </a>
           )}
-          <Link href="/dashboard/regulatory" className="inline-flex items-center justify-center gap-2 rounded-lg border border-blue-200 bg-blue-50 px-4 py-2 text-sm font-medium text-blue-700 hover:bg-blue-100">
+          <Link href="/dashboard/regulatory" className="inline-flex items-center justify-center gap-2 rounded-xl border border-blue-200 bg-blue-50 px-4 py-2 text-sm font-medium text-blue-700 hover:bg-blue-100">
             <Sparkles className="h-4 w-4" />
             Ask Regulatory Copilot
           </Link>
@@ -314,9 +314,9 @@ export default function RegulatoryChangeCenter({ projectId }: RegulatoryChangeCe
       </div>
 
       <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-        <Card><CardContent className="p-5"><p className="text-sm text-gray-500">Changes shown</p><p className="mt-1 text-3xl font-bold text-gray-900">{filtered.length}</p></CardContent></Card>
-        <Card><CardContent className="p-5"><p className="text-sm text-gray-500">Active now</p><p className="mt-1 text-3xl font-bold text-green-600">{activeCount}</p></CardContent></Card>
-        <Card><CardContent className="p-5"><p className="text-sm text-gray-500">Potential impact</p><p className="mt-1 text-3xl font-bold text-amber-600">{potentialImpactCount}</p></CardContent></Card>
+        <Card><CardContent className="p-5"><p className="text-sm text-gray-500">Changes shown</p><p className="mt-1 text-3xl font-extrabold tracking-tight text-gray-900">{filtered.length}</p></CardContent></Card>
+        <Card><CardContent className="p-5"><p className="text-sm text-gray-500">Active now</p><p className="mt-1 text-3xl font-extrabold tracking-tight text-teal-600">{activeCount}</p></CardContent></Card>
+        <Card><CardContent className="p-5"><p className="text-sm text-gray-500">Potential impact</p><p className="mt-1 text-3xl font-extrabold tracking-tight text-amber-600">{potentialImpactCount}</p></CardContent></Card>
         <Card><CardContent className="p-5"><p className="text-sm text-gray-500">View</p><p className="mt-1 text-lg font-semibold text-gray-900">{selectedProject ? 'Your project' : 'All recent'}</p></CardContent></Card>
       </div>
 
@@ -356,7 +356,7 @@ export default function RegulatoryChangeCenter({ projectId }: RegulatoryChangeCe
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search regulation, department, version..."
-                className="w-full rounded-lg border border-gray-300 py-2.5 pl-10 pr-4 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full rounded-xl border border-gray-300 py-2.5 pl-10 pr-4 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
             <Button variant="outline" onClick={() => { setSearch(''); setDepartment(''); setEffectiveStatus('') }}>
@@ -375,7 +375,7 @@ export default function RegulatoryChangeCenter({ projectId }: RegulatoryChangeCe
       ) : isError ? (
         <Card><CardContent className="py-16 text-center"><AlertTriangle className="mx-auto h-10 w-10 text-amber-500" /><p className="mt-4 font-medium text-gray-900">Regulatory change data is unavailable.</p><p className="mt-1 text-sm text-gray-600">The knowledge base may not contain versioned change records yet.</p></CardContent></Card>
       ) : filtered.length === 0 ? (
-        <Card><CardContent className="py-16 text-center"><CheckCircle2 className="mx-auto h-10 w-10 text-green-500" /><p className="mt-4 font-medium text-gray-900">No matching regulatory changes found.</p><p className="mt-1 text-sm text-gray-600">Try another filter or view all recent changes.</p></CardContent></Card>
+        <Card><CardContent className="py-16 text-center"><CheckCircle2 className="mx-auto h-10 w-10 text-teal-600" /><p className="mt-4 font-medium text-gray-900">No matching regulatory changes found.</p><p className="mt-1 text-sm text-gray-600">Try another filter or view all recent changes.</p></CardContent></Card>
       ) : (
         <div className="grid grid-cols-1 gap-5 xl:grid-cols-[1.15fr_0.85fr]">
           <div className="space-y-3">
@@ -399,7 +399,7 @@ export default function RegulatoryChangeCenter({ projectId }: RegulatoryChangeCe
         </div>
       )}
 
-      <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 text-xs leading-5 text-gray-600">
+      <div className="rounded-xl border border-gray-200 bg-gray-50 p-4 text-xs leading-5 text-gray-600">
         <strong className="text-gray-800">Prototype knowledge-base notice:</strong> regulatory change summaries and potential-impact matches are advisory. Always verify the authoritative regulation and applicable official process before acting.
       </div>
     </div>
