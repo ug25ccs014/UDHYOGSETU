@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import { AlertTriangle, CloudOff, UploadCloud, FilePen } from 'lucide-react'
+import { AlertTriangle, CloudOff, UploadCloud, FileEdit } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -44,7 +44,7 @@ export default function OfflineDraftsPanel() {
         {drafts.slice(0, 5).map((draft) => (
           <div key={draft.applicationId} className="flex flex-col gap-3 rounded-xl border border-slate-200 bg-white p-3 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex min-w-0 items-start gap-3">
-              {draft.status === 'CONFLICT' ? <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-red-600" /> : <FilePen className="mt-0.5 h-4 w-4 shrink-0 text-blue-700" />}
+              {draft.status === 'CONFLICT' ? <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-red-600" /> : <FileEdit className="mt-0.5 h-4 w-4 shrink-0 text-blue-700" />}
               <div className="min-w-0">
                 <p className="truncate text-sm font-semibold text-slate-950">{draft.approvalName || 'Application draft'}</p>
                 <p className="text-xs text-slate-500">Updated {formatOfflineTimestamp(draft.updatedAt) || 'recently'} · {draft.dirtyKeys.length} edited field{draft.dirtyKeys.length === 1 ? '' : 's'}</p>
