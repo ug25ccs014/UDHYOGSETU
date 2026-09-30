@@ -1,8 +1,8 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
-import { FileSearch, ShieldCheck, Landmark, Bot, Gift, Check, AlertTriangle, MousePointer2 } from 'lucide-react'
+import { FileSearch, ShieldCheck, Landmark, Bot, Gift, Check, AlertTriangle } from 'lucide-react'
 import usePrefersReducedMotion from './usePrefersReducedMotion'
 
 /**
@@ -10,7 +10,7 @@ import usePrefersReducedMotion from './usePrefersReducedMotion'
  * Hover (or tap) a pane -> it turns to face you, grows, and shows a mini preview of that feature.
  * Hit-testing is done on the container (not the tilted panes) so the hover never flickers.
  */
-const N = 5, S = 96, TOP = 36, CH = 552, CW = 380, PW = 320, PH = 210, FLAT = 1.1
+const N = 5, S = 100, TOP = 40, CH = TOP * 2 + S * N, CW = 560, PW = 460, PH = 250, FLAT = 1.12
 const center = (i: number) => TOP + S * i + S / 2
 const flatCenter = (i: number) => Math.min(Math.max(center(i), (PH * FLAT) / 2 + 8), CH - (PH * FLAT) / 2 - 8)
 
@@ -21,7 +21,7 @@ function pick(x: number, y: number, active: number | null): number | null {
 }
 
 const Row = ({ children, tone = '#2F9C84', label }: { children?: React.ReactNode; tone?: string; label: string }) => (
-  <div className="flex items-center justify-between gap-2 rounded-lg bg-white/85 px-2.5 py-1.5 text-[11px] font-semibold text-gray-800 shadow-sm">
+  <div className="flex items-center justify-between gap-2 rounded-lg bg-white/90 px-3 py-2 text-xs font-semibold text-gray-800 shadow-sm">
     <span className="truncate">{label}</span>
     <span className="flex flex-none items-center gap-1" style={{ color: tone }}>{children}</span>
   </div>
@@ -29,7 +29,7 @@ const Row = ({ children, tone = '#2F9C84', label }: { children?: React.ReactNode
 
 const arts: Record<string, React.ReactNode> = {
   approvals: (
-    <div className="space-y-1.5">
+    <div className="space-y-2">
       <Row label="Factory licence" tone="#2F9C84">● Approved</Row>
       <Row label="Fire NOC" tone="#C98F00">● In review</Row>
       <Row label="Pollution consent" tone="#93A0AB">● To start</Row>
@@ -37,30 +37,30 @@ const arts: Record<string, React.ReactNode> = {
     </div>
   ),
   docs: (
-    <div className="space-y-1.5">
+    <div className="space-y-2">
       <Row label="Land documents" tone="#2F9C84"><Check className="h-3 w-3" /> Verified</Row>
       <Row label="Address on PAN vs deed" tone="#C98F00"><AlertTriangle className="h-3 w-3" /> Mismatch</Row>
       <Row label="Project report" tone="#2F9C84"><Check className="h-3 w-3" /> Verified</Row>
     </div>
   ),
   compliance: (
-    <div className="space-y-2">
+    <div className="space-y-2.5">
       {[['Fire NOC renewal', '12 days', 'w-4/5', 'bg-coral'], ['Pollution returns', '30 days', 'w-3/5', 'bg-sun'], ['Labour filing', '58 days', 'w-2/5', 'bg-teal']].map(([l, d, w, c]) => (
         <div key={l}>
-          <div className="mb-0.5 flex justify-between text-[11px] font-semibold text-gray-800"><span>{l}</span><span className="text-gray-500">{d}</span></div>
+          <div className="mb-1 flex justify-between text-xs font-semibold text-gray-800"><span>{l}</span><span className="text-gray-500">{d}</span></div>
           <div className="h-1.5 overflow-hidden rounded-full bg-gray-200"><div className={`h-full rounded-full ${w} ${c}`} /></div>
         </div>
       ))}
     </div>
   ),
   copilot: (
-    <div className="space-y-1.5 text-[11px] font-semibold">
-      <div className="ml-auto w-fit max-w-[85%] rounded-xl rounded-br-sm bg-navy px-2.5 py-1.5 text-cream">Which approvals does my unit need?</div>
-      <div className="w-fit max-w-[90%] rounded-xl rounded-bl-sm bg-white/90 px-2.5 py-1.5 text-gray-800 shadow-sm">4 approvals apply. Start with the factory licence.</div>
+    <div className="space-y-2 text-xs font-semibold">
+      <div className="ml-auto w-fit max-w-[85%] rounded-xl rounded-br-sm bg-navy px-3 py-2 text-cream">Which approvals does my unit need?</div>
+      <div className="w-fit max-w-[90%] rounded-xl rounded-bl-sm bg-white/90 px-3 py-2 text-gray-800 shadow-sm">4 approvals apply. Start with the factory licence.</div>
     </div>
   ),
   schemes: (
-    <div className="space-y-1.5">
+    <div className="space-y-2">
       <Row label="Capital subsidy" tone="#2F9C84">Eligible</Row>
       <Row label="Interest subvention" tone="#2F9C84">Eligible</Row>
       <Row label="Stamp duty waiver" tone="#C98F00">Check</Row>
@@ -78,21 +78,33 @@ const cards = [
 
 export default function GlassStack() {
   const reduced = usePrefersReducedMotion()
+  const outer = useRef<HTMLDivElement>(null)
   const box = useRef<HTMLDivElement>(null)
   const [active, setActive] = useState<number | null>(null)
+  const [k, setK] = useState(1) // fit-to-width scale
+
+  useEffect(() => {
+    const el = outer.current
+    if (!el) return
+    const fit = () => setK(Math.min(1, el.clientWidth / CW))
+    fit()
+    const ro = new ResizeObserver(fit)
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [])
 
   const local = (e: React.PointerEvent) => {
     const r = box.current!.getBoundingClientRect()
-    const k = r.height / CH
-    return { x: (e.clientX - r.left) / k, y: (e.clientY - r.top) / k }
+    const sc = r.height / CH
+    return { x: (e.clientX - r.left) / sc, y: (e.clientY - r.top) / sc }
   }
 
   return (
-    <div className="relative mx-auto h-[480px] w-full sm:h-[552px]" aria-hidden="true">
+    <div ref={outer} className="relative mx-auto w-full" style={{ height: CH * k }} aria-hidden="true">
       <div
         ref={box}
-        className="absolute left-1/2 top-0 -ml-[190px] origin-top scale-[.86] sm:scale-100"
-        style={{ width: CW, height: CH, touchAction: 'pan-y' }}
+        className="absolute left-1/2 top-0"
+        style={{ width: CW, height: CH, marginLeft: -CW / 2, transform: `scale(${k})`, transformOrigin: 'top center', touchAction: 'pan-y' }}
         onPointerMove={(e) => { if (e.pointerType !== 'mouse') return; const { x, y } = local(e); setActive((a) => pick(x, y, a)) }}
         onPointerLeave={(e) => { if (e.pointerType === 'mouse') setActive(null) }}
         onPointerDown={(e) => { if (e.pointerType === 'mouse') return; const { x, y } = local(e); setActive((a) => pick(x, y, a)) }}
@@ -126,28 +138,28 @@ export default function GlassStack() {
                 transition={reduced ? { duration: 0 } : { type: 'spring', stiffness: 170, damping: 22 }}
               >
                 {/* Collapsed face */}
-                <div className="absolute inset-0 p-5 transition-opacity duration-200" style={{ opacity: isActive ? 0 : 1 }}>
+                <div className="absolute inset-0 p-7 transition-opacity duration-200" style={{ opacity: isActive ? 0 : 1 }}>
                   <div className="flex items-center gap-3">
-                    <span className="grid h-11 w-11 place-items-center rounded-2xl shadow-card" style={{ background: c.accent, color: c.ink }}><Icon className="h-5 w-5" /></span>
+                    <span className="grid h-14 w-14 place-items-center rounded-2xl shadow-card" style={{ background: c.accent, color: c.ink }}><Icon className="h-7 w-7" /></span>
                     <div className="min-w-0">
-                      <div className="truncate text-lg font-extrabold leading-tight text-navy">{c.title}</div>
-                      <div className="text-[11px] font-bold uppercase tracking-widest text-gray-500">{c.tag}</div>
+                      <div className="truncate text-2xl font-extrabold leading-tight text-navy">{c.title}</div>
+                      <div className="text-xs font-bold uppercase tracking-widest text-gray-500">{c.tag}</div>
                     </div>
                   </div>
-                  <div className="mt-5 space-y-2">
-                    <div className="h-2.5 w-4/5 rounded-full bg-gray-200/80" />
-                    <div className="h-2.5 w-3/5 rounded-full bg-gray-200/80" />
-                    <div className="h-2.5 w-2/5 rounded-full" style={{ background: `${c.accent}55` }} />
+                  <div className="mt-7 space-y-3">
+                    <div className="h-3 w-4/5 rounded-full bg-gray-200/80" />
+                    <div className="h-3 w-3/5 rounded-full bg-gray-200/80" />
+                    <div className="h-3 w-2/5 rounded-full" style={{ background: `${c.accent}55` }} />
                   </div>
-                  <span className="absolute bottom-3 right-5 text-3xl font-black text-gray-200">0{i + 1}</span>
+                  <span className="absolute bottom-4 right-7 text-4xl font-black text-gray-200">0{i + 1}</span>
                 </div>
                 {/* Detail face (visible when the pane faces you) */}
                 <div className="absolute inset-0 flex flex-col p-4 transition-opacity duration-200" style={{ opacity: isActive ? 1 : 0 }}>
                   <div className="flex items-center gap-2">
-                    <span className="grid h-7 w-7 place-items-center rounded-lg" style={{ background: c.accent, color: c.ink }}><Icon className="h-4 w-4" /></span>
-                    <span className="text-sm font-extrabold text-navy">{c.title}</span>
+                    <span className="grid h-8 w-8 place-items-center rounded-lg" style={{ background: c.accent, color: c.ink }}><Icon className="h-4 w-4" /></span>
+                    <span className="text-base font-extrabold text-navy">{c.title}</span>
                   </div>
-                  <p className="mt-1.5 text-[11px] leading-snug text-gray-600">{c.desc}</p>
+                  <p className="mt-2 text-xs leading-snug text-gray-600">{c.desc}</p>
                   <div className="mt-auto pt-2">{arts[c.key]}</div>
                 </div>
               </motion.div>
@@ -155,9 +167,6 @@ export default function GlassStack() {
           )
         })}
       </div>
-      <p className="absolute inset-x-0 bottom-0 flex items-center justify-center gap-1.5 text-xs font-semibold text-gray-500">
-        <MousePointer2 className="h-3.5 w-3.5" /> Hover or tap a card to explore
-      </p>
     </div>
   )
 }

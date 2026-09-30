@@ -12,7 +12,6 @@ import AuroraBackground from '@/components/fx/AuroraBackground'
 import Counter from '@/components/fx/Counter'
 import GlassStack from '@/components/fx/GlassStack'
 import HowItWorks from '@/components/landing/HowItWorks'
-import FeatureBento from '@/components/landing/FeatureBento'
 
 const stats: [string, number, string][] = [
   ['Integrated modules', 7, ''],
@@ -39,36 +38,35 @@ export default function Home() {
   return (
     <main className="min-h-screen overflow-x-hidden bg-cream text-gray-900">
       {/* NAV */}
-      <nav className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${scrolled ? 'border-b border-gray-200 bg-cream/85 shadow-card backdrop-blur-md' : 'bg-transparent'}`}>
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 sm:px-8">
+      <nav className={`fixed inset-x-0 top-0 z-50 border-b-4 border-sun bg-gradient-to-r from-navy via-navy-2 to-navy text-cream transition-shadow duration-300 ${scrolled ? 'shadow-lift' : 'shadow-card'}`}>
+        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 sm:px-8 lg:px-14">
           <Link href="/" className="flex items-center gap-2.5">
-            <span className="grid h-10 w-10 place-items-center rounded-full border-2 border-navy bg-white">
-              <Building2 className="h-5 w-5 text-navy" />
+            <span className="grid h-10 w-10 place-items-center rounded-full border-2 border-cream/70 bg-white/10">
+              <Building2 className="h-5 w-5 text-cream" />
             </span>
-            <span className="text-lg font-extrabold tracking-tight text-navy">UDYOGSETU</span>
+            <span className="text-lg font-extrabold tracking-tight text-cream">UDYOGSETU</span>
           </Link>
-          <div className="hidden items-center gap-8 text-sm font-semibold text-gray-600 md:flex">
-            <a href="#how-it-works" className="transition hover:text-navy">How it works</a>
-            <a href="#features" className="transition hover:text-navy">Features</a>
+          <div className="hidden items-center gap-8 text-sm font-semibold text-blue-100 md:flex">
+            <a href="#how-it-works" className="transition hover:text-white">How it works</a>
           </div>
           <div className="flex items-center gap-2">
-            <Link href="/login"><Button variant="outline" size="sm">Login</Button></Link>
-            <Link href="/register"><Button size="sm">Get Started</Button></Link>
+            <Link href="/login"><Button variant="outline" size="sm" className="border-white/30 bg-white/10 text-cream hover:border-white/50 hover:bg-white/20">Login</Button></Link>
+            <Link href="/register"><Button variant="secondary" size="sm">Get Started</Button></Link>
           </div>
         </div>
       </nav>
 
       {/* HERO */}
-      <section ref={heroRef} className="relative isolate overflow-hidden border-b border-gray-200 pt-16">
+      <section ref={heroRef} className="relative isolate overflow-hidden border-b border-gray-200 pt-[68px]">
         <AuroraBackground />
         <div className="absolute inset-0 -z-0 bg-grid [mask-image:linear-gradient(to_bottom,#000,transparent_85%)]" aria-hidden="true" />
-        <motion.div style={{ y: heroY, opacity: heroFade }} className="relative z-10 mx-auto grid max-w-7xl items-center gap-10 px-5 py-16 sm:px-8 lg:grid-cols-2 lg:py-24">
+        <motion.div style={{ y: heroY, opacity: heroFade }} className="relative z-10 mx-auto grid max-w-7xl items-center gap-10 px-5 py-12 sm:px-8 lg:grid-cols-[1fr_1.15fr] lg:gap-12 lg:px-14 lg:py-14">
           <div>
             <div className="eyebrow mb-5 rounded-full border border-gray-200 bg-white/70 px-3.5 py-1.5 backdrop-blur">
               <span className="pulse-dot" /> <Sparkles className="h-3.5 w-3.5" /> Smart India Hackathon · Prototype
             </div>
             <BlurText
-              className="text-4xl font-extrabold leading-[1.02] tracking-tight text-navy sm:text-5xl lg:text-6xl"
+              className="text-4xl font-extrabold leading-[1.02] tracking-tight text-navy sm:text-5xl xl:text-6xl"
               segments={[{ text: 'From Idea to Industry' }, { text: 'One Intelligent Journey', gradient: true }]}
             />
             <motion.p
@@ -105,8 +103,6 @@ export default function Home() {
       </section>
 
       <HowItWorks />
-
-      <FeatureBento />
 
       {/* CTA */}
       <section className="relative isolate overflow-hidden bg-navy py-20 text-center sm:py-24">

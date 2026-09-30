@@ -27,9 +27,14 @@ npm run dev
 - [x] **Step 1b – Landing polish after review** (DONE)
   - Hero: `components/fx/GlassStack.tsx` replaces IsoStack (**delete `components/fx/IsoStack.tsx`**). 5 tilted glass cards; hover/tap turns one to face you and shows a mini preview of that feature. Hit-testing is on the container so hover never flickers.
   - `components/landing/HowItWorks.tsx`: true zigzag (left/right alternating around a centre line), bigger cards with bullets, watermark numbers, scroll-filled line
-  - `components/landing/FeatureBento.tsx`: 7 features in a bento grid (4-col, fills the frame exactly, no orphan card), each with a mini UI preview
+  - (FeatureBento was added, then REMOVED by request — delete `components/landing/FeatureBento.tsx` if present)
   - `components/fx/ScrollReveal.tsx`: new optional `x` prop (slide from side)
   - `app/page.tsx`: now just composes hero + stats + `<HowItWorks/>` + `<FeatureBento/>` + CTA + footer
+- [x] **Step 1c – Landing round 2** (DONE)
+  - Nav: solid navy gradient bar with sun-yellow bottom border (like NER topbar); nav + hero share the same container/padding (`max-w-7xl px-5 sm:px-8 lg:px-14`) so logo, text and cards align
+  - Hero: text indented further from the left edge, text + cards vertically centred on one axis; GlassStack cards bigger (460x250), auto-scale to column width, hint text removed
+  - How it works: cards now compact rectangles (icon+title+desc, chip row); the opposite side of each row shows a "What you'll see" mini preview so no empty space
+  - Features section removed from the landing page (and the nav link)
 - [x] **Step 2 – Auth + Dashboard shell** (DONE)
   - NEW `components/AuthShell.tsx`: split layout (navy story panel + centred form), used by login/register
   - `app/login/page.tsx`: same logic, new UI, shows "Account created" notice after `?registered=1`, labels linked to inputs
