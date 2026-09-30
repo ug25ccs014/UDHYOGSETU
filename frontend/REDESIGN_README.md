@@ -24,6 +24,12 @@ npm run dev
   - `components/fx/*` (ScrollReveal, BlurText, Magnet, SpotlightCard, AuroraBackground, Counter, IsoStack, usePrefersReducedMotion)
   - `components/ui/*` restyled (button, card, input, select, textarea, badge, loading) — same props/API
   - `app/page.tsx` landing rewritten (nav, hero + 3D stack, stats, scroll-progress "how it works", feature grid, CTA, footer)
+- [x] **Step 1b – Landing polish after review** (DONE)
+  - Hero: `components/fx/GlassStack.tsx` replaces IsoStack (**delete `components/fx/IsoStack.tsx`**). 5 tilted glass cards; hover/tap turns one to face you and shows a mini preview of that feature. Hit-testing is on the container so hover never flickers.
+  - `components/landing/HowItWorks.tsx`: true zigzag (left/right alternating around a centre line), bigger cards with bullets, watermark numbers, scroll-filled line
+  - `components/landing/FeatureBento.tsx`: 7 features in a bento grid (4-col, fills the frame exactly, no orphan card), each with a mini UI preview
+  - `components/fx/ScrollReveal.tsx`: new optional `x` prop (slide from side)
+  - `app/page.tsx`: now just composes hero + stats + `<HowItWorks/>` + `<FeatureBento/>` + CTA + footer
 - [x] **Step 2 – Auth + Dashboard shell** (DONE)
   - NEW `components/AuthShell.tsx`: split layout (navy story panel + centred form), used by login/register
   - `app/login/page.tsx`: same logic, new UI, shows "Account created" notice after `?registered=1`, labels linked to inputs

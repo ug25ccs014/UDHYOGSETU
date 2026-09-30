@@ -3,35 +3,16 @@
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { motion, useScroll, useTransform } from 'framer-motion'
-import {
-  Building2, FileSearch, ShieldCheck, Landmark, Bot, Gift, History,
-  ArrowRight, ArrowDown, Sparkles, ClipboardList, Upload, Activity,
-} from 'lucide-react'
+import { Building2, ArrowRight, ArrowDown, Sparkles } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import BlurText from '@/components/fx/BlurText'
 import Magnet from '@/components/fx/Magnet'
 import ScrollReveal from '@/components/fx/ScrollReveal'
-import SpotlightCard from '@/components/fx/SpotlightCard'
 import AuroraBackground from '@/components/fx/AuroraBackground'
 import Counter from '@/components/fx/Counter'
-import IsoStack from '@/components/fx/IsoStack'
-
-const features = [
-  { icon: FileSearch, title: 'Intelligent Approvals', description: 'Get a personalised approval checklist based on your project.', tone: 'bg-blue-100 text-blue-600' },
-  { icon: ShieldCheck, title: 'Document Intelligence', description: 'AI-powered document validation and cross-checking.', tone: 'bg-teal-100 text-teal-700' },
-  { icon: Landmark, title: 'Compliance Tracking', description: 'Stay on top of post-approval compliance requirements.', tone: 'bg-sun/30 text-navy-ink' },
-  { icon: Building2, title: 'Government Integration Readiness', description: 'Transparent prototype with guided, future-authorised integration paths.', tone: 'bg-coral/20 text-coral' },
-  { icon: Bot, title: 'Regulatory Copilot', description: 'Ask questions about regulations and get grounded answers.', tone: 'bg-blue-100 text-blue-600' },
-  { icon: Gift, title: 'Incentive Discovery', description: 'Find and apply for government schemes you qualify for.', tone: 'bg-teal-100 text-teal-700' },
-  { icon: History, title: 'Regulatory Change Center', description: 'Compare regulation versions and review potential project impact.', tone: 'bg-sun/30 text-navy-ink' },
-]
-
-const steps = [
-  { icon: ClipboardList, title: 'Tell us about your project', desc: 'Answer a few simple questions about your business.', you: 'You: fill a 2-minute form' },
-  { icon: FileSearch, title: 'Get your approval roadmap', desc: 'We build a personalised checklist of every approval you need.', you: 'You: review the checklist' },
-  { icon: Upload, title: 'Upload documents', desc: 'Documents are validated and cross-checked automatically.', you: 'You: upload & fix flagged items' },
-  { icon: Activity, title: 'Track & stay compliant', desc: 'Monitor deadlines, queries and renewals in one place.', you: 'You: follow the timeline' },
-]
+import GlassStack from '@/components/fx/GlassStack'
+import HowItWorks from '@/components/landing/HowItWorks'
+import FeatureBento from '@/components/landing/FeatureBento'
 
 const stats: [string, number, string][] = [
   ['Integrated modules', 7, ''],
@@ -42,7 +23,6 @@ const stats: [string, number, string][] = [
 export default function Home() {
   const [scrolled, setScrolled] = useState(false)
   const heroRef = useRef<HTMLElement>(null)
-  const stepsRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const on = () => setScrolled(window.scrollY > 8)
@@ -55,8 +35,6 @@ export default function Home() {
   const { scrollYProgress: heroP } = useScroll({ target: heroRef, offset: ['start start', 'end start'] })
   const heroY = useTransform(heroP, [0, 1], [0, 90])
   const heroFade = useTransform(heroP, [0, 0.8], [1, 0.2])
-  // Steps: progress line fills while section scrolls
-  const { scrollYProgress: stepsP } = useScroll({ target: stepsRef, offset: ['start 70%', 'end 60%'] })
 
   return (
     <main className="min-h-screen overflow-x-hidden bg-cream text-gray-900">
@@ -110,7 +88,7 @@ export default function Home() {
             </motion.div>
             <p className="mt-5 text-sm text-gray-500">Free to try · No government login needed · Takes about 2 minutes to start</p>
           </div>
-          <IsoStack />
+          <GlassStack />
         </motion.div>
       </section>
 
@@ -126,75 +104,9 @@ export default function Home() {
         </div>
       </section>
 
-      {/* HOW IT WORKS */}
-      <section id="how-it-works" className="scroll-mt-16 py-20 sm:py-28">
-        <div className="mx-auto max-w-5xl px-5 sm:px-8">
-          <ScrollReveal className="mx-auto mb-14 max-w-2xl text-center">
-            <div className="eyebrow">How it works</div>
-            <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-navy sm:text-4xl">Four clear steps. Always know what’s next.</h2>
-            <p className="mt-3 text-gray-600">Each step tells you exactly what to do, so nothing gets missed.</p>
-          </ScrollReveal>
+      <HowItWorks />
 
-          <div ref={stepsRef} className="relative">
-            {/* track + animated fill */}
-            <div className="absolute bottom-6 left-6 top-6 w-0.5 rounded bg-gray-200 sm:left-1/2 sm:-translate-x-1/2" aria-hidden="true" />
-            <motion.div
-              className="absolute bottom-6 left-6 top-6 w-0.5 origin-top rounded bg-gradient-to-b from-blue-500 via-teal to-coral sm:left-1/2 sm:-translate-x-1/2"
-              style={{ scaleY: stepsP }} aria-hidden="true"
-            />
-            <ol className="space-y-10">
-              {steps.map((s, i) => {
-                const Icon = s.icon
-                const right = i % 2 === 1
-                return (
-                  <li key={s.title} className="relative grid grid-cols-[3rem_1fr] items-start gap-5 sm:grid-cols-2 sm:gap-16">
-                    <div className="absolute left-0 top-0 grid h-12 w-12 place-items-center rounded-full border-4 border-cream bg-navy text-lg font-extrabold text-cream shadow-card sm:left-1/2 sm:-translate-x-1/2">
-                      {i + 1}
-                    </div>
-                    <ScrollReveal className={`col-start-2 sm:col-start-auto ${right ? 'sm:col-start-2' : 'sm:col-start-1 sm:text-right'}`} y={30}>
-                      <div className={`rounded-2xl border border-gray-200 bg-white/85 p-5 shadow-card ${right ? '' : 'sm:ml-auto'}`}>
-                        <div className={`mb-3 flex items-center gap-2 text-navy ${right ? '' : 'sm:justify-end'}`}>
-                          <Icon className="h-5 w-5 text-blue-500" />
-                          <h3 className="text-lg font-bold">{s.title}</h3>
-                        </div>
-                        <p className="text-sm text-gray-600">{s.desc}</p>
-                        <p className="mt-3 inline-block rounded-full bg-sun/30 px-3 py-1 text-xs font-bold text-navy-ink">{s.you}</p>
-                      </div>
-                    </ScrollReveal>
-                  </li>
-                )
-              })}
-            </ol>
-          </div>
-        </div>
-      </section>
-
-      {/* FEATURES */}
-      <section id="features" className="scroll-mt-16 border-y border-gray-200 bg-white/60 py-20 sm:py-28">
-        <div className="mx-auto max-w-7xl px-5 sm:px-8">
-          <ScrollReveal className="mx-auto mb-14 max-w-2xl text-center">
-            <div className="eyebrow">Features</div>
-            <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-navy sm:text-4xl">Everything to set up and run an industrial unit</h2>
-            <p className="mt-3 text-gray-600">Built for entrepreneurs setting up in Maharashtra.</p>
-          </ScrollReveal>
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {features.map((f, i) => {
-              const Icon = f.icon
-              return (
-                <ScrollReveal key={f.title} delay={(i % 3) * 0.08} className="h-full">
-                  <SpotlightCard className="h-full">
-                    <div className="flex h-full flex-col p-6">
-                      <div className={`mb-4 grid h-12 w-12 place-items-center rounded-xl ${f.tone}`}><Icon className="h-6 w-6" /></div>
-                      <h3 className="mb-1.5 text-lg font-bold text-navy">{f.title}</h3>
-                      <p className="text-sm leading-relaxed text-gray-600">{f.description}</p>
-                    </div>
-                  </SpotlightCard>
-                </ScrollReveal>
-              )
-            })}
-          </div>
-        </div>
-      </section>
+      <FeatureBento />
 
       {/* CTA */}
       <section className="relative isolate overflow-hidden bg-navy py-20 text-center sm:py-24">
