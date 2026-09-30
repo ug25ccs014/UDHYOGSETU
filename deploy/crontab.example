@@ -1,0 +1,3 @@
+# Install with: sudo crontab deploy/crontab.example
+# Runs nightly at 02:30; logs to /var/log/udyogsetu-backup.log
+30 2 * * * /opt/udyogsetu/deploy/backup.sh >> /var/log/udyogsetu-backup.log 2>&1

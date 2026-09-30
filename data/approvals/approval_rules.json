@@ -1,0 +1,166 @@
+[
+  {
+    "id": "rule_001",
+    "name": "MPCB Consent to Establish - Textile Industry",
+    "department": "MPCB",
+    "sector": "Textile",
+    "conditions": {
+      "type": "AND",
+      "conditions": [
+        {
+          "type": "COMPARISON",
+          "field": "industry",
+          "operator": "contains",
+          "value": "Textile"
+        },
+        {
+          "type": "COMPARISON",
+          "field": "pollution_potential",
+          "operator": "equals",
+          "value": "high"
+        }
+      ]
+    },
+    "is_mandatory": true,
+    "required_documents": ["ETP Calculation", "Process Flow Diagram", "Environmental Impact Assessment"],
+    "dependencies": [],
+    "estimated_processing_days": 60,
+    "renewal_period_days": 365,
+    "risk_level": "HIGH",
+    "source": "MPCB Guidelines",
+    "source_url": "https://mpcb.gov.in"
+  },
+  {
+    "id": "rule_002",
+    "name": "Factory License",
+    "department": "Department of Factory",
+    "sector": "Manufacturing",
+    "conditions": {
+      "type": "COMPARISON",
+      "field": "employees",
+      "operator": "greater_than",
+      "value": 9
+    },
+    "is_mandatory": true,
+    "required_documents": ["Factory Plan", "Building Approval", "Safety Certificate"],
+    "dependencies": [],
+    "estimated_processing_days": 30,
+    "renewal_period_days": 730,
+    "risk_level": "MEDIUM",
+    "source": "Factories Act",
+    "source_url": "https://factory.gov.in"
+  },
+  {
+    "id": "rule_003",
+    "name": "Boiler Registration",
+    "department": "Department of Boiler Safety",
+    "sector": "Manufacturing",
+    "conditions": {
+      "type": "COMPARISON",
+      "field": "has_boiler",
+      "operator": "equals",
+      "value": true
+    },
+    "is_mandatory": true,
+    "required_documents": ["Boiler Specification", "Technical Drawing", "Inspection Report"],
+    "dependencies": ["rule_002"],
+    "estimated_processing_days": 15,
+    "renewal_period_days": 365,
+    "risk_level": "HIGH",
+    "source": "Boiler Regulations",
+    "source_url": "https://boiler.gov.in"
+  },
+  {
+    "id": "rule_004",
+    "name": "Fire No Objection Certificate",
+    "department": "Fire Services Department",
+    "sector": "All",
+    "conditions": {
+      "type": "OR",
+      "conditions": [
+        {
+          "type": "COMPARISON",
+          "field": "employees",
+          "operator": "greater_than",
+          "value": 9
+        },
+        {
+          "type": "COMPARISON",
+          "field": "hazardous_materials",
+          "operator": "equals",
+          "value": true
+        }
+      ]
+    },
+    "is_mandatory": true,
+    "required_documents": ["Building Layout", "Fire Safety Plan", "NoC Undertaking"],
+    "dependencies": [],
+    "estimated_processing_days": 20,
+    "renewal_period_days": 365,
+    "risk_level": "MEDIUM",
+    "source": "Fire Services Act",
+    "source_url": "https://fireservices.gov.in"
+  },
+  {
+    "id": "rule_005",
+    "name": "MPCB Consent to Operate",
+    "department": "MPCB",
+    "sector": "All",
+    "conditions": {
+      "type": "AND",
+      "conditions": [
+        {
+          "type": "COMPARISON",
+          "field": "pollution_potential",
+          "operator": "equals",
+          "value": "high"
+        },
+        {
+          "type": "COMPARISON",
+          "field": "project_stage",
+          "operator": "in",
+          "value": ["implementation", "operation"]
+        }
+      ]
+    },
+    "is_mandatory": true,
+    "required_documents": ["Consent to Establish Order", "Water Allocation", "ETP Design"],
+    "dependencies": ["rule_001"],
+    "estimated_processing_days": 45,
+    "renewal_period_days": 365,
+    "risk_level": "HIGH",
+    "source": "Air & Water Acts",
+    "source_url": "https://mpcb.gov.in"
+  },
+  {
+    "id": "rule_006",
+    "name": "State GST Registration",
+    "department": "GST Department",
+    "sector": "All",
+    "conditions": {
+      "type": "OR",
+      "conditions": [
+        {
+          "type": "COMPARISON",
+          "field": "business_type",
+          "operator": "contains",
+          "value": "manufacturing"
+        },
+        {
+          "type": "COMPARISON",
+          "field": "employees",
+          "operator": "greater_than",
+          "value": 0
+        }
+      ]
+    },
+    "is_mandatory": true,
+    "required_documents": ["PAN Card", "Business Address Proof", "Bank Account Details"],
+    "dependencies": [],
+    "estimated_processing_days": 7,
+    "renewal_period_days": null,
+    "risk_level": "LOW",
+    "source": "GST Act",
+    "source_url": "https://gst.gov.in"
+  }
+]

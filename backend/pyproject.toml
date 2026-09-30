@@ -1,0 +1,26 @@
+[project]
+name = "udyogsetu-backend"
+version = "1.0.0"
+description = "UDYOGSETU - Smart India Hackathon 2026 backend"
+requires-python = ">=3.11"
+
+[tool.ruff]
+target-version = "py311"
+
+[tool.ruff.lint]
+# The default rule set is kept. Two project policies are explicitly documented.
+ignore = [
+    # DTZ001 / DTZ003: the project deliberately stores timestamps as naive UTC
+    # (datetime.utcnow) and consistently normalises with _as_utc helpers
+    # (see services/compliance_tracker.py and the timezone audit). Switching to
+    # aware datetimes here would mix offset-naive/offset-aware arithmetic.
+    "DTZ001",
+    "DTZ003",
+    "UP017",
+]
+
+[tool.ruff.lint.per-file-ignores]
+# B008: FastAPI dependency injection calls Depends(...) per-request at request
+# time, not at import time. Flagging the idiom is a false positive for FastAPI
+# route/dependency modules; kept narrow to API modules only.
+"app/api/*.py" = ["B008"]

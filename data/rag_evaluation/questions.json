@@ -1,0 +1,352 @@
+[
+  {
+    "id": "q001",
+    "category": "boiler",
+    "question": "Is boiler registration mandatory in Maharashtra before putting a boiler into use?",
+    "expected_answer_points": ["registration is mandatory", "before it is put into use", "Director of Steam Boilers"],
+    "expected_source_hint": "boiler_registration"
+  },
+  {
+    "id": "q002",
+    "category": "boiler",
+    "question": "What is the definition of a boiler for the purpose of registration in Maharashtra?",
+    "expected_answer_points": ["closed vessel", "22.75 litres", "steam under pressure"],
+    "expected_source_hint": "boiler_registration"
+  },
+  {
+    "id": "q003",
+    "category": "boiler",
+    "question": "What documents are required for boiler registration?",
+    "expected_answer_points": ["certificate of manufacture", "design drawings", "hydraulic test certificate", "site inspection report"],
+    "expected_source_hint": "boiler_registration"
+  },
+  {
+    "id": "q004",
+    "category": "boiler",
+    "question": "How long does boiler inspection and registration typically take in Maharashtra?",
+    "expected_answer_points": ["45", "60 days", "initial inspection"],
+    "expected_source_hint": "boiler_registration"
+  },
+  {
+    "id": "q005",
+    "category": "factory",
+    "question": "Under what conditions is a premise considered a factory under the Factories Act, 1948?",
+    "expected_answer_points": ["ten or more workers", "power", "twenty or more workers", "without power"],
+    "expected_source_hint": "factory_license"
+  },
+  {
+    "id": "q006",
+    "category": "factory",
+    "question": "Which authority issues the factory license in Maharashtra?",
+    "expected_answer_points": ["Director of Industrial Safety and Health", "DISH"],
+    "expected_source_hint": "factory_license"
+  },
+  {
+    "id": "q007",
+    "category": "factory",
+    "question": "How often must a factory license be renewed and what is the license validity period?",
+    "expected_answer_points": ["not exceeding one year", "renewed every year", "annually"],
+    "expected_source_hint": "factory_license"
+  },
+  {
+    "id": "q008",
+    "category": "factory",
+    "question": "What is the typical timeline for a fresh factory license?",
+    "expected_answer_points": ["15-30 days", "complete submission"],
+    "expected_source_hint": "factory_license"
+  },
+  {
+    "id": "q009",
+    "category": "fire",
+    "question": "Which establishments must obtain a Fire No Objection Certificate in Maharashtra?",
+    "expected_answer_points": ["high-risk occupancies", "industrial premises", "flammable goods warehouses", "high-rise buildings", "hazardous process units"],
+    "expected_source_hint": "fire_noc"
+  },
+  {
+    "id": "q010",
+    "category": "fire",
+    "question": "Which authority issues the Fire NOC?",
+    "expected_answer_points": ["Chief Fire Officer"],
+    "expected_source_hint": "fire_noc"
+  },
+  {
+    "id": "q011",
+    "category": "fire",
+    "question": "What documents are needed for a fire NOC application?",
+    "expected_answer_points": ["building plan", "structural drawings", "escape routes", "fire-fighting equipment certificate", "undertaking"],
+    "expected_source_hint": "fire_noc"
+  },
+  {
+    "id": "q012",
+    "category": "fire",
+    "question": "What is the typical timeline for a fire NOC for industrial units?",
+    "expected_answer_points": ["15-30 days", "complete application", "site inspection"],
+    "expected_source_hint": "fire_noc"
+  },
+  {
+    "id": "q013",
+    "category": "mpcb",
+    "question": "Under which acts does the MPCB issue Consent to Establish and Consent to Operate?",
+    "expected_answer_points": ["Water (Prevention and Control of Pollution) Act, 1974", "Air (Prevention and Control of Pollution) Act, 1981"],
+    "expected_source_hint": "mpcb_consent"
+  },
+  {
+    "id": "q014",
+    "category": "mpcb",
+    "question": "What is the difference between Consent to Establish and Consent to Operate?",
+    "expected_answer_points": ["construction period", "commissioned", "annual renewal", "Consent to Operate"],
+    "expected_source_hint": "mpcb_consent"
+  },
+  {
+    "id": "q015",
+    "category": "mpcb",
+    "question": "What are the pollution potential categories used by MPCB?",
+    "expected_answer_points": ["red", "orange", "green", "high", "medium", "low"],
+    "expected_source_hint": "mpcb_consent"
+  },
+  {
+    "id": "q016",
+    "category": "mpcb",
+    "question": "When should Consent to Operate renewal applications be submitted?",
+    "expected_answer_points": ["thirty days", "before the expiry", "annual"],
+    "expected_source_hint": "mpcb_consent"
+  },
+  {
+    "id": "q017",
+    "category": "general",
+    "question": "What documents typically form the complete environmental compliance package for a textile processing unit in Maharashtra?",
+    "expected_answer_points": ["Consent to Establish", "process flow diagram", "ETP design", "air pollution control equipment"],
+    "expected_source_hint": "mpcb_consent"
+  },
+  {
+    "id": "q018",
+    "category": "general",
+    "question": "What compliance duties apply to registered factories under the Factories Act?",
+    "expected_answer_points": ["ventilation", "lighting", "fire safety", "emergency exits", "drinking water", "medical facilities"],
+    "expected_source_hint": "factory_license"
+  },
+  {
+    "id": "q019",
+    "category": "boiler",
+    "question": "What happens if a boiler is brought into Maharashtra from another state?",
+    "expected_answer_points": ["second-hand boiler", "fresh certificate", "new installation", "requires registration"],
+    "expected_source_hint": "boiler_registration"
+  },
+  {
+    "id": "q020",
+    "category": "fire",
+    "question": "What are the fire safety compliance requirements for covered establishments?",
+    "expected_answer_points": ["fire extinguishers", "hydrant systems", "escape routes", "exit signage", "flammable material storage", "annual testing", "fire wardens"],
+    "expected_source_hint": "fire_noc"
+  },
+  {
+    "id": "q021",
+    "category": "boiler",
+    "question": "What inspection is carried out before a boiler is issued a working certificate?",
+    "expected_answer_points": ["initial inspection", "hydraulic test", "safety valves", "pressure gauge"],
+    "expected_source_hint": "boiler_registration"
+  },
+  {
+    "id": "q022",
+    "category": "boiler",
+    "question": "What is the validity period of the boiler certificate and when must a boiler be re-examined?",
+    "expected_answer_points": ["periodic re-examination", "twelve months", "annual certification"],
+    "expected_source_hint": "boiler_registration"
+  },
+  {
+    "id": "q023",
+    "category": "boiler",
+    "question": "Who can certify that a boiler conforms to the Indian Boiler Regulations?",
+    "expected_answer_points": ["Chief Inspector of Boilers", "competent authority", "approved manufacturer"],
+    "expected_source_hint": "boiler_registration"
+  },
+  {
+    "id": "q024",
+    "category": "boiler",
+    "question": "Before importing a boiler into the state, what needs to be filed?",
+    "expected_answer_points": ["import permission", "specification", "previous certificate", "owner details"],
+    "expected_source_hint": "boiler_registration"
+  },
+  {
+    "id": "q025",
+    "category": "factory",
+    "question": "Which authorities approve the site and building plans for a new factory in Maharashtra?",
+    "expected_answer_points": ["DISH", "site approval", "building plan approval", "local authority"],
+    "expected_source_hint": "factory_license"
+  },
+  {
+    "id": "q026",
+    "category": "factory",
+    "question": "What documentation is required to register a factory with DISH?",
+    "expected_answer_points": ["company registration", "site plan", "list of directors", "workers strength", "process details"],
+    "expected_source_hint": "factory_license"
+  },
+  {
+    "id": "q027",
+    "category": "factory",
+    "question": "What is the role of the occupier and the manager of a registered factory?",
+    "expected_answer_points": ["occupier", "manager", "statutory duties", "notice of occupation"],
+    "expected_source_hint": "factory_license"
+  },
+  {
+    "id": "q028",
+    "category": "factory",
+    "question": "How soon after starting an activity must a notice of occupation be sent under the Factories Act?",
+    "expected_answer_points": ["within fifteen days", "notice of occupation", "date of commencement"],
+    "expected_source_hint": "factory_license"
+  },
+  {
+    "id": "q029",
+    "category": "fire",
+    "question": "What building elements are inspected before a Fire NOC is granted?",
+    "expected_answer_points": ["means of escape", "fire load", "compartmentation", "structural fire resistance"],
+    "expected_source_hint": "fire_noc"
+  },
+  {
+    "id": "q030",
+    "category": "fire",
+    "question": "What are the fire prevention measures required in a textile warehouse?",
+    "expected_answer_points": ["flammable storage", "fire separation", "hydrants", "extinguishers", "no smoking", "electrical safety"],
+    "expected_source_hint": "fire_noc"
+  },
+  {
+    "id": "q031",
+    "category": "fire",
+    "question": "How often must fire-fighting equipment be inspected and maintained?",
+    "expected_answer_points": ["periodic inspection", "annual maintenance", "tagged and tested", "refilling"],
+    "expected_source_hint": "fire_noc"
+  },
+  {
+    "id": "q032",
+    "category": "fire",
+    "question": "What role does a fire safety audit play in renewal of the NOC?",
+    "expected_answer_points": ["compliance audit", "identify violations", "renewal condition", "corrective action"],
+    "expected_source_hint": "fire_noc"
+  },
+  {
+    "id": "q033",
+    "category": "mpcb",
+    "question": "What is an effluent treatment plant and when is it mandated by MPCB?",
+    "expected_answer_points": ["ETP", "effluent treatment", "red category", "consent condition", "industrial wastewater"],
+    "expected_source_hint": "mpcb_consent"
+  },
+  {
+    "id": "q034",
+    "category": "mpcb",
+    "question": "What air pollution control measures may be required under the Consent to Operate?",
+    "expected_answer_points": ["scrubber", "dust collector", "stack monitoring", "air pollution control equipment"],
+    "expected_source_hint": "mpcb_consent"
+  },
+  {
+    "id": "q035",
+    "category": "mpcb",
+    "question": "What is the purpose of a Hazardous Waste authorization under MPCB?",
+    "expected_answer_points": ["hazardous waste", "storage", "treatment", "disposal", "authorization"],
+    "expected_source_hint": "mpcb_consent"
+  },
+  {
+    "id": "q036",
+    "category": "mpcb",
+    "question": "What monitoring and reporting obligations attach to a Consent to Operate?",
+    "expected_answer_points": ["effluent monitoring", "stack monitoring", "annual environmental statement", "records"],
+    "expected_source_hint": "mpcb_consent"
+  },
+  {
+    "id": "q037",
+    "category": "general",
+    "question": "Which approvals does a typical textile dyeing unit in Maharashtra need at start-up?",
+    "expected_answer_points": ["MPCB consent", "factory license", "fire NOC", "boiler registration", "MIDC plot"],
+    "expected_source_hint": "mpcb_consent"
+  },
+  {
+    "id": "q038",
+    "category": "general",
+    "question": "What is the sequence of approvals for a greenfield industrial project?",
+    "expected_answer_points": ["land", "Consent to Establish", "construction", "factory license", "Consent to Operate", "fire NOC"],
+    "expected_source_hint": "factory_license"
+  },
+  {
+    "id": "q039",
+    "category": "general",
+    "question": "What compliance obligations must a factory track after receiving approvals?",
+    "expected_answer_points": ["renewals", "inspections", "effluent compliance", "fire drills", "reports"],
+    "expected_source_hint": "mpcb_consent"
+  },
+  {
+    "id": "q040",
+    "category": "midc",
+    "question": "What is the role of MIDC in allotting industrial plots in Maharashtra?",
+    "expected_answer_points": ["industrial estate", "plot allotment", "land", "midc"],
+    "expected_source_hint": "midc_plot"
+  },
+  {
+    "id": "q041",
+    "category": "midc",
+    "question": "What documents are required for MIDC plot allotment?",
+    "expected_answer_points": ["application", "project profile", "extended producer", "company details", "financial statement"],
+    "expected_source_hint": "midc_plot"
+  },
+  {
+    "id": "q042",
+    "category": "midc",
+    "question": "How does MIDC set the price of an industrial plot?",
+    "expected_answer_points": ["upto date", "premium", "as per policy", "lease rent"],
+    "expected_source_hint": "midc_plot"
+  },
+  {
+    "id": "q043",
+    "category": "midc",
+    "question": "What is the procedure to convert land use in a MIDC industrial area?",
+    "expected_answer_points": ["land use conversion", "application", "development rules", "approval"],
+    "expected_source_hint": "midc_plot"
+  },
+  {
+    "id": "q044",
+    "category": "rules",
+    "question": "A project with high pollution potential and a boiler: which approvals are triggered by the rules engine?",
+    "expected_answer_points": ["MPCB consent", "boiler registration", "factory license", "fire NOC"],
+    "expected_source_hint": "approval_rules"
+  },
+  {
+    "id": "q045",
+    "category": "rules",
+    "question": "How does an investment amount above the threshold affect the approval determination?",
+    "expected_answer_points": ["MIDC", "investment threshold", "additional approvals"],
+    "expected_source_hint": "approval_rules"
+  },
+  {
+    "id": "q046",
+    "category": "rules",
+    "question": "Which department issues a consent for air and water pollution in Maharashtra?",
+    "expected_answer_points": ["MPCB", "Maharashtra Pollution Control Board", "consent"],
+    "expected_source_hint": "mpcb_consent"
+  },
+  {
+    "id": "q047",
+    "category": "general",
+    "question": "Which schemes provide financial support for textile units in Maharashtra?",
+    "expected_answer_points": ["incentive scheme", "subsidy", "textile policy", "capital subsidy", "interest subvention"],
+    "expected_source_hint": "incentive_schemes"
+  },
+  {
+    "id": "q048",
+    "category": "general",
+    "question": "What is the expected completion timeline for the full approval set of a textile unit?",
+    "expected_answer_points": ["parallel approvals", "critical path", "estimated days", "sequence"],
+    "expected_source_hint": "approval_rules"
+  },
+  {
+    "id": "q049",
+    "category": "compliance",
+    "question": "What periodic compliance obligations arise from a Consent to Operate?",
+    "expected_answer_points": ["renewal", "effluent report", "annual statement", "monitoring"],
+    "expected_source_hint": "mpcb_consent"
+  },
+  {
+    "id": "q050",
+    "category": "compliance",
+    "question": "What happens if an approval certificate expires and is not renewed in time?",
+    "expected_answer_points": ["expired", "renewal window", "penalty", "non-compliance", "stop of operations"],
+    "expected_source_hint": "mpcb_consent"
+  }
+]

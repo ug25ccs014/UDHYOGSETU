@@ -1,0 +1,76 @@
+# UDYOGSETU - free single-VM production stack (frontend stays on Vercel).
+#
+# This stack runs ONLY what a VM needs: PostgreSQL + Redis + the FastAPI
+# backend. It intentionally does not run the frontend/nginx containers (the
+# frontend is deployed to Vercel, which reaches the backend at :8000).
+#
+# Usage (on the VM, from the repository root):
+#   docker compose --env-file deploy/.env -f deploy/docker-compose.yml up -d --build
+#
+# Contexts are relative to THIS file, so `..` means the repository root.
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: udyogsetu-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: udyogsetu
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be set in deploy/.env}
+      POSTGRES_DB: udyogsetu
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U udyogsetu"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: udyogsetu-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ..
+      dockerfile: infrastructure/docker/Dockerfile.backend
+    container_name: udyogsetu-backend
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql+asyncpg://udyogsetu:${POSTGRES_PASSWORD}@postgres:5432/udyogsetu
+      REDIS_URL: redis://redis:6379/0
+      ENVIRONMENT: production
+      DEBUG: "false"
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:?JWT_SECRET_KEY must be set in deploy/.env}
+      CORS_ORIGINS: ${CORS_ORIGINS}
+      ALLOWED_HOSTS: ${ALLOWED_HOSTS}
+      UPLOAD_DIRECTORY: /var/uploads
+      MAX_UPLOAD_SIZE_MB: 50
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - uploads_data:/var/uploads
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  postgres_data:
+  redis_data:
+  uploads_data:

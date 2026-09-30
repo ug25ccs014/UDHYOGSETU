@@ -1,0 +1,44 @@
+# Backend Dockerfile (multi-stage, production)
+
+# Stage 1: Build dependencies
+FROM python:3.11-slim AS builder
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY backend/requirements.txt .
+RUN pip wheel --no-cache-dir --wheel-dir /wheels -r requirements.txt
+
+# Stage 2: Runtime
+FROM python:3.11-slim AS runtime
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    postgresql-client \
+    tesseract-ocr \
+    libtesseract-dev \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY --from=builder /wheels /wheels
+COPY backend/requirements.txt .
+RUN pip install --no-cache-dir --find-links=/wheels -r requirements.txt \
+    && rm -rf /wheels
+
+COPY backend/alembic.ini .
+COPY backend/alembic ./alembic
+COPY backend/app ./app
+COPY data ./data
+
+RUN mkdir -p /var/uploads && \
+    groupadd -r app && useradd -r -g app -d /app appuser && \
+    chown -R appuser:app /app /var/uploads
+
+USER appuser
+
+EXPOSE 8000
+
+# Railway injects PORT; fall back to 8000 so Docker Compose/local runs are unchanged.
+CMD ["sh", "-c", "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
