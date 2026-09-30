@@ -795,6 +795,7 @@ export function useUpdateInspection() {
         location?: string
         notes?: string
         status?: string
+        checklist?: Array<{ id: string; label: string; completed: boolean }>
       }
     }) => apiClient.updateInspection(inspectionId, payload),
   })
