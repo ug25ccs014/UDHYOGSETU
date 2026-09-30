@@ -39,7 +39,7 @@ export default function Home() {
     <main className="min-h-screen overflow-x-hidden bg-cream text-gray-900">
       {/* NAV */}
       <nav className={`fixed inset-x-0 top-0 z-50 border-b-4 border-sun bg-gradient-to-r from-navy via-navy-2 to-navy text-cream transition-shadow duration-300 ${scrolled ? 'shadow-lift' : 'shadow-card'}`}>
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 sm:px-8 lg:px-14">
+        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 sm:px-8 lg:pl-20 lg:pr-10">
           <Link href="/" className="flex items-center gap-2.5">
             <span className="grid h-10 w-10 place-items-center rounded-full border-2 border-cream/70 bg-white/10">
               <Building2 className="h-5 w-5 text-cream" />
@@ -57,16 +57,16 @@ export default function Home() {
       </nav>
 
       {/* HERO */}
-      <section ref={heroRef} className="relative isolate overflow-hidden border-b border-gray-200 pt-[68px]">
+      <section ref={heroRef} className="relative isolate flex min-h-screen flex-col overflow-hidden border-b border-gray-200 pt-[68px]">
         <AuroraBackground />
         <div className="absolute inset-0 -z-0 bg-grid [mask-image:linear-gradient(to_bottom,#000,transparent_85%)]" aria-hidden="true" />
-        <motion.div style={{ y: heroY, opacity: heroFade }} className="relative z-10 mx-auto grid max-w-7xl items-center gap-10 px-5 py-12 sm:px-8 lg:grid-cols-[1fr_1.15fr] lg:gap-12 lg:px-14 lg:py-14">
+        <motion.div style={{ y: heroY, opacity: heroFade }} className="relative z-10 mx-auto my-auto grid w-full max-w-7xl items-center gap-8 px-5 py-6 sm:px-8 lg:grid-cols-[1fr_1.15fr] lg:gap-10 lg:pl-20 lg:pr-10 lg:py-8">
           <div>
             <div className="eyebrow mb-5 rounded-full border border-gray-200 bg-white/70 px-3.5 py-1.5 backdrop-blur">
               <span className="pulse-dot" /> <Sparkles className="h-3.5 w-3.5" /> Smart India Hackathon · Prototype
             </div>
             <BlurText
-              className="text-4xl font-extrabold leading-[1.02] tracking-tight text-navy sm:text-5xl xl:text-6xl"
+              className="text-4xl font-extrabold leading-[1.02] tracking-tight text-navy sm:text-5xl lg:text-[2.75rem] xl:text-5xl"
               segments={[{ text: 'From Idea to Industry' }, { text: 'One Intelligent Journey', gradient: true }]}
             />
             <motion.p

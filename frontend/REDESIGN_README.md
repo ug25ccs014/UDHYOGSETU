@@ -35,6 +35,7 @@ npm run dev
   - Hero: text indented further from the left edge, text + cards vertically centred on one axis; GlassStack cards bigger (460x250), auto-scale to column width, hint text removed
   - How it works: cards now compact rectangles (icon+title+desc, chip row); the opposite side of each row shows a "What you'll see" mini preview so no empty space
   - Features section removed from the landing page (and the nav link)
+- [x] **Step 1d – Hero centring** (DONE): hero is `min-h-screen`, content vertically centred; text + nav shifted right (`lg:pl-20`), cards nudged right; GlassStack also scales to viewport height so all 5 cards + buttons are visible without scrolling; heading a bit smaller.
 - [x] **Step 2 – Auth + Dashboard shell** (DONE)
   - NEW `components/AuthShell.tsx`: split layout (navy story panel + centred form), used by login/register
   - `app/login/page.tsx`: same logic, new UI, shows "Account created" notice after `?registered=1`, labels linked to inputs

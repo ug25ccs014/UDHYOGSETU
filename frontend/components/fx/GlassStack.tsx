@@ -86,11 +86,17 @@ export default function GlassStack() {
   useEffect(() => {
     const el = outer.current
     if (!el) return
-    const fit = () => setK(Math.min(1, el.clientWidth / CW))
+    // fit to column width AND to the visible viewport height so the whole stack is always on screen
+    const fit = () => {
+      const byW = el.clientWidth / CW
+      const byH = window.innerWidth >= 1024 ? Math.max(0.6, (window.innerHeight - 68 - 64) / CH) : 1
+      setK(Math.min(1, byW, byH))
+    }
     fit()
     const ro = new ResizeObserver(fit)
     ro.observe(el)
-    return () => ro.disconnect()
+    window.addEventListener('resize', fit)
+    return () => { ro.disconnect(); window.removeEventListener('resize', fit) }
   }, [])
 
   const local = (e: React.PointerEvent) => {
@@ -100,7 +106,7 @@ export default function GlassStack() {
   }
 
   return (
-    <div ref={outer} className="relative mx-auto w-full" style={{ height: CH * k }} aria-hidden="true">
+    <div ref={outer} className="relative mx-auto w-full lg:translate-x-4" style={{ height: CH * k }} aria-hidden="true">
       <div
         ref={box}
         className="absolute left-1/2 top-0"
