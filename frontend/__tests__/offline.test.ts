@@ -73,14 +73,23 @@ describe('offline cache and draft store', () => {
       application_status: 'DRAFT',
       status: 'DRAFT',
       stale_fields: [],
-      summary: { required_fields: 1, filled_required_fields: 1, preparation_score: 100, readiness_score: 100 },
+      summary: {
+        required_fields: 1,
+        filled_required_fields: 1,
+        missing_required_fields: [],
+        filled_fields: 2,
+        total_fields: 2,
+        preparation_score: 100,
+        readiness_score: 100,
+        readiness_state: 'READY',
+      },
       fields: [
-        { key: 'investment_amount', label: 'Investment', value: 100000, source_value: 100000, kind: 'number', required: true, section: 'Project' },
-        { key: 'pan', label: 'PAN', value: 'ABCDE1234F', source_value: 'ABCDE1234F', kind: 'text', required: true, section: 'Identity' },
+        { key: 'investment_amount', label: 'Investment', value: 100000, source_value: 100000, kind: 'number', required: true, section: 'Project', source: 'project', source_path: 'project.investment_amount', editable: true, status: 'FILLED', effective_source: 'project', source_label: 'Project', has_override: false },
+        { key: 'pan', label: 'PAN', value: 'ABCDE1234F', source_value: 'ABCDE1234F', kind: 'text', required: true, section: 'Identity', source: 'business_profile', source_path: 'business_profile.pan', editable: true, status: 'FILLED', effective_source: 'business_profile', source_label: 'Business profile', has_override: false },
       ],
       attached_documents: [],
       recommended_documents: [],
-      sources: [],
+      sources: { business_profile: 'Business profile', project: 'Project', government_api: 'Not connected' },
       disclaimer: 'Prototype',
     })
     const cached = readCachedApplicationPreparation('MPCB-privacy')

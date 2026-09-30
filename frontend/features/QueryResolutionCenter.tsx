@@ -36,7 +36,7 @@ interface Props {
   compact?: boolean
 }
 
-function statusVariant(status?: string): 'success' | 'warning' | 'info' | 'outline' | 'danger' {
+function statusVariant(status?: string | null): 'success' | 'warning' | 'info' | 'outline' | 'danger' {
   switch (status) {
     case 'SUBMITTED':
       return 'success'

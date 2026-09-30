@@ -70,7 +70,7 @@ export default function ProjectCompliancePage() {
   const [message, setMessage] = useState('')
   const [filter, setFilter] = useState('ALL')
 
-  const items: ComplianceLifecycleItem[] = dashboard.data?.items || []
+  const items: ComplianceLifecycleItem[] = useMemo(() => dashboard.data?.items || [], [dashboard.data?.items])
   const renewals: RenewalCase[] = dashboard.data?.renewals || []
 
   const filteredItems = useMemo(() => {

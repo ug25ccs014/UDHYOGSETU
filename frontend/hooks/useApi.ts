@@ -1,4 +1,4 @@
-import { useQuery, useMutation } from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { apiClient } from '@/services/api'
 import {
   cacheApprovalGraph,
@@ -21,6 +21,7 @@ import {
   cacheApplicationPreparation,
   readCachedApplicationPreparation,
 } from '@/lib/offline'
+import type { CommandCenterResponse, SubmissionReadiness } from '@/types'
 
 export function useProject(projectId: string) {
   return useQuery({
@@ -47,7 +48,7 @@ export function useProject(projectId: string) {
 export function useProjectCommandCenter(projectId: string) {
   return useQuery({
     queryKey: ['project-command-center', projectId],
-    queryFn: async () => {
+    queryFn: async (): Promise<CommandCenterResponse & { __offlineCachedAt?: string }> => {
       if (isOffline()) {
         const cached = readProjectCommandCenter(projectId)
         if (cached) return { ...cached.data, __offlineCachedAt: cached.savedAt }
@@ -501,7 +502,7 @@ export function useSlaStatus(applicationId: string) {
 export function useApplicationReadiness(applicationId: string) {
   return useQuery({
     queryKey: ['application-readiness', applicationId],
-    queryFn: async () => {
+    queryFn: async (): Promise<SubmissionReadiness & { __offlineCachedAt?: string }> => {
       if (isOffline()) {
         const cached = readCachedApplicationReadiness(applicationId)
         if (cached) return { ...cached.data, __offlineCachedAt: cached.savedAt }

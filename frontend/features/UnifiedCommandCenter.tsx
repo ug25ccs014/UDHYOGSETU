@@ -242,7 +242,7 @@ export function UnifiedCommandCenter({ projectId }: Props) {
       </section>
 
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4 xl:grid-cols-8">
-        {[
+        {([
           ['Approvals', overview.approval_count, FileCheck2, 'text-blue-700'],
           ['Approved', overview.approved, CheckCircle2, 'text-green-700'],
           ['In progress', overview.in_progress, Clock3, 'text-slate-700'],
@@ -251,8 +251,7 @@ export function UnifiedCommandCenter({ projectId }: Props) {
           ['High risk', overview.high_risk, ShieldAlert, 'text-red-700'],
           ['Renewals', overview.renewals_due, RefreshCw, 'text-violet-700'],
           ['Incentives', overview.incentive_matches, Gift, 'text-emerald-700'],
-        ].map(([label, value, Icon, iconClass]) => {
-          const I = Icon as ElementType
+        ] as [string, number, ElementType, string][]).map(([label, value, I, iconClass]) => {
           return (
             <Card key={String(label)} className="shadow-none">
               <CardContent className="p-3.5 sm:p-4">

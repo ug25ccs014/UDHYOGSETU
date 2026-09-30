@@ -1,5 +1,6 @@
 import axios, { AxiosInstance, AxiosError } from 'axios'
 import { clearSession, getToken, setSession } from '@/lib/auth'
+import type { CommandCenterResponse, SubmissionReadiness } from '@/types'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api'
 
@@ -116,8 +117,8 @@ class ApiClient {
     return response.data
   }
 
-  async getProjectCommandCenter(projectId: string) {
-    const response = await this.client.get(`/command-center/projects/${projectId}`)
+  async getProjectCommandCenter(projectId: string): Promise<CommandCenterResponse> {
+    const response = await this.client.get<CommandCenterResponse>(`/command-center/projects/${projectId}`)
     return response.data
   }
 
@@ -380,8 +381,8 @@ class ApiClient {
     return response.data
   }
 
-  async getApplicationReadiness(applicationId: string) {
-    const response = await this.client.get(`/applications/${applicationId}/readiness`)
+  async getApplicationReadiness(applicationId: string): Promise<SubmissionReadiness> {
+    const response = await this.client.get<SubmissionReadiness>(`/applications/${applicationId}/readiness`)
     return response.data
   }
 

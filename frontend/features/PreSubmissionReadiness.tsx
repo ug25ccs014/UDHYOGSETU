@@ -225,13 +225,13 @@ export function PreSubmissionReadiness({ applicationId, applicationStatus }: Pre
                           <p className="mt-0.5 text-sm text-gray-500">
                             {item.file_name ? item.file_name : item.available_in_vault ? 'Available in Data Vault' : 'No matching document attached'}
                           </p>
-                          {item.validation_errors?.length > 0 && (
-                            <p className="mt-1 text-xs text-red-600">{item.validation_errors.join(' ')}</p>
+                          {(item.validation_errors?.length ?? 0) > 0 && (
+                            <p className="mt-1 text-xs text-red-600">{item.validation_errors?.join(' ')}</p>
                           )}
-                          {item.candidate_documents?.length > 0 && (
+                          {(item.candidate_documents?.length ?? 0) > 0 && (
                             <div className="mt-2 space-y-1.5">
                               <p className="text-xs font-medium text-gray-600">Matching project documents available</p>
-                              {item.candidate_documents.map((candidate) => (
+                              {item.candidate_documents?.map((candidate) => (
                                 <div key={candidate.document_id} className="flex flex-wrap items-center gap-2 text-xs">
                                   <span className="text-gray-700">{candidate.file_name}</span>
                                   <Badge variant={candidate.status === 'VERIFIED' ? 'success' : 'warning'}>{candidate.status.replace('_', ' ')}</Badge>
@@ -264,7 +264,7 @@ export function PreSubmissionReadiness({ applicationId, applicationStatus }: Pre
                           <Button
                             size="sm"
                             variant="outline"
-                            onClick={() => handleValidate(item.document_id)}
+                            onClick={() => handleValidate(item.document_id as string)}
                             disabled={validateDocument.isPending}
                           >
                             {validateDocument.isPending ? <Loader2 className="mr-1 h-4 w-4 animate-spin" /> : null}
