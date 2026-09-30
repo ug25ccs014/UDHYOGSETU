@@ -24,6 +24,7 @@ import {
   Bell,
   History,
   FlaskConical,
+  ArrowLeft,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
@@ -142,6 +143,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       </div>
 
       <nav className="flex-1 space-y-5 overflow-y-auto px-4 py-5" aria-label="Main navigation">
+        {!isProjectContext && (
+          <>
         {navGroups.map((group) => (
           <div key={group.label}>
             <p className="mb-1.5 px-3 text-[11px] font-extrabold uppercase tracking-[.16em] text-gray-400">{group.label}</p>
@@ -187,35 +190,47 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             Officer Command Center
           </Link>
         )}
+          </>
+        )}
 
         {isProjectContext && (
           <>
-            <div className="pt-4 pb-2">
+            <Link
+              href="/dashboard"
+              onClick={() => setSidebarOpen(false)}
+              className="mb-1 flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold text-gray-500 transition-all duration-200 hover:bg-white hover:text-navy"
+            >
+              <ArrowLeft className="h-[18px] w-[18px] flex-none" />
+              Back to Dashboard
+            </Link>
+            <div className="pt-2 pb-1">
               <p className="px-3 text-[11px] font-extrabold uppercase tracking-[.16em] text-teal-700">
                 This project
               </p>
             </div>
-            {projectNavItems.map((item) => {
-              const active = currentProjectTab === item.key
-              const Icon = item.icon
-              return (
-                <Link
-                  key={item.key}
-                  href={`/dashboard/${currentProjectId}${item.key ? `/${item.key}` : ''}`}
-                  aria-current={active ? 'page' : undefined}
-                  onClick={() => setSidebarOpen(false)}
-                  className={cn(
-                    'flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold transition-all duration-200',
-                    active
-                      ? 'bg-navy text-cream shadow-card'
-                      : 'text-gray-700 hover:bg-white hover:text-navy',
-                  )}
-                >
-                  <Icon className="h-[18px] w-[18px] flex-none" />
-                  {item.label}
-                </Link>
-              )
-            })}
+            <div className="space-y-0.5">
+              {projectNavItems.map((item) => {
+                const active = currentProjectTab === item.key
+                const Icon = item.icon
+                return (
+                  <Link
+                    key={item.key}
+                    href={`/dashboard/${currentProjectId}${item.key ? `/${item.key}` : ''}`}
+                    aria-current={active ? 'page' : undefined}
+                    onClick={() => setSidebarOpen(false)}
+                    className={cn(
+                      'flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold transition-all duration-200',
+                      active
+                        ? 'bg-navy text-cream shadow-card'
+                        : 'text-gray-700 hover:bg-white hover:text-navy hover:translate-x-0.5',
+                    )}
+                  >
+                    <Icon className={cn('h-[18px] w-[18px] flex-none', active ? 'text-sun' : 'text-gray-400')} />
+                    {item.label}
+                  </Link>
+                )
+              })}
+            </div>
           </>
         )}
       </nav>
