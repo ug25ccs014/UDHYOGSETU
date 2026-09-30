@@ -1,6 +1,6 @@
 'use client'
 
-import type { ApplicationPreparation, Project } from '@/types'
+import type { ApplicationPreparation, ApplicationPreparationField, Project } from '@/types'
 
 type CacheKind = 'project' | 'approvals' | 'approval-graph' | 'command-center' | 'applications' | 'application' | 'application-sla' | 'application-readiness' | 'application-preparation'
 
@@ -297,7 +297,7 @@ export function formatOfflineTimestamp(timestamp?: string | null) {
 export type CachedApplicationPreparation = Pick<ApplicationPreparation, 'application_id' | 'approval_id' | 'approval_name' | 'department' | 'project_id' | 'project_name' | 'application_status' | 'status' | 'stale_fields' | 'summary' | 'fields' | 'attached_documents' | 'recommended_documents' | 'sources' | 'disclaimer'>
 
 export function cacheApplicationPreparation(data: CachedApplicationPreparation) {
-  const safeFields = (data.fields || []).map((field) => {
+  const safeFields = (data.fields || []).map((field: ApplicationPreparationField) => {
     if (!isOfflineSensitiveField(field.key)) return field
     return { ...field, value: null, source_value: null }
   })

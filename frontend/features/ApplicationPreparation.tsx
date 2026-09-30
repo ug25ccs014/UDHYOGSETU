@@ -150,7 +150,7 @@ export function ApplicationPreparation({ applicationId, compact = false }: Props
     if (!data || !['NOT_STARTED', 'DRAFT'].includes(data.application_status)) return
     if (dirty.size === 0 && resetFields.size === 0) return
     const existing = getOfflineApplicationDraft(applicationId)
-    const serverValues = existing?.serverValues || Object.fromEntries((data.fields || []).map((field) => [field.key, field.value ?? '']))
+    const serverValues = existing?.serverValues || Object.fromEntries((data.fields || []).map((field: ApplicationPreparationField) => [field.key, field.value ?? '']))
     const dirtyKeys = Array.from(dirty).filter((key) => !isOfflineSensitiveField(key))
     const resetKeys = Array.from(resetFields).filter((key) => !isOfflineSensitiveField(key))
     const blockedSensitiveKeys = Array.from(new Set([
@@ -228,7 +228,7 @@ export function ApplicationPreparation({ applicationId, compact = false }: Props
       ...Array.from(dirty).filter((key) => isOfflineSensitiveField(key)),
       ...Array.from(resetFields).filter((key) => isOfflineSensitiveField(key)),
     ]))
-    const serverValues = offlineDraft?.serverValues || Object.fromEntries(prep.fields.map((field) => [field.key, field.value ?? '']))
+    const serverValues = offlineDraft?.serverValues || Object.fromEntries(prep.fields.map((field: ApplicationPreparationField) => [field.key, field.value ?? '']))
     return {
       applicationId,
       projectId: prep.project_id,
