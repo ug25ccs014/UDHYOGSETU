@@ -199,16 +199,53 @@ class MockLLMProvider(LLMProvider):
         return True
 
     async def generate(self, system_prompt, user_prompt, temperature=0.2, max_tokens=1024) -> str:
-        # Heuristic: pull the most relevant sentence from the context block.
-        lines = [ln.strip() for ln in user_prompt.splitlines() if ln.strip()]
-        context_lines = [
-            ln for ln in lines
-            if not ln.lower().startswith(("question", "answer", "source"))
-            and len(ln) > 30
-        ]
-        if context_lines:
-            return context_lines[0]
-        return "I could not find sufficient authoritative information to answer this question."
+        """Extractive answer built from the highest-ranked context section for the question."""
+        import re
+
+        question = ""
+        m = re.search(r"QUESTION:\s*(.+?)(?:\n\s*\n|\nANSWER:|$)", user_prompt, re.DOTALL)
+        if m:
+            question = m.group(1).strip()
+
+        cm = re.search(r"REGULATORY CONTEXT:\s*(.+?)\n\s*QUESTION:", user_prompt, re.DOTALL)
+        if not cm:
+            return "I could not find sufficient authoritative information to answer this question."
+        # Sources arrive ranked best-first; each starts with "Source N:".
+        sources = [x.strip() for x in re.split(r"(?m)^Source \d+:\s*$", cm.group(1)) if x.strip()]
+        if not sources:
+            return "I could not find sufficient authoritative information to answer this question."
+
+        stop = {
+            "a", "an", "and", "are", "the", "is", "of", "to", "for", "in", "on", "do", "does", "i", "my",
+            "what", "how", "which", "when", "where", "who", "why", "need", "required", "require", "about", "tell",
+        }
+
+        def toks(text):
+            return {t[:6] for t in re.findall(r"[a-z0-9]+", text.lower()) if t not in stop and len(t) > 1}
+
+        q = toks(question)
+        top = sources[0]
+        lines = [ln.rstrip() for ln in top.splitlines() if ln.strip()]
+        label = lines[0] if lines and ("›" in lines[0] or len(lines[0]) < 90) else ""
+        body_lines = lines[1:] if label else lines
+        body_lines = [ln for ln in body_lines if not ln.lstrip().startswith("#")]
+        body = "\n".join(body_lines).strip()
+        if not body:
+            return "I could not find sufficient authoritative information to answer this question."
+
+        # Short sections (lists, timelines) are the answer as-is.
+        if len(body) <= 700:
+            return f"{label}\n{body}".strip() if label else body
+
+        # Long section: keep only the sentences that overlap the question.
+        parts = [p.strip() for p in re.split(r"(?<=[.!?])\s+|\n+", body) if len(p.strip()) > 25]
+        scored = [(len(q & toks(p)), -i, p) for i, p in enumerate(parts)]
+        scored = [x for x in scored if x[0] > 0]
+        if not scored:
+            return f"{label}\n{parts[0]}".strip() if parts else body[:700]
+        best = sorted(sorted(scored, reverse=True)[:3], key=lambda x: -x[1])
+        answer = " ".join(p for _, _, p in best)
+        return f"{label}\n{answer}".strip() if label else answer
 
 
 _PROVIDER_REGISTRY = {

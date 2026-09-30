@@ -5,7 +5,7 @@ import os
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.models import ApprovalRule, GovernmentService, KnowledgeDocument, Scheme
+from app.models import ApprovalRule, GovernmentService, KnowledgeChunk, KnowledgeDocument, Scheme
 from app.rag.pipeline import RAGPipeline
 
 
@@ -89,8 +89,18 @@ class RuleLoadingService:
                 select(Scheme).where(Scheme.name == scheme_data['name'])
             )
             
-            if result.scalar_one_or_none():
-                continue  # Skip existing
+            existing_doc = result.scalar_one_or_none()
+            if existing_doc:
+                # Upgrade chunks created before section-aware chunking existed.
+                first = await self.db.execute(
+                    select(KnowledgeChunk).where(KnowledgeChunk.document_id == existing_doc.id)
+                    .order_by(KnowledgeChunk.chunk_index).limit(1)
+                )
+                first_chunk = first.scalars().first()
+                if pipeline._split_markdown_sections(text) and not (first_chunk and "›" in first_chunk.text.split("\n", 1)[0]):
+                    existing_doc.text = text
+                    await pipeline.reindex_document(existing_doc)
+                continue
             
             scheme = Scheme(
                 name=scheme_data['name'],

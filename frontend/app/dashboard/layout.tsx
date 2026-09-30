@@ -32,6 +32,7 @@ import { ErrorBoundary } from '@/components/ErrorBoundary'
 import { getSessionUser, isTokenExpired, logout } from '@/lib/auth'
 import NotificationBell from '@/features/NotificationBell'
 import OfflineStatusBanner from '@/features/OfflineStatusBanner'
+import CopilotDrawer from '@/features/CopilotDrawer'
 
 const navGroups = [
   {
@@ -318,6 +319,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </div>
         </div>
       </main>
+
+      {/* Floating Regulatory Copilot, available on every dashboard page */}
+      {currentProjectTab !== 'copilot' && <CopilotDrawer projectId={currentProjectId} />}
     </div>
   )
 }

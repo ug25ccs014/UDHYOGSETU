@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import json
 import logging
+import re
 from uuid import UUID
 
 from app.services.gateway_service import GatewayService
@@ -22,26 +23,36 @@ from app.services.rag_service import RAGService
 
 logger = logging.getLogger(__name__)
 
+# Whole-word / whole-phrase matches only (so "act" no longer matches "factory").
 _INTENT_KEYWORDS: dict[str, list[str]] = {
     "regulation": [
-        "regulation", "law", "rule", "act", "compliance", "license requirement",
-        "legal", "statutory", "must i", "need to", "required", "obligation",
-        "consent", "noc", "clearance",
+        "regulation", "regulations", "law", "rule", "rules", "act", "compliance", "legal", "statutory",
+        "must i", "do i need", "required", "requirement", "requirements", "obligation", "consent", "noc",
+        "clearance", "licence", "license", "registration", "register", "approval", "approvals", "how long",
+        "how many days", "timeline", "processing time", "fee", "fees", "penalty", "renewal",
+        "licensing", "licenses", "licences", "permit", "certificate", "factory", "boiler", "mpcb", "pollution",
+        "fire", "labour", "labor", "safety", "epf", "esi", "process",
     ],
     "document": [
-        "document", "upload", "pan", "gstin", "gst registration", "validation",
-        "cross", "mismatch", "expired", "expiry", "verify my document",
-        "what documents", "documents do",
+        "my document", "my documents", "uploaded", "upload", "pan", "gstin", "gst registration", "validation",
+        "cross validation", "mismatch", "expired", "expiry", "verify my document", "document check",
     ],
     "status": [
-        "status", "application status", "track", "where is my application",
-        "approval status", "how long", "sla", "pending approval",
+        "status", "application status", "track", "tracking", "where is my application", "approval status",
+        "my application", "my applications", "pending approval", "my approvals", "submitted",
     ],
     "scheme": [
-        "scheme", "subsidy", "incentive", "grant", "benefit", "finance",
-        "funding", "loan", "psu", "pmegp", "eligibility",
+        "scheme", "schemes", "subsidy", "subsidies", "incentive", "incentives", "grant", "benefit", "benefits",
+        "funding", "loan", "psu", "pmegp", "eligibility", "eligible",
     ],
 }
+
+# Phrases that mean the user wants facts about *their own* records.
+_PERSONAL_MARKERS = re.compile(r"\b(my|mine|our)\b")
+
+
+def _phrase_present(lowered: str, phrase: str) -> bool:
+    return re.search(rf"\b{re.escape(phrase)}\b", lowered) is not None
 
 
 class CopilotWorkflow:
@@ -54,11 +65,29 @@ class CopilotWorkflow:
 
     def detect_intent(self, question: str) -> str:
         lowered = (question or "").lower()
-        best, best_score = "general", 0
+        scores: dict[str, float] = {}
         for intent, keywords in _INTENT_KEYWORDS.items():
-            score = sum(1 for k in keywords if k in lowered)
-            if score > best_score:
-                best, best_score = intent, score
+            # Longer phrases are more specific, so they count for more.
+            scores[intent] = sum(
+                1.0 + 0.5 * (len(k.split()) - 1) for k in keywords if _phrase_present(lowered, k)
+            )
+
+        personal = bool(_PERSONAL_MARKERS.search(lowered))
+        # "Which documents do I need for X?" is a regulation question; only
+        # questions about the user's *own* uploads should hit Document AI.
+        if scores["document"] and not personal and not _phrase_present(lowered, "uploaded"):
+            scores["document"] = 0
+        # Likewise status needs a personal / tracking cue ("how long does MPCB take" is not a status query).
+        if scores["status"] and not personal and not any(
+            _phrase_present(lowered, w) for w in ("status", "track", "tracking")
+        ):
+            scores["status"] = 0
+        # Scheme questions about a named scheme's rules still work via the matcher, but general
+        # "what documents/approvals" wording should stay with regulations.
+        best, best_score = "general", 0.0
+        for intent in ("regulation", "scheme", "document", "status"):  # tie-break order
+            if scores[intent] > best_score:
+                best, best_score = intent, scores[intent]
         return best
 
     async def route(self, question: str, project_id: UUID | None) -> dict:
@@ -217,11 +246,21 @@ class CopilotWorkflow:
                 "sources": [],
                 "confidence": 1.0,
             }
-        lines = []
-        for a in approvals[:8]:
+        q_tokens = {t for t in re.findall(r"[a-z0-9]+", (question or "").lower()) if len(t) > 2}
+        generic = {"status", "application", "applications", "approval", "approvals", "what", "the", "how",
+                   "long", "does", "for", "and", "track", "pending", "submitted", "where", "many"}
+        wanted = q_tokens - generic
+
+        def _line(a):
             status = a.status.value if hasattr(a.status, "value") else str(a.status)
-            lines.append(f"- {a.name}: {status}")
-        answer = "Here is the status of your applications:\n" + "\n".join(lines) + "\n\nTrack them individually for live SLA updates from the department systems."
+            return f"- {a.name}: {status}"
+
+        matched = [a for a in approvals if wanted & set(re.findall(r"[a-z0-9]+", (a.name or "").lower()))]
+        if matched:
+            answer = "Here is the status of the approval(s) you asked about:\n" + "\n".join(_line(a) for a in matched[:8])
+        else:
+            answer = "Here is the status of your applications:\n" + "\n".join(_line(a) for a in approvals[:8])
+        answer += "\n\nTrack them individually for live SLA updates from the department systems."
         return {"intent": intent, "engine": "status", "answer": answer, "sources": [], "confidence": 0.9}
 
     async def _scheme_flow(self, question: str, project_id: UUID, intent: str) -> dict:
