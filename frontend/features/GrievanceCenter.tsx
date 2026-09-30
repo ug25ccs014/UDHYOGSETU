@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react'
 import Link from 'next/link'
-import { AlertCircle, ArrowUpRight, CheckCircle2, Clock3, MessageSquareWarning, Send, ShieldAlert } from 'lucide-react'
+import { AlertCircle, ArrowUpRight, CheckCircle2, Clock3, MessageSquare, Send, ShieldAlert } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
 import { useQueryClient } from '@tanstack/react-query'
 import { useApplications, useCreateGrievance, useEscalateGrievance, useGrievanceOfficers, useGrievances, useTransitionGrievance } from '@/hooks/useApi'
@@ -140,7 +140,7 @@ export default function GrievanceCenter() {
     <div className="space-y-6">
       <div>
         <div className="flex items-center gap-3">
-          <MessageSquareWarning className="h-7 w-7 text-blue-600" />
+          <MessageSquare className="h-7 w-7 text-blue-600" />
           <h1 className="text-3xl font-bold text-gray-900">Grievance & Escalation Center</h1>
         </div>
         <p className="mt-1 text-gray-600">Record application issues, follow their resolution path, and use an auditable escalation workflow.</p>

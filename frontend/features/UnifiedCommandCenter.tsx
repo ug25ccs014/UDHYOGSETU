@@ -67,7 +67,7 @@ function statusBadge(status: string) {
     case 'NOT_STARTED':
       return { label: 'Not started', variant: 'outline' as const }
     default:
-      return { label: status.replaceAll('_', ' '), variant: 'outline' as const }
+      return { label: status.split('_').join(' '), variant: 'outline' as const }
   }
 }
 

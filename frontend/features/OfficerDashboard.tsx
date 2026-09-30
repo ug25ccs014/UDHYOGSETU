@@ -7,7 +7,7 @@ import {
   ArrowRight,
   BarChart3,
   Bell,
-  BriefcaseBusiness,
+  Briefcase,
   CheckCircle2,
   ClipboardList,
   Clock3,
@@ -156,7 +156,7 @@ export function OfficerDashboard({ user }: OfficerDashboardProps) {
   }
 
   const kpis = [
-    { label: 'Total Applications', value: overview.total_applications ?? 0, icon: BriefcaseBusiness, href: '/dashboard/officer/applications' },
+    { label: 'Total Applications', value: overview.total_applications ?? 0, icon: Briefcase, href: '/dashboard/officer/applications' },
     { label: 'Active Review Queue', value: overview.review_queue_count ?? 0, icon: ClipboardList, href: '/dashboard/officer/applications' },
     { label: 'SLA Breaches', value: overview.sla_breached ?? overview.sla_breaches ?? 0, icon: Clock3, href: '/dashboard/sla-risk' },
     { label: 'High Risk', value: overview.high_risk ?? 0, icon: ShieldAlert, href: '/dashboard/sla-risk' },
@@ -258,7 +258,7 @@ export function OfficerDashboard({ user }: OfficerDashboardProps) {
                             {app.approval_name}
                           </Link>
                           <Badge variant={riskVariant(app.risk_band)}>{app.risk_band}</Badge>
-                          <Badge variant={statusVariant(app.status)}>{String(app.status).replaceAll('_', ' ')}</Badge>
+                          <Badge variant={statusVariant(app.status)}>{String(app.status).split('_').join(' ')}</Badge>
                         </div>
                         <p className="mt-1 text-sm text-gray-600">{app.company_name || '—'} · {app.department}</p>
                         <p className="text-xs text-gray-500 mt-1">{app.project_name || 'Project'}{app.project_location ? ` · ${app.project_location}` : ''}</p>
@@ -271,7 +271,7 @@ export function OfficerDashboard({ user }: OfficerDashboardProps) {
 
                     <div className="mt-4">
                       <div className="flex items-center justify-between text-xs text-gray-500 mb-1">
-                        <span>SLA: {app.sla.status.replaceAll('_', ' ')}</span>
+                        <span>SLA: {app.sla.status.split('_').join(' ')}</span>
                         <span>{app.sla.days_elapsed} / {app.sla.sla_days} days</span>
                       </div>
                       <div className="h-2 rounded-full bg-gray-100 overflow-hidden">
@@ -422,7 +422,7 @@ export function OfficerDashboard({ user }: OfficerDashboardProps) {
           <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-6 gap-3">
             {(data?.distribution || []).map((item: any) => (
               <div key={item.status} className="rounded-lg border border-gray-200 p-3">
-                <Badge variant={statusVariant(item.status)}>{String(item.status).replaceAll('_', ' ')}</Badge>
+                <Badge variant={statusVariant(item.status)}>{String(item.status).split('_').join(' ')}</Badge>
                 <p className="mt-2 text-2xl font-bold text-gray-900">{item.count}</p>
                 <p className="text-xs text-gray-500">{statusTotal ? Math.round((item.count / statusTotal) * 100) : 0}% of total</p>
               </div>

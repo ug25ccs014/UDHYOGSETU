@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { ArrowRight, CheckCircle2, CircleAlert, FlaskConical, Info, Loader2, RefreshCw, ShieldCheck } from 'lucide-react'
+import { ArrowRight, CheckCircle2, AlertCircle, FlaskConical, Info, Loader2, RefreshCw, ShieldCheck } from 'lucide-react'
 import { useDemoReadiness } from '@/hooks/useApi'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -68,7 +68,7 @@ export default function DemoCenterPage() {
               <CardContent className="space-y-3">
                 {(data?.checks || []).map((check: any) => (
                   <div key={check.key} className="flex items-start gap-3 rounded-xl border border-gray-200 p-4">
-                    {check.ok ? <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-green-600" /> : <CircleAlert className="mt-0.5 h-5 w-5 shrink-0 text-amber-600" />}
+                    {check.ok ? <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-green-600" /> : <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-amber-600" />}
                     <div className="min-w-0 flex-1"><p className="font-medium text-gray-900">{check.label}</p><p className="mt-1 text-sm text-gray-600">{check.detail}</p></div>
                     <Link href={check.href} className="shrink-0 text-sm font-medium text-blue-700 hover:underline">Open</Link>
                   </div>

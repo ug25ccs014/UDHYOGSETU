@@ -13,7 +13,7 @@ import {
   CalendarDays,
   History,
   Bell,
-  MessageSquareWarning,
+  MessageSquare,
   FlaskConical,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -25,7 +25,7 @@ const capabilities = [
   { href: '/dashboard/applications', icon: FileText, title: 'Applications', desc: 'Track drafts, submissions, queries and approval progress in one place.' },
   { href: '/dashboard/inspections', icon: CalendarDays, title: 'Inspection Planner', desc: 'See scheduled site visits and coordination opportunities.' },
   { href: '/dashboard/sla-risk', icon: ShieldCheck, title: 'SLA & Risk', desc: 'Review timelines, risk signals and cases that need attention.' },
-  { href: '/dashboard/grievances', icon: MessageSquareWarning, title: 'Grievances', desc: 'Raise and follow application issues through an auditable workflow.' },
+  { href: '/dashboard/grievances', icon: MessageSquare, title: 'Grievances', desc: 'Raise and follow application issues through an auditable workflow.' },
   { href: '/dashboard/notifications', icon: Bell, title: 'Notifications', desc: 'Review important approval, query, inspection and compliance alerts.' },
   { href: '/dashboard/regulatory', icon: History, title: 'Regulatory Updates', desc: 'Compare knowledge-base versions and review potential project impact.' },
   { href: '/dashboard/integrations', icon: ShieldCheck, title: 'Government Integrations', desc: 'See which services are simulated, guided, external or future-authorized.' },

@@ -6,7 +6,6 @@ import {
   AlertCircle,
   CheckCircle2,
   ChevronDown,
-  CircleAlert,
   FileCheck2,
   FileWarning,
   Loader2,
@@ -36,7 +35,7 @@ function checkVariant(status: string): 'success' | 'warning' | 'danger' | 'outli
 }
 
 function issueIcon(severity: string) {
-  return severity === 'BLOCKER' ? CircleAlert : AlertCircle
+  return severity === 'BLOCKER' ? AlertCircle : AlertCircle
 }
 
 export function PreSubmissionReadiness({ applicationId, applicationStatus }: PreSubmissionReadinessProps) {
@@ -171,7 +170,7 @@ export function PreSubmissionReadiness({ applicationId, applicationStatus }: Pre
 
         <div className="space-y-2">
           {data.checks.map((check) => {
-            const Icon = check.status === 'PASS' ? CheckCircle2 : check.status === 'BLOCKED' ? CircleAlert : AlertCircle
+            const Icon = check.status === 'PASS' ? CheckCircle2 : check.status === 'BLOCKED' ? AlertCircle : AlertCircle
             return (
               <div key={check.key} className="flex items-start gap-3 rounded-lg border border-gray-200 p-4">
                 <Icon className={`mt-0.5 h-5 w-5 ${check.status === 'PASS' ? 'text-green-600' : check.status === 'BLOCKED' ? 'text-red-600' : 'text-amber-600'}`} />
@@ -330,7 +329,7 @@ export function PreSubmissionReadiness({ applicationId, applicationStatus }: Pre
           </div>
         ) : isPreSubmission ? (
           <div className="flex items-start gap-2 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
-            <CircleAlert className="mt-0.5 h-5 w-5 flex-none" />
+            <AlertCircle className="mt-0.5 h-5 w-5 flex-none" />
             Submission is blocked until the readiness issues above are resolved.
           </div>
         ) : null}

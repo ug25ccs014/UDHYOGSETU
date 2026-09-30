@@ -3,7 +3,7 @@
 import { useParams, useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
-import { AlertCircle, ArrowLeft, FileText, Loader2, MessageSquareWarning, ShieldCheck, Sparkles } from 'lucide-react'
+import { AlertCircle, ArrowLeft, FileText, Loader2, MessageSquare, ShieldCheck, Sparkles } from 'lucide-react'
 import {
   useApplication,
   useApplicationTransitions,
@@ -230,7 +230,7 @@ export default function ApplicationDetailPage() {
       <Card className="border-slate-200">
         <CardContent className="flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-start gap-3">
-            <MessageSquareWarning className="mt-0.5 h-5 w-5 shrink-0 text-blue-700" />
+            <MessageSquare className="mt-0.5 h-5 w-5 shrink-0 text-blue-700" />
             <div>
               <p className="font-semibold text-slate-950">Need to report an application issue?</p>
               <p className="mt-1 text-sm text-slate-600">Create a grievance and follow its status through an auditable escalation workflow.</p>

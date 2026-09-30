@@ -14,7 +14,7 @@ import {
   Sparkles,
   Undo2,
   CloudOff,
-  CloudUpload,
+  UploadCloud,
   AlertTriangle,
   GitMerge,
 } from 'lucide-react'
@@ -447,7 +447,7 @@ export function ApplicationPreparation({ applicationId, compact = false }: Props
       {(prep.__offlineCachedAt || offlineDraft) && (
         <div className={`rounded-xl border p-4 ${offlineDraft?.status === 'CONFLICT' ? 'border-red-200 bg-red-50 text-red-950' : 'border-blue-200 bg-blue-50 text-blue-950'}`}>
           <div className="flex items-start gap-3">
-            {offlineDraft?.status === 'CONFLICT' ? <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-red-600" /> : isOnline ? <CloudUpload className="mt-0.5 h-5 w-5 shrink-0 text-blue-700" /> : <CloudOff className="mt-0.5 h-5 w-5 shrink-0 text-amber-700" />}
+            {offlineDraft?.status === 'CONFLICT' ? <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-red-600" /> : isOnline ? <UploadCloud className="mt-0.5 h-5 w-5 shrink-0 text-blue-700" /> : <CloudOff className="mt-0.5 h-5 w-5 shrink-0 text-amber-700" />}
             <div className="min-w-0 flex-1">
               <p className="font-semibold">{offlineDraft?.status === 'CONFLICT' ? 'Offline draft needs review' : !isOnline ? 'Working offline' : offlineDraft ? 'Draft saved locally' : 'Using locally cached application data'}</p>
               <p className="mt-1 text-sm">
@@ -473,7 +473,7 @@ export function ApplicationPreparation({ applicationId, compact = false }: Props
               )}
               {offlineDraft?.status === 'PENDING_SYNC' && isOnline && (
                 <Button size="sm" variant="outline" className="mt-3" onClick={() => void syncOfflineDraft()} disabled={syncingOffline}>
-                  {syncingOffline ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <CloudUpload className="mr-2 h-4 w-4" />}
+                  {syncingOffline ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <UploadCloud className="mr-2 h-4 w-4" />}
                   Sync draft now
                 </Button>
               )}
