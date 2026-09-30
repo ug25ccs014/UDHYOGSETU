@@ -250,7 +250,6 @@ export function BusinessProfile() {
           </>
         }
       />
-      </div>
 
       <div className="rounded-xl border border-blue-200 bg-blue-50 p-5">
         <div className="flex gap-3">
