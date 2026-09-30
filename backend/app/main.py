@@ -119,18 +119,18 @@ async def global_exception_handler(request: Request, exc: Exception):
     )
 
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=settings.CORS_ORIGINS,
-    allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE"],
-    allow_headers=["*"],
-    expose_headers=["X-Request-ID", "X-Response-Time"],
-)
+# Middleware order: Starlette runs the LAST one added FIRST (outermost). CORSMiddleware
+# must be added last so that responses produced by the other middlewares (invalid host
+# 400, rate-limit 429, errors) still carry CORS headers. Otherwise browsers report
+# every such failure as a misleading "blocked by CORS policy" error.
+_allowed_hosts = list(settings.ALLOWED_HOSTS)
+_render_host = os.environ.get("RENDER_EXTERNAL_HOSTNAME")  # set automatically by Render
+if _render_host and _render_host not in _allowed_hosts and "*" not in _allowed_hosts:
+    _allowed_hosts.append(_render_host)
 
 app.add_middleware(
     TrustedHostMiddleware,
-    allowed_hosts=settings.ALLOWED_HOSTS,
+    allowed_hosts=_allowed_hosts,
 )
 
 if settings.RATE_LIMIT_ENABLED:
@@ -139,6 +139,16 @@ if settings.RATE_LIMIT_ENABLED:
 from app.audit.middleware import audit_logging_middleware
 
 app.middleware("http")(audit_logging_middleware)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.CORS_ORIGINS,
+    allow_origin_regex=settings.CORS_ORIGIN_REGEX or None,
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allow_headers=["*"],
+    expose_headers=["X-Request-ID", "X-Response-Time"],
+)
 
 app.include_router(api_router, prefix="/api")
 

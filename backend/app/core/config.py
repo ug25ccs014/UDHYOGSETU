@@ -25,6 +25,9 @@ class Settings(BaseSettings):
         "http://127.0.0.1:3000",
     ]
     ALLOWED_HOSTS: list[str] = ["localhost", "127.0.0.1"]
+    # Optional regex (full match) for origins that change per deployment, e.g. Vercel
+    # preview URLs:  https://udhyogsetu[a-z0-9-]*\.vercel\.app
+    CORS_ORIGIN_REGEX: str = ""
 
     GEMINI_API_KEY: str = ""
     GROQ_API_KEY: str = ""
