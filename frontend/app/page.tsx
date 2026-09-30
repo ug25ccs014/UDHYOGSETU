@@ -1,238 +1,225 @@
-'use client'
+use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { motion, useScroll, useTransform } from 'framer-motion'
 import {
-  Building2, FileSearch, ShieldCheck, Landmark, Bot, Gift, History,
-  ArrowRight, ArrowDown, Sparkles, ClipboardList, Upload, Activity,
+  ArrowDown,
+  ArrowRight,
+  Building2,
+  Check,
+  ClipboardCheck,
+  FileCheck2,
+  Landmark,
+  ShieldCheck,
+  Sparkles,
+  Timer,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import BlurText from '@/components/fx/BlurText'
-import Magnet from '@/components/fx/Magnet'
-import ScrollReveal from '@/components/fx/ScrollReveal'
-import SpotlightCard from '@/components/fx/SpotlightCard'
-import AuroraBackground from '@/components/fx/AuroraBackground'
-import Counter from '@/components/fx/Counter'
-import IsoStack from '@/components/fx/IsoStack'
 
 const features = [
-  { icon: FileSearch, title: 'Intelligent Approvals', description: 'Get a personalised approval checklist based on your project.', tone: 'bg-blue-100 text-blue-600' },
-  { icon: ShieldCheck, title: 'Document Intelligence', description: 'AI-powered document validation and cross-checking.', tone: 'bg-teal-100 text-teal-700' },
-  { icon: Landmark, title: 'Compliance Tracking', description: 'Stay on top of post-approval compliance requirements.', tone: 'bg-sun/30 text-navy-ink' },
-  { icon: Building2, title: 'Government Integration Readiness', description: 'Transparent prototype with guided, future-authorised integration paths.', tone: 'bg-coral/20 text-coral' },
-  { icon: Bot, title: 'Regulatory Copilot', description: 'Ask questions about regulations and get grounded answers.', tone: 'bg-blue-100 text-blue-600' },
-  { icon: Gift, title: 'Incentive Discovery', description: 'Find and apply for government schemes you qualify for.', tone: 'bg-teal-100 text-teal-700' },
-  { icon: History, title: 'Regulatory Change Center', description: 'Compare regulation versions and review potential project impact.', tone: 'bg-sun/30 text-navy-ink' },
+  { icon: ClipboardCheck, number: '01', title: 'Know your approvals', description: 'Start with your project details and get a clear approval roadmap instead of searching across departments.' },
+  { icon: FileCheck2, number: '02', title: 'Prepare with confidence', description: 'Organise documents, resolve queries and see what is still missing before you submit.' },
+  { icon: Timer, number: '03', title: 'Track every milestone', description: 'Keep applications, inspections, deadlines and compliance actions visible in one workspace.' },
+  { icon: ShieldCheck, number: '04', title: 'Stay compliant', description: 'Review post-approval obligations and regulatory changes that may affect your project.' },
+  { icon: Landmark, number: '05', title: 'Discover support', description: 'Explore relevant schemes and incentives alongside the approvals you already need.' },
+  { icon: Sparkles, number: '06', title: 'Use the intelligent layer', description: 'Get guided answers and project signals while keeping prototype and government boundaries transparent.' },
 ]
 
-const steps = [
-  { icon: ClipboardList, title: 'Tell us about your project', desc: 'Answer a few simple questions about your business.', you: 'You: fill a 2-minute form' },
-  { icon: FileSearch, title: 'Get your approval roadmap', desc: 'We build a personalised checklist of every approval you need.', you: 'You: review the checklist' },
-  { icon: Upload, title: 'Upload documents', desc: 'Documents are validated and cross-checked automatically.', you: 'You: upload & fix flagged items' },
-  { icon: Activity, title: 'Track & stay compliant', desc: 'Monitor deadlines, queries and renewals in one place.', you: 'You: follow the timeline' },
-]
-
-const stats: [string, number, string][] = [
-  ['Integrated modules', 7, ''],
-  ['Guided steps to go live', 4, ''],
-  ['Dashboard for everything', 1, ''],
+const journey = [
+  ['01', 'Tell us about the project', 'Sector, location, investment and a few essentials.'],
+  ['02', 'See your approval roadmap', 'Understand what applies, what comes next and why.'],
+  ['03', 'Prepare and submit', 'Build documents, handle queries and track progress.'],
+  ['04', 'Operate with visibility', 'Monitor compliance, inspections and regulatory changes.'],
 ]
 
 export default function Home() {
-  const [scrolled, setScrolled] = useState(false)
-  const heroRef = useRef<HTMLElement>(null)
-  const stepsRef = useRef<HTMLDivElement>(null)
+  const router = useRouter()
 
   useEffect(() => {
-    const on = () => setScrolled(window.scrollY > 8)
-    on()
-    window.addEventListener('scroll', on, { passive: true })
-    return () => window.removeEventListener('scroll', on)
+    const nodes = Array.from(document.querySelectorAll<HTMLElement>('.ud-reveal'))
+    if (!('IntersectionObserver' in window)) {
+      nodes.forEach((node) => node.classList.add('ud-visible'))
+      return
+    }
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('ud-visible')
+          observer.unobserve(entry.target)
+        }
+      })
+    }, { rootMargin: '-80px 0px -10% 0px' })
+    nodes.forEach((node) => observer.observe(node))
+    return () => observer.disconnect()
   }, [])
 
-  // Hero parallax: content drifts up & fades as you scroll away
-  const { scrollYProgress: heroP } = useScroll({ target: heroRef, offset: ['start start', 'end start'] })
-  const heroY = useTransform(heroP, [0, 1], [0, 90])
-  const heroFade = useTransform(heroP, [0, 0.8], [1, 0.2])
-  // Steps: progress line fills while section scrolls
-  const { scrollYProgress: stepsP } = useScroll({ target: stepsRef, offset: ['start 70%', 'end 60%'] })
-
   return (
-    <main className="min-h-screen overflow-x-hidden bg-cream text-gray-900">
-      {/* NAV */}
-      <nav className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${scrolled ? 'border-b border-gray-200 bg-cream/85 shadow-card backdrop-blur-md' : 'bg-transparent'}`}>
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 sm:px-8">
-          <Link href="/" className="flex items-center gap-2.5">
-            <span className="grid h-10 w-10 place-items-center rounded-full border-2 border-navy bg-white">
-              <Building2 className="h-5 w-5 text-navy" />
+    <main className="min-h-screen overflow-x-hidden bg-[#FFFFE3] text-[#18324A]">
+      <div className="pointer-events-none fixed inset-0 z-50 opacity-[.045] ud-noise" aria-hidden="true" />
+
+      <nav className="absolute left-0 right-0 top-0 z-40 px-5 py-5 sm:px-8 lg:px-16">
+        <div className="mx-auto flex max-w-7xl items-center justify-between">
+          <Link href="/" className="flex items-center gap-3 text-[#18324A] no-underline">
+            <span className="grid h-10 w-10 place-items-center rounded-full border-2 border-[#18324A] bg-white text-[10px] font-black tracking-wider">US</span>
+            <span>
+              <strong className="block text-sm tracking-[.08em]">UDYOGSETU</strong>
+              <small className="block text-[9px] font-semibold uppercase tracking-[.2em] text-[#607386]">Idea to Industry</small>
             </span>
-            <span className="text-lg font-extrabold tracking-tight text-navy">UDYOGSETU</span>
           </Link>
-          <div className="hidden items-center gap-8 text-sm font-semibold text-gray-600 md:flex">
-            <a href="#how-it-works" className="transition hover:text-navy">How it works</a>
-            <a href="#features" className="transition hover:text-navy">Features</a>
-          </div>
-          <div className="flex items-center gap-2">
-            <Link href="/login"><Button variant="outline" size="sm">Login</Button></Link>
-            <Link href="/register"><Button size="sm">Get Started</Button></Link>
+          <div className="flex items-center gap-2 sm:gap-3">
+            <Link href="/login" className="hidden rounded-full px-4 py-2 text-sm font-semibold text-[#18324A] transition hover:bg-white/70 sm:inline-flex">Sign in</Link>
+            <Button onClick={() => router.push('/register')} className="rounded-full bg-[#173A59] px-5 shadow-lg shadow-[#173A59]/15 hover:bg-[#102f4b]">
+              Start a project <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
           </div>
         </div>
       </nav>
 
-      {/* HERO */}
-      <section ref={heroRef} className="relative isolate overflow-hidden border-b border-gray-200 pt-16">
-        <AuroraBackground />
-        <div className="absolute inset-0 -z-0 bg-grid [mask-image:linear-gradient(to_bottom,#000,transparent_85%)]" aria-hidden="true" />
-        <motion.div style={{ y: heroY, opacity: heroFade }} className="relative z-10 mx-auto grid max-w-7xl items-center gap-10 px-5 py-16 sm:px-8 lg:grid-cols-2 lg:py-24">
-          <div>
-            <div className="eyebrow mb-5 rounded-full border border-gray-200 bg-white/70 px-3.5 py-1.5 backdrop-blur">
-              <span className="pulse-dot" /> <Sparkles className="h-3.5 w-3.5" /> Smart India Hackathon · Prototype
+      <section className="relative min-h-[760px] overflow-hidden border-b border-[#D9D7B7] sm:min-h-[820px]">
+        <div className="absolute inset-0 ud-grid opacity-70" />
+        <div className="absolute -right-24 top-20 h-[520px] w-[520px] rounded-full bg-[#22B8CF]/10 blur-3xl" />
+        <div className="absolute -bottom-48 left-[-8%] h-[500px] w-[500px] rounded-full bg-[#2F9C84]/10 blur-3xl" />
+
+        <div className="relative mx-auto grid min-h-[760px] max-w-7xl items-center gap-12 px-5 pb-20 pt-32 sm:px-8 lg:grid-cols-[1.02fr_.98fr] lg:px-16 lg:pt-28">
+          <div className="max-w-3xl">
+            <div className="ud-reveal inline-flex items-center gap-2 rounded-full border border-[#C9C7A8] bg-white/65 px-4 py-2 text-[10px] font-black uppercase tracking-[.18em] text-[#547086] backdrop-blur">
+              <span className="h-2 w-2 rounded-full bg-[#2F9C84] shadow-[0_0_0_7px_rgba(47,156,132,.10)]" /> Industrial approvals, made clearer
             </div>
-            <BlurText
-              className="text-4xl font-extrabold leading-[1.02] tracking-tight text-navy sm:text-5xl lg:text-6xl"
-              segments={[{ text: 'From Idea to Industry' }, { text: 'One Intelligent Journey', gradient: true }]}
-            />
-            <motion.p
-              className="mt-6 max-w-xl text-base leading-relaxed text-gray-600 sm:text-lg"
-              initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6, duration: 0.6 }}
-            >
-              Understand approvals, prepare documents, track applications, stay compliant and discover government support — all from one place.
-            </motion.p>
-            <motion.div
-              className="mt-8 flex flex-wrap items-center gap-3"
-              initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.75, duration: 0.6 }}
-            >
-              <Magnet>
-                <Link href="/register"><Button size="lg">Start your project <ArrowRight className="h-4 w-4" /></Button></Link>
-              </Magnet>
-              <a href="#how-it-works"><Button size="lg" variant="outline">See how it works <ArrowDown className="h-4 w-4" /></Button></a>
-            </motion.div>
-            <p className="mt-5 text-sm text-gray-500">Free to try · No government login needed · Takes about 2 minutes to start</p>
+            <h1 className="ud-reveal mt-6 text-[clamp(3.2rem,7vw,6.7rem)] font-black leading-[.92] tracking-[-.065em]" style={{ transitionDelay: '80ms' }}>
+              From idea to industry.
+              <span className="mt-2 block bg-gradient-to-r from-[#173A59] via-[#167A9A] to-[#2F9C84] bg-[length:200%_auto] bg-clip-text text-transparent" style={{ animation: 'ud-shimmer 8s linear infinite' }}>
+                One clear journey.
+              </span>
+            </h1>
+            <p className="ud-reveal mt-7 max-w-2xl text-base leading-7 text-[#607386] sm:text-lg" style={{ transitionDelay: '160ms' }}>
+              UDYOGSETU brings approvals, documents, applications, inspections, compliance and support schemes into one guided workspace—so you always know what to do next.
+            </p>
+            <div className="ud-reveal mt-8 flex flex-col gap-3 sm:flex-row" style={{ transitionDelay: '240ms' }}>
+              <Button size="lg" onClick={() => router.push('/register')} className="h-12 rounded-full bg-[#173A59] px-7 text-base hover:bg-[#102f4b]">
+                Start your project <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+              <a href="#journey" className="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-[#BFC0A5] bg-white/60 px-6 text-sm font-bold text-[#18324A] backdrop-blur transition hover:-translate-y-0.5 hover:bg-white">
+                See how it works <ArrowDown className="h-4 w-4" />
+              </a>
+            </div>
+            <div className="ud-reveal mt-8 flex flex-wrap gap-x-6 gap-y-2 text-xs font-semibold text-[#607386]" style={{ transitionDelay: '320ms' }}>
+              <span className="inline-flex items-center gap-2"><Check className="h-4 w-4 text-[#2F9C84]" /> Guided approval roadmap</span>
+              <span className="inline-flex items-center gap-2"><Check className="h-4 w-4 text-[#2F9C84]" /> Document readiness</span>
+              <span className="inline-flex items-center gap-2"><Check className="h-4 w-4 text-[#2F9C84]" /> Compliance visibility</span>
+            </div>
           </div>
-          <IsoStack />
-        </motion.div>
-      </section>
 
-      {/* STATS */}
-      <section className="border-b border-gray-200 bg-white/60">
-        <div className="mx-auto grid max-w-7xl grid-cols-3 gap-4 px-5 py-10 text-center sm:px-8">
-          {stats.map(([label, v, s]) => (
-            <ScrollReveal key={label}>
-              <div className="text-4xl font-extrabold tracking-tight text-navy sm:text-5xl"><Counter value={v} suffix={s} /></div>
-              <div className="mt-1 text-xs font-semibold uppercase tracking-wider text-gray-500 sm:text-sm">{label}</div>
-            </ScrollReveal>
-          ))}
-        </div>
-      </section>
-
-      {/* HOW IT WORKS */}
-      <section id="how-it-works" className="scroll-mt-16 py-20 sm:py-28">
-        <div className="mx-auto max-w-5xl px-5 sm:px-8">
-          <ScrollReveal className="mx-auto mb-14 max-w-2xl text-center">
-            <div className="eyebrow">How it works</div>
-            <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-navy sm:text-4xl">Four clear steps. Always know what’s next.</h2>
-            <p className="mt-3 text-gray-600">Each step tells you exactly what to do, so nothing gets missed.</p>
-          </ScrollReveal>
-
-          <div ref={stepsRef} className="relative">
-            {/* track + animated fill */}
-            <div className="absolute bottom-6 left-6 top-6 w-0.5 rounded bg-gray-200 sm:left-1/2 sm:-translate-x-1/2" aria-hidden="true" />
-            <motion.div
-              className="absolute bottom-6 left-6 top-6 w-0.5 origin-top rounded bg-gradient-to-b from-blue-500 via-teal to-coral sm:left-1/2 sm:-translate-x-1/2"
-              style={{ scaleY: stepsP }} aria-hidden="true"
-            />
-            <ol className="space-y-10">
-              {steps.map((s, i) => {
-                const Icon = s.icon
-                const right = i % 2 === 1
-                return (
-                  <li key={s.title} className="relative grid grid-cols-[3rem_1fr] items-start gap-5 sm:grid-cols-2 sm:gap-16">
-                    <div className="absolute left-0 top-0 grid h-12 w-12 place-items-center rounded-full border-4 border-cream bg-navy text-lg font-extrabold text-cream shadow-card sm:left-1/2 sm:-translate-x-1/2">
-                      {i + 1}
-                    </div>
-                    <ScrollReveal className={`col-start-2 sm:col-start-auto ${right ? 'sm:col-start-2' : 'sm:col-start-1 sm:text-right'}`} y={30}>
-                      <div className={`rounded-2xl border border-gray-200 bg-white/85 p-5 shadow-card ${right ? '' : 'sm:ml-auto'}`}>
-                        <div className={`mb-3 flex items-center gap-2 text-navy ${right ? '' : 'sm:justify-end'}`}>
-                          <Icon className="h-5 w-5 text-blue-500" />
-                          <h3 className="text-lg font-bold">{s.title}</h3>
+          <div className="relative mx-auto w-full max-w-[610px] [perspective:1200px]">
+            <div className="absolute -inset-8 rounded-[3rem] bg-gradient-to-br from-[#22B8CF]/10 to-[#2F9C84]/10 blur-2xl" />
+            <div className="ud-reveal relative rotate-[2deg] rounded-[30px] border border-[#18324A]/15 bg-[#173A59] p-3 shadow-[0_35px_90px_rgba(23,58,89,.22)] [transform-style:preserve-3d]" style={{ transitionDelay: '180ms' }}>
+              <div className="overflow-hidden rounded-[23px] border border-white/10 bg-[#0e2941]">
+                <div className="flex items-center justify-between border-b border-white/10 px-5 py-4 text-white">
+                  <div>
+                    <p className="text-[10px] font-bold uppercase tracking-[.2em] text-cyan-200/60">Project command view</p>
+                    <p className="mt-1 font-semibold">Approval journey</p>
+                  </div>
+                  <span className="rounded-full bg-[#2F9C84]/15 px-3 py-1 text-[10px] font-bold text-emerald-200">LIVE</span>
+                </div>
+                <div className="relative min-h-[370px] overflow-hidden px-5 py-6 sm:min-h-[410px]">
+                  <div className="absolute inset-0 opacity-20 ud-grid" />
+                  <div className="relative z-10 space-y-3">
+                    {['Project profile', 'Approval roadmap', 'Document readiness', 'Application tracking', 'Compliance'].map((item, i) => (
+                      <div key={item} className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[.045] p-3 backdrop-blur" style={{ animation: `ud-float ${4 + i * .4}s ease-in-out infinite`, animationDelay: `${i * -.45}s` }}>
+                        <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-xl ${i < 2 ? 'bg-[#2F9C84] text-white' : 'bg-white/10 text-cyan-100'}`}>
+                          {i < 2 ? <Check className="h-4 w-4" /> : <span className="text-xs font-black">0{i + 1}</span>}
+                        </span>
+                        <div className="min-w-0 flex-1">
+                          <p className="truncate text-sm font-semibold text-white">{item}</p>
+                          <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white/10"><div className="h-full rounded-full bg-gradient-to-r from-cyan-300 to-emerald-300" style={{ width: `${[100, 76, 58, 36, 22][i]}%` }} /></div>
                         </div>
-                        <p className="text-sm text-gray-600">{s.desc}</p>
-                        <p className="mt-3 inline-block rounded-full bg-sun/30 px-3 py-1 text-xs font-bold text-navy-ink">{s.you}</p>
+                        <span className="text-[10px] text-white/45">{i < 2 ? 'Ready' : 'Next'}</span>
                       </div>
-                    </ScrollReveal>
-                  </li>
-                )
-              })}
-            </ol>
+                    ))}
+                  </div>
+                  <svg className="pointer-events-none absolute bottom-7 left-10 h-20 w-[80%] opacity-50" viewBox="0 0 400 80" fill="none" aria-hidden="true">
+                    <path d="M5 65 C90 10 135 75 220 35 S315 20 395 5" stroke="#22D3EE" strokeWidth="2" strokeDasharray="8 10" style={{ animation: 'ud-route 4s linear infinite' }} />
+                    {[5, 120, 220, 395].map((cx) => <circle key={cx} cx={cx} cy={cx === 5 ? 65 : cx === 120 ? 48 : cx === 220 ? 35 : 5} r="4" fill="#E0FBFF" />)}
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <div className="absolute -bottom-5 -left-2 hidden rounded-2xl border border-[#18324A]/10 bg-white/85 px-4 py-3 text-xs font-bold shadow-xl backdrop-blur sm:block" style={{ animation: 'ud-float 4s ease-in-out infinite' }}>
+              <span className="mr-2 inline-block h-2 w-2 rounded-full bg-[#2F9C84]" /> Next action: complete project profile
+            </div>
+          </div>
+        </div>
+        <div className="absolute bottom-6 left-1/2 hidden -translate-x-1/2 items-center gap-2 text-[10px] font-black uppercase tracking-[.2em] text-[#607386] sm:flex">Scroll to explore <ArrowDown className="h-3 w-3" /></div>
+      </section>
+
+      <section id="journey" className="border-b border-[#D9D7B7] bg-white/45 py-24 sm:py-28">
+        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-16">
+          <div className="ud-reveal max-w-2xl">
+            <p className="text-[10px] font-black uppercase tracking-[.22em] text-[#547086]">A guided journey</p>
+            <h2 className="mt-3 text-4xl font-black tracking-[-.04em] sm:text-5xl">Know what happens next.</h2>
+            <p className="mt-4 text-base leading-7 text-[#607386]">The interface is organised around the work you actually need to complete—not a wall of disconnected tools.</p>
+          </div>
+          <div className="mt-12 grid gap-4 md:grid-cols-4">
+            {journey.map(([step, title, desc], i) => (
+              <article key={step} className="ud-reveal group relative rounded-[24px] border border-[#18324A]/10 bg-white/75 p-6 shadow-[0_12px_40px_rgba(24,50,74,.06)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_22px_55px_rgba(24,50,74,.11)]" style={{ transitionDelay: `${i * 70}ms` }}>
+                <span className="text-[10px] font-black tracking-[.18em] text-[#2F9C84]">{step}</span>
+                <div className="mt-10 h-px w-full bg-[#D9D7B7] transition group-hover:bg-[#2F9C84]" />
+                <h3 className="mt-5 text-lg font-black">{title}</h3>
+                <p className="mt-2 text-sm leading-6 text-[#607386]">{desc}</p>
+              </article>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* FEATURES */}
-      <section id="features" className="scroll-mt-16 border-y border-gray-200 bg-white/60 py-20 sm:py-28">
-        <div className="mx-auto max-w-7xl px-5 sm:px-8">
-          <ScrollReveal className="mx-auto mb-14 max-w-2xl text-center">
-            <div className="eyebrow">Features</div>
-            <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-navy sm:text-4xl">Everything to set up and run an industrial unit</h2>
-            <p className="mt-3 text-gray-600">Built for entrepreneurs setting up in Maharashtra.</p>
-          </ScrollReveal>
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {features.map((f, i) => {
-              const Icon = f.icon
-              return (
-                <ScrollReveal key={f.title} delay={(i % 3) * 0.08} className="h-full">
-                  <SpotlightCard className="h-full">
-                    <div className="flex h-full flex-col p-6">
-                      <div className={`mb-4 grid h-12 w-12 place-items-center rounded-xl ${f.tone}`}><Icon className="h-6 w-6" /></div>
-                      <h3 className="mb-1.5 text-lg font-bold text-navy">{f.title}</h3>
-                      <p className="text-sm leading-relaxed text-gray-600">{f.description}</p>
-                    </div>
-                  </SpotlightCard>
-                </ScrollReveal>
-              )
-            })}
+      <section id="features" className="py-24 sm:py-28">
+        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-16">
+          <div className="ud-reveal flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
+            <div className="max-w-2xl">
+              <p className="text-[10px] font-black uppercase tracking-[.22em] text-[#547086]">One workspace</p>
+              <h2 className="mt-3 text-4xl font-black tracking-[-.04em] sm:text-5xl">Everything has a place.</h2>
+            </div>
+            <p className="max-w-md text-sm leading-6 text-[#607386]">Each screen will follow the same visual language: clear hierarchy, predictable actions, generous spacing and purposeful motion.</p>
+          </div>
+
+          <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {features.map(({ icon: Icon, number, title, description }, i) => (
+              <article key={number} className="ud-reveal group relative min-h-[230px] overflow-hidden rounded-[26px] border border-[#18324A]/10 bg-white/65 p-7 backdrop-blur transition duration-300 hover:-translate-y-1 hover:border-[#2F9C84]/35 hover:bg-white" style={{ transitionDelay: `${(i % 3) * 70}ms` }}>
+                <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-[#22B8CF]/10 blur-2xl transition duration-500 group-hover:bg-[#22B8CF]/20" />
+                <div className="relative flex items-start justify-between">
+                  <div className="grid h-11 w-11 place-items-center rounded-2xl bg-[#173A59] text-white shadow-lg shadow-[#173A59]/15"><Icon className="h-5 w-5" /></div>
+                  <span className="text-[10px] font-black tracking-[.18em] text-[#9AA4A9]">{number}</span>
+                </div>
+                <h3 className="relative mt-9 text-xl font-black">{title}</h3>
+                <p className="relative mt-2 max-w-sm text-sm leading-6 text-[#607386]">{description}</p>
+                <ArrowRight className="absolute bottom-7 right-7 h-4 w-4 text-[#A5AFB4] transition duration-300 group-hover:translate-x-1 group-hover:text-[#2F9C84]" />
+              </article>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="relative isolate overflow-hidden bg-navy py-20 text-center sm:py-24">
-        <div className="absolute inset-0 opacity-[.12] bg-grid [background-size:44px_44px] invert" aria-hidden="true" />
-        <div className="relative z-10 mx-auto max-w-3xl px-5 sm:px-8">
-          <ScrollReveal>
-            <h2 className="text-3xl font-extrabold tracking-tight text-cream sm:text-4xl">Ready to streamline your approvals?</h2>
-            <p className="mt-3 text-lg text-blue-200">Join entrepreneurs across Maharashtra using UDYOGSETU.</p>
-            <div className="mt-8"><Magnet><Link href="/register"><Button size="lg" variant="secondary">Get started now <ArrowRight className="h-4 w-4" /></Button></Link></Magnet></div>
-          </ScrollReveal>
+      <section className="px-5 pb-20 sm:px-8 lg:px-16">
+        <div className="mx-auto max-w-7xl overflow-hidden rounded-[32px] bg-[#173A59] px-7 py-14 text-white shadow-[0_30px_80px_rgba(23,58,89,.18)] sm:px-12 sm:py-16 lg:px-16">
+          <div className="grid gap-10 lg:grid-cols-[1fr_auto] lg:items-center">
+            <div>
+              <p className="text-[10px] font-black uppercase tracking-[.22em] text-cyan-200/70">Start with the next step</p>
+              <h2 className="mt-3 max-w-3xl text-4xl font-black tracking-[-.04em] sm:text-5xl">Your project should not feel like a paperwork maze.</h2>
+              <p className="mt-4 max-w-2xl text-sm leading-6 text-blue-100/75 sm:text-base">Create a project and let the workspace guide you through the journey.</p>
+            </div>
+            <Button size="lg" onClick={() => router.push('/register')} className="h-12 rounded-full bg-white px-7 font-bold text-[#173A59] hover:bg-[#FFFFE3]">
+              Create account <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </div>
         </div>
       </section>
 
-      {/* FOOTER */}
-      <footer className="bg-navy-ink py-12 text-sm text-blue-200">
-        <div className="mx-auto grid max-w-7xl gap-8 px-5 sm:px-8 md:grid-cols-4">
-          <div>
-            <div className="mb-3 flex items-center gap-2 font-bold text-cream"><Building2 className="h-5 w-5" /> UDYOGSETU</div>
-            <p>An intelligent platform helping entrepreneurs navigate industrial approvals and compliance.</p>
-          </div>
-          <div>
-            <h4 className="mb-3 font-bold text-cream">Quick links</h4>
-            <ul className="space-y-2">
-              <li><a href="#how-it-works" className="hover:text-white">How it works</a></li>
-              <li><Link href="/login" className="hover:text-white">Login</Link></li>
-              <li><Link href="/register" className="hover:text-white">Create account</Link></li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="mb-3 font-bold text-cream">Project note</h4>
-            <p>This is a prototype journey. Government API access is not assumed.</p>
-          </div>
-          <div>
-            <h4 className="mb-3 font-bold text-cream">Contact</h4>
-            <p>support@udyogsetu.gov.in</p>
-          </div>
+      <footer className="border-t border-[#D9D7B7] px-5 py-8 sm:px-8 lg:px-16">
+        <div className="mx-auto flex max-w-7xl flex-col gap-3 text-xs text-[#607386] sm:flex-row sm:items-center sm:justify-between">
+          <span className="font-black tracking-[.12em] text-[#18324A]">UDYOGSETU</span>
+          <span>Industrial approval & compliance prototype · Smart India Hackathon</span>
+          <Link href="/login" className="font-bold text-[#173A59] hover:underline">Sign in</Link>
         </div>
-        <p className="mx-auto mt-10 max-w-7xl border-t border-white/10 px-5 pt-6 text-center text-xs sm:px-8">© 2026 UDYOGSETU · Smart India Hackathon prototype</p>
       </footer>
     </main>
   )
