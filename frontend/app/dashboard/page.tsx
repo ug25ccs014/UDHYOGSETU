@@ -3,22 +3,21 @@
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import {
-  ArrowRight,
-  ArrowUpRight,
-  Building2,
-  FileText,
-  ShieldCheck,
-  Loader2,
-  UserRound,
-  CalendarDays,
-  History,
-  Bell,
-  MessageSquare,
-  FlaskConical,
+  ArrowRight, ArrowUpRight, Building2, FileText, ShieldCheck, Loader2, UserRound,
+  CalendarDays, History, Bell, MessageSquare, FlaskConical, Plus, ClipboardList, Compass,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { useProjects } from '@/hooks/useApi'
+import ScrollReveal from '@/components/fx/ScrollReveal'
+import SpotlightCard from '@/components/fx/SpotlightCard'
+import AuroraBackground from '@/components/fx/AuroraBackground'
+
+const quickStart = [
+  { n: 1, title: 'Create a project', desc: 'Tell us about your unit', href: '/dashboard/new-project', icon: Plus },
+  { n: 2, title: 'Review approvals', desc: 'See your personalised checklist', href: '/dashboard/applications', icon: ClipboardList },
+  { n: 3, title: 'Explore services', desc: 'Apply for what you need', href: '/dashboard/explore', icon: Compass },
+]
 
 const capabilities = [
   { href: '/dashboard/profile', icon: UserRound, title: 'Business Profile', desc: 'Keep reusable business information and documents ready for future applications.' },
@@ -31,132 +30,152 @@ const capabilities = [
   { href: '/dashboard/integrations', icon: ShieldCheck, title: 'Government Integrations', desc: 'See which services are simulated, guided, external or future-authorized.' },
   { href: '/dashboard/demo', icon: FlaskConical, title: 'SIH Demo Center', desc: 'Run the complete prototype walkthrough and verify the seeded journey before your presentation.' },
 ]
+
+const tones = ['bg-blue-100 text-blue-600', 'bg-teal-100 text-teal-700', 'bg-sun/30 text-navy-ink', 'bg-coral/20 text-coral']
+
 export default function DashboardHome() {
   const router = useRouter()
   const { data, isLoading, isError, refetch, isFetching } = useProjects()
   const projects = Array.isArray(data) ? data : []
 
   return (
-    <div className="space-y-8">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div className="space-y-10">
+      {/* Header */}
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Dashboard</h1>
-          <p className="mt-1 text-gray-600">Manage your industrial projects and approvals</p>
+          <h1 className="page-title">Dashboard</h1>
+          <p className="page-sub">Manage your industrial projects and approvals from one place.</p>
         </div>
         <Button onClick={() => router.push('/dashboard/new-project')} className="w-full sm:w-auto">
-          <Building2 className="w-4 h-4 mr-2" />
-          Start New Project
+          <Plus className="h-4 w-4" /> Start new project
         </Button>
       </div>
 
-      <Card>
-        <CardContent className="p-0">
-          <div className="flex flex-col lg:flex-row items-center gap-8 p-8 bg-gradient-to-r from-blue-600 to-indigo-700 rounded-lg">
-            <div className="flex-1">
-              <h2 className="text-2xl font-bold text-white">
-                From Idea to Industry — One Intelligent Journey
-              </h2>
-              <p className="mt-2 text-blue-100">
-                Set up your industrial project in a few simple steps. Answer a few questions about
-                your business and UDYOGSETU will build your approval roadmap instantly.
+      {/* Hero / quick start */}
+      <ScrollReveal>
+        <div className="relative isolate overflow-hidden rounded-3xl bg-navy p-6 text-cream shadow-soft sm:p-10">
+          <div className="absolute inset-0 -z-10 opacity-[.10] bg-grid invert" aria-hidden="true" />
+          <AuroraBackground className="-z-10 opacity-40" />
+          <div className="grid items-center gap-8 lg:grid-cols-[1.1fr_1fr]">
+            <div>
+              <div className="eyebrow !text-sun"><span className="pulse-dot" /> Your journey</div>
+              <h2 className="mt-3 text-2xl font-extrabold leading-tight tracking-tight sm:text-3xl">From idea to industry — three simple steps</h2>
+              <p className="mt-3 max-w-md text-blue-100">
+                Answer a few questions about your business and UDYOGSETU builds your approval roadmap instantly.
               </p>
-              <Button
-                variant="secondary"
-                size="lg"
-                className="mt-6"
-                onClick={() => router.push('/dashboard/new-project')}
-              >
-                Get Started
-                <ArrowRight className="w-4 h-4 ml-2" />
+              <Button variant="secondary" size="lg" className="mt-6" onClick={() => router.push('/dashboard/new-project')}>
+                Get started <ArrowRight className="h-4 w-4" />
               </Button>
             </div>
-            <div className="hidden lg:block text-8xl">🏭</div>
+            <ol className="grid gap-3">
+              {quickStart.map((s) => {
+                const Icon = s.icon
+                return (
+                  <li key={s.n}>
+                    <Link href={s.href} className="group flex items-center gap-4 rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur transition hover:bg-white/20">
+                      <span className="grid h-10 w-10 flex-none place-items-center rounded-full bg-sun text-sm font-extrabold text-navy-ink">{s.n}</span>
+                      <span className="min-w-0 flex-1">
+                        <span className="block font-bold">{s.title}</span>
+                        <span className="block text-sm text-blue-200">{s.desc}</span>
+                      </span>
+                      <Icon className="h-5 w-5 flex-none text-blue-200 transition group-hover:translate-x-0.5 group-hover:text-sun" />
+                    </Link>
+                  </li>
+                )
+              })}
+            </ol>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </ScrollReveal>
 
-      <div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Your Projects</h3>
+      {/* Projects */}
+      <section aria-labelledby="projects-h">
+        <div className="mb-4 flex items-center justify-between">
+          <h3 id="projects-h" className="text-lg font-extrabold text-navy">Your projects</h3>
+          {projects.length > 0 && <span className="text-sm text-gray-500">{projects.length} total</span>}
+        </div>
         {isLoading ? (
-          <div className="flex items-center gap-2 text-gray-500 py-8" role="status" aria-live="polite">
-            <Loader2 className="w-4 h-4 animate-spin" />
-            Loading your projects...
+          <div className="flex items-center gap-2 py-8 text-gray-500" role="status" aria-live="polite">
+            <Loader2 className="h-4 w-4 animate-spin" /> Loading your projects...
           </div>
         ) : isError ? (
           <Card>
             <CardContent className="py-10 text-center">
-              <p className="font-medium text-gray-900">We couldn’t load your projects.</p>
+              <p className="font-bold text-gray-900">We couldn’t load your projects.</p>
               <p className="mt-1 text-sm text-gray-600">Your projects are safe. Check your connection and try again.</p>
               <Button className="mt-4" variant="outline" onClick={() => refetch()} disabled={isFetching}>
-                {isFetching ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}Retry
+                {isFetching ? <Loader2 className="h-4 w-4 animate-spin" /> : null}Retry
               </Button>
             </CardContent>
           </Card>
         ) : projects.length === 0 ? (
-          <Card>
-            <CardContent className="py-10 text-center">
-              <p className="text-gray-600">No projects yet.</p>
-              <Button className="mt-4" onClick={() => router.push('/dashboard/new-project')}>
-                Create your first project
-              </Button>
+          <Card className="border-dashed">
+            <CardContent className="py-12 text-center">
+              <span className="mx-auto mb-3 grid h-12 w-12 place-items-center rounded-2xl bg-blue-100 text-blue-600"><Building2 className="h-6 w-6" /></span>
+              <p className="font-bold text-gray-900">No projects yet</p>
+              <p className="mt-1 text-sm text-gray-600">Create your first project to get your approval roadmap.</p>
+              <Button className="mt-5" onClick={() => router.push('/dashboard/new-project')}>Create your first project</Button>
             </CardContent>
           </Card>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {projects.map((project) => (
-              <Card
-                key={project.id}
-                className="cursor-pointer hover:shadow-md transition group"
-                onClick={() => router.push(`/dashboard/${project.id}`)}
-              >
-                <CardHeader>
-                  <div className="flex items-start justify-between">
-                    <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center mb-3">
-                      <Building2 className="w-5 h-5 text-blue-600" />
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+            {projects.map((project, i) => (
+              <ScrollReveal key={project.id} delay={(i % 3) * 0.07} className="h-full">
+                <Card
+                  className="group h-full cursor-pointer transition duration-200 hover:-translate-y-1 hover:shadow-lift"
+                  onClick={() => router.push(`/dashboard/${project.id}`)}
+                >
+                  <CardHeader>
+                    <div className="flex items-start justify-between">
+                      <div className="mb-3 grid h-10 w-10 place-items-center rounded-xl bg-blue-100">
+                        <Building2 className="h-5 w-5 text-blue-600" />
+                      </div>
+                      <ArrowUpRight className="h-4 w-4 text-gray-400 transition group-hover:text-blue-500" />
                     </div>
-                    <ArrowUpRight className="w-4 h-4 text-gray-400 group-hover:text-blue-600 transition" />
-                  </div>
-                  <CardTitle className="capitalize">{project.name}</CardTitle>
-                  <CardDescription className="capitalize">
-                    {project.sector} · {[project.location_district, project.location_state].filter(Boolean).join(', ')}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-gray-500">
-                    ${Number(project.investment_amount || 0).toLocaleString()}
-                    {project.created_at ? ` · ${new Date(project.created_at).toLocaleDateString()}` : ''}
-                  </p>
-                </CardContent>
-              </Card>
+                    <CardTitle className="capitalize">{project.name}</CardTitle>
+                    <CardDescription className="capitalize">
+                      {project.sector} · {[project.location_district, project.location_state].filter(Boolean).join(', ')}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-gray-500">
+                      ₹{Number(project.investment_amount || 0).toLocaleString('en-IN')}
+                      {project.created_at ? ` · ${new Date(project.created_at).toLocaleDateString()}` : ''}
+                    </p>
+                  </CardContent>
+                </Card>
+              </ScrollReveal>
             ))}
           </div>
         )}
-      </div>
+      </section>
 
-      <div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">What you can do</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {capabilities.map((cap) => {
+      {/* Capabilities */}
+      <section aria-labelledby="cap-h">
+        <h3 id="cap-h" className="mb-1 text-lg font-extrabold text-navy">What you can do</h3>
+        <p className="mb-4 text-sm text-gray-500">Jump straight to any tool.</p>
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+          {capabilities.map((cap, i) => {
             const Icon = cap.icon
             return (
-              <Link key={cap.title} href={cap.href} className="group block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 rounded-lg">
-                <Card className="h-full transition group-hover:-translate-y-0.5 group-hover:shadow-md group-focus-visible:ring-2 group-focus-visible:ring-blue-500">
-                  <CardHeader>
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center mb-3">
-                        <Icon className="w-5 h-5 text-blue-600" />
+              <ScrollReveal key={cap.title} delay={(i % 3) * 0.07} className="h-full">
+                <Link href={cap.href} className="group block h-full rounded-[1.25rem] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-cream">
+                  <SpotlightCard className="h-full">
+                    <div className="flex h-full flex-col p-5">
+                      <div className="mb-3 flex items-start justify-between gap-3">
+                        <div className={`grid h-11 w-11 place-items-center rounded-xl ${tones[i % tones.length]}`}><Icon className="h-5 w-5" /></div>
+                        <ArrowUpRight className="h-4 w-4 text-gray-300 transition group-hover:text-blue-500" aria-hidden="true" />
                       </div>
-                      <ArrowUpRight className="w-4 h-4 text-gray-300 transition group-hover:text-blue-600" aria-hidden="true" />
+                      <h4 className="font-bold text-navy">{cap.title}</h4>
+                      <p className="mt-1 text-sm leading-relaxed text-gray-600">{cap.desc}</p>
                     </div>
-                    <CardTitle>{cap.title}</CardTitle>
-                    <CardDescription>{cap.desc}</CardDescription>
-                  </CardHeader>
-                </Card>
-              </Link>
+                  </SpotlightCard>
+                </Link>
+              </ScrollReveal>
             )
           })}
         </div>
-      </div>
+      </section>
     </div>
   )
 }

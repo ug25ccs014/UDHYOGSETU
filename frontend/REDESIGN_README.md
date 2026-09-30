@@ -24,7 +24,13 @@ npm run dev
   - `components/fx/*` (ScrollReveal, BlurText, Magnet, SpotlightCard, AuroraBackground, Counter, IsoStack, usePrefersReducedMotion)
   - `components/ui/*` restyled (button, card, input, select, textarea, badge, loading) — same props/API
   - `app/page.tsx` landing rewritten (nav, hero + 3D stack, stats, scroll-progress "how it works", feature grid, CTA, footer)
-- [ ] **Step 2 – Auth + Dashboard shell**: `app/login/page.tsx`, `app/register/page.tsx`, `app/dashboard/layout.tsx`, `app/dashboard/page.tsx` (+ `features/NotificationBell.tsx`, `features/UnifiedCommandCenter.tsx` if used by dashboard home)
+- [x] **Step 2 – Auth + Dashboard shell** (DONE)
+  - NEW `components/AuthShell.tsx`: split layout (navy story panel + centred form), used by login/register
+  - `app/login/page.tsx`: same logic, new UI, shows "Account created" notice after `?registered=1`, labels linked to inputs
+  - `app/register/page.tsx`: same logic, "Step 1 of 2" label, phone + role on one row, password pair on one row
+  - `app/dashboard/layout.tsx`: sidebar grouped (Start here / My work / Stay on track / More), navy active pill, top bar shows current page title, content capped at `max-w-7xl`, page fade-in on route change
+  - `app/dashboard/page.tsx`: header + 3-step quick-start hero, project cards, spotlight capability grid; currency now ₹ (was $)
+  - NotificationBell / UnifiedCommandCenter NOT edited (they inherit the remapped colours)
 - [ ] **Step 3 – Project pages**: `app/dashboard/[projectId]/*` (approvals, documents, compliance, copilot, schemes, regulatory, simulate)
 - [ ] **Step 4 – Applications/Explore/Officer pages** + `features/*` used by them
 - [ ] **Step 5 – Remaining dashboard pages** (profile, inspections, sla-risk, grievances, notifications, integrations, demo) + final QA (alignment, mobile, build)
