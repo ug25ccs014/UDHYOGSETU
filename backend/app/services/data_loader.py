@@ -89,18 +89,8 @@ class RuleLoadingService:
                 select(Scheme).where(Scheme.name == scheme_data['name'])
             )
             
-            existing_doc = result.scalar_one_or_none()
-            if existing_doc:
-                # Upgrade chunks created before section-aware chunking existed.
-                first = await self.db.execute(
-                    select(KnowledgeChunk).where(KnowledgeChunk.document_id == existing_doc.id)
-                    .order_by(KnowledgeChunk.chunk_index).limit(1)
-                )
-                first_chunk = first.scalars().first()
-                if pipeline._split_markdown_sections(text) and not (first_chunk and "›" in first_chunk.text.split("\n", 1)[0]):
-                    existing_doc.text = text
-                    await pipeline.reindex_document(existing_doc)
-                continue
+            if result.scalar_one_or_none():
+                continue  # Skip existing
             
             scheme = Scheme(
                 name=scheme_data['name'],
@@ -211,8 +201,18 @@ class RuleLoadingService:
             result = await self.db.execute(
                 select(KnowledgeDocument).where(KnowledgeDocument.title == title)
             )
-            if result.scalar_one_or_none():
-                continue  # Skip existing
+            existing_doc = result.scalar_one_or_none()
+            if existing_doc:
+                # Upgrade chunks created before section-aware chunking existed.
+                first = await self.db.execute(
+                    select(KnowledgeChunk).where(KnowledgeChunk.document_id == existing_doc.id)
+                    .order_by(KnowledgeChunk.chunk_index).limit(1)
+                )
+                first_chunk = first.scalars().first()
+                if pipeline._split_markdown_sections(text) and not (first_chunk and "›" in first_chunk.text.split("\n", 1)[0]):
+                    existing_doc.text = text
+                    await pipeline.reindex_document(existing_doc)
+                continue
             
             await pipeline.ingest_document(
                 title=title,
