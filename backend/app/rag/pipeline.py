@@ -8,6 +8,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models import KnowledgeChunk, KnowledgeDocument
+from app.rag.language import NO_CONTEXT_MESSAGES, language_instruction
 
 logger = logging.getLogger(__name__)
 
@@ -368,6 +369,7 @@ ANSWER:"""
         query: str,
         llm_provider=None,
         project_context: str | None = None,
+        language: str = "en",
     ) -> dict:
         """
         Generate answer using RAG
@@ -377,7 +379,7 @@ ANSWER:"""
         
         if not context_chunks:
             return {
-                'answer': (
+                'answer': NO_CONTEXT_MESSAGES.get(language) or (
                     'I could not find this in the regulations I have. Try asking about a specific approval '
                     '(for example factory licence, MPCB consent, boiler registration or fire NOC), '
                     'or rephrase your question with more detail.'
@@ -400,7 +402,7 @@ ANSWER:"""
             "Answer the specific question asked and keep the answer concise. "
             "Always provide sources. "
             "Never present yourself as a legal authority."
-        )
+        ) + language_instruction(language)
 
         from app.services.ai_observability import AIObservability
         obs = AIObservability(self.db)

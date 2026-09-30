@@ -33,38 +33,40 @@ import { getSessionUser, isTokenExpired, logout } from '@/lib/auth'
 import NotificationBell from '@/features/NotificationBell'
 import OfflineStatusBanner from '@/features/OfflineStatusBanner'
 import CopilotDrawer from '@/features/CopilotDrawer'
+import LanguageSwitcher from '@/components/LanguageSwitcher'
+import { useLanguage, TKey } from '@/lib/language'
 
-const navGroups = [
+const navGroups: { label: TKey; items: { href: string; label: TKey; icon: any }[] }[] = [
   {
-    label: 'Start here',
+    label: 'nav.groupStart',
     items: [
-      { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-      { href: '/dashboard/new-project', label: 'New Project', icon: Plus },
-      { href: '/dashboard/explore', label: 'Explore Services', icon: Compass },
+      { href: '/dashboard', label: 'nav.dashboard', icon: LayoutDashboard },
+      { href: '/dashboard/new-project', label: 'nav.newProject', icon: Plus },
+      { href: '/dashboard/explore', label: 'nav.explore', icon: Compass },
     ],
   },
   {
-    label: 'My work',
+    label: 'nav.groupWork',
     items: [
-      { href: '/dashboard/applications', label: 'Applications', icon: ClipboardList },
-      { href: '/dashboard/profile', label: 'Business Profile', icon: UserRound },
-      { href: '/dashboard/inspections', label: 'Inspections', icon: CalendarDays },
+      { href: '/dashboard/applications', label: 'nav.applications', icon: ClipboardList },
+      { href: '/dashboard/profile', label: 'nav.profile', icon: UserRound },
+      { href: '/dashboard/inspections', label: 'nav.inspections', icon: CalendarDays },
     ],
   },
   {
-    label: 'Stay on track',
+    label: 'nav.groupTrack',
     items: [
-      { href: '/dashboard/sla-risk', label: 'SLA & Risk', icon: ShieldAlert },
-      { href: '/dashboard/grievances', label: 'Grievances', icon: MessageSquare },
-      { href: '/dashboard/notifications', label: 'Notifications', icon: Bell },
-      { href: '/dashboard/regulatory', label: 'Regulatory Updates', icon: History },
+      { href: '/dashboard/sla-risk', label: 'nav.slaRisk', icon: ShieldAlert },
+      { href: '/dashboard/grievances', label: 'nav.grievances', icon: MessageSquare },
+      { href: '/dashboard/notifications', label: 'nav.notifications', icon: Bell },
+      { href: '/dashboard/regulatory', label: 'nav.regulatory', icon: History },
     ],
   },
   {
-    label: 'More',
+    label: 'nav.groupMore',
     items: [
-      { href: '/dashboard/integrations', label: 'Government Integrations', icon: ShieldCheck },
-      { href: '/dashboard/demo', label: 'SIH Demo Center', icon: FlaskConical },
+      { href: '/dashboard/integrations', label: 'nav.integrations', icon: ShieldCheck },
+      { href: '/dashboard/demo', label: 'nav.demo', icon: FlaskConical },
     ],
   },
 ]
@@ -73,18 +75,19 @@ const navItems = navGroups.flatMap((g) => g.items)
 // Top-level dashboard segments that are NOT a project id.
 const reservedSegments = new Set(['new-project', 'explore', 'applications', 'profile', 'inspections', 'sla-risk', 'grievances', 'notifications', 'regulatory', 'integrations', 'demo'])
 
-const projectNavItems = [
-  { key: '', label: 'Command Center', icon: FolderOpen },
-  { key: 'approvals', label: 'Approvals', icon: FileText },
-  { key: 'documents', label: 'Documents', icon: FileText },
-  { key: 'compliance', label: 'Compliance', icon: ShieldCheck },
-  { key: 'copilot', label: 'Regulatory Copilot', icon: Bot },
-  { key: 'schemes', label: 'Schemes & Support', icon: Gift },
-  { key: 'regulatory', label: 'Regulatory Updates', icon: History },
-  { key: 'simulate', label: 'Scenario Simulator', icon: FlaskConical },
+const projectNavItems: { key: string; label: TKey; icon: any }[] = [
+  { key: '', label: 'nav.commandCenter', icon: FolderOpen },
+  { key: 'approvals', label: 'nav.approvals', icon: FileText },
+  { key: 'documents', label: 'nav.documents', icon: FileText },
+  { key: 'compliance', label: 'nav.compliance', icon: ShieldCheck },
+  { key: 'copilot', label: 'nav.copilot', icon: Bot },
+  { key: 'schemes', label: 'nav.schemes', icon: Gift },
+  { key: 'regulatory', label: 'nav.regulatory', icon: History },
+  { key: 'simulate', label: 'nav.simulate', icon: FlaskConical },
 ]
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+  const { t } = useLanguage()
   const pathname = usePathname()
   const router = useRouter()
   const [user, setUser] = useState<{ name: string; role: string } | null>(null)
@@ -115,10 +118,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   }
 
   const isProjectContext = !!currentProjectId
-  const currentTitle = isProjectContext
-    ? projectNavItems.find((i) => i.key === currentProjectTab)?.label ?? 'Project'
+  const currentTitleKey: TKey = isProjectContext
+    ? projectNavItems.find((i) => i.key === currentProjectTab)?.label ?? 'shell.projectFallback'
     : [...navItems].sort((a, b) => b.href.length - a.href.length).find((i) => i.href === '/dashboard' ? pathname === '/dashboard' : pathname === i.href || pathname.startsWith(`${i.href}/`))?.label
-      ?? (pathname.startsWith('/dashboard/officer') ? 'Officer Command Center' : 'Dashboard')
+      ?? (pathname.startsWith('/dashboard/officer') ? 'nav.officer' : 'nav.dashboard')
+  const currentTitle = t(currentTitleKey)
 
   const sidebar = (
     <>
@@ -137,18 +141,18 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           type="button"
           onClick={() => setSidebarOpen(false)}
           className="lg:hidden inline-flex items-center justify-center w-9 h-9 rounded-lg text-gray-500 hover:bg-gray-100"
-          aria-label="Close sidebar"
+          aria-label={t('shell.closeSidebar')}
         >
           <X className="w-5 h-5" />
         </button>
       </div>
 
-      <nav className="flex-1 space-y-5 overflow-y-auto px-4 py-5" aria-label="Main navigation">
+      <nav className="flex-1 space-y-5 overflow-y-auto px-4 py-5" aria-label={t('nav.main')}>
         {!isProjectContext && (
           <>
         {navGroups.map((group) => (
           <div key={group.label}>
-            <p className="mb-1.5 px-3 text-[11px] font-extrabold uppercase tracking-[.16em] text-gray-400">{group.label}</p>
+            <p className="mb-1.5 px-3 text-[11px] font-extrabold uppercase tracking-[.16em] text-gray-400">{t(group.label)}</p>
             <div className="space-y-0.5">
               {group.items.map((item) => {
                 const active = item.href === '/dashboard'
@@ -167,7 +171,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     )}
                   >
                     <Icon className={cn('h-[18px] w-[18px] flex-none', active ? 'text-sun' : 'text-gray-400')} />
-                    {item.label}
+                    {t(item.label)}
                   </Link>
                 )
               })}
@@ -188,7 +192,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             )}
           >
             <ShieldAlert className="h-[18px] w-[18px] flex-none" />
-            Officer Command Center
+            {t('nav.officer')}
           </Link>
         )}
           </>
@@ -202,11 +206,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               className="mb-1 flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold text-gray-500 transition-all duration-200 hover:bg-white hover:text-navy"
             >
               <ArrowLeft className="h-[18px] w-[18px] flex-none" />
-              Back to Dashboard
+              {t('shell.backToDashboard')}
             </Link>
             <div className="pt-2 pb-1">
               <p className="px-3 text-[11px] font-extrabold uppercase tracking-[.16em] text-teal-700">
-                This project
+                {t('shell.thisProject')}
               </p>
             </div>
             <div className="space-y-0.5">
@@ -227,7 +231,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     )}
                   >
                     <Icon className={cn('h-[18px] w-[18px] flex-none', active ? 'text-sun' : 'text-gray-400')} />
-                    {item.label}
+                    {t(item.label)}
                   </Link>
                 )
               })}
@@ -244,7 +248,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium text-gray-900 truncate capitalize">{user?.name}</p>
             <p className="text-xs text-gray-500">
-              {user?.role === 'OFFICER' ? 'Officer' : 'Entrepreneur'}
+              {user?.role === 'OFFICER' ? t('shell.roleOfficer') : t('shell.roleEntrepreneur')}
             </p>
           </div>
         </div>
@@ -255,7 +259,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           onClick={handleLogout}
         >
           <LogOut className="w-4 h-4 mr-2" />
-          Logout
+          {t('shell.logout')}
         </Button>
       </div>
     </>
@@ -263,7 +267,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   return (
     <div className="min-h-screen bg-cream">
-      <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-gray-900 focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-white">Skip to main content</a>
+      <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-gray-900 focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-white">{t('shell.skipToMain')}</a>
       {sidebarOpen && (
         <div
           className="fixed inset-0 z-40 bg-black/50 lg:hidden"
@@ -288,10 +292,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <main id="main-content" tabIndex={-1} className="lg:ml-64 min-h-screen outline-none">
         <div className="sticky top-0 z-30 hidden h-16 items-center justify-between border-b border-gray-200 bg-cream/85 px-8 backdrop-blur-md lg:flex">
           <div className="min-w-0">
-            <p className="text-[11px] font-extrabold uppercase tracking-[.16em] text-gray-400">{isProjectContext ? 'Project' : 'UDYOGSETU'}</p>
+            <p className="text-[11px] font-extrabold uppercase tracking-[.16em] text-gray-400">{isProjectContext ? t('shell.project') : 'UDYOGSETU'}</p>
             <p className="truncate text-sm font-bold text-navy">{currentTitle}</p>
           </div>
-          <NotificationBell />
+          <div className="flex items-center gap-3">
+            <LanguageSwitcher />
+            <NotificationBell />
+          </div>
         </div>
         <div className="sticky top-0 z-30 flex items-center justify-between border-b border-gray-200 bg-cream/90 px-4 py-3 backdrop-blur-md lg:hidden">
           <Link href="/dashboard" className="flex items-center gap-2">
@@ -301,12 +308,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <span className="text-base font-extrabold tracking-tight text-navy">UDYOGSETU</span>
           </Link>
           <div className="flex items-center gap-1">
+            <LanguageSwitcher iconOnlyOnMobile />
             <NotificationBell />
             <button
               type="button"
               onClick={() => setSidebarOpen(true)}
               className="inline-flex h-10 w-10 items-center justify-center rounded-xl text-gray-600 hover:bg-white"
-              aria-label="Open menu"
+              aria-label={t('shell.openMenu')}
             >
               <Menu className="w-6 h-6" />
             </button>

@@ -11,11 +11,14 @@ class RAGService:
     def __init__(self, db: AsyncSession):
         self.db = db
 
-    async def answer_regulatory_question(self, question: str, project_id: UUID | None = None) -> dict:
+    async def answer_regulatory_question(self, question: str, project_id: UUID | None = None, language: str = "en") -> dict:
         """Answer regulatory question using RAG"""
         pipeline = RAGPipeline(self.db)
         project_context = await self._project_context(project_id)
-        result = await pipeline.generate_answer(question, project_context=project_context)
+        if language and language != "en":
+            result = await pipeline.generate_answer(question, project_context=project_context, language=language)
+        else:
+            result = await pipeline.generate_answer(question, project_context=project_context)
 
         relevant_regulations = [
             source.get("title", "") for source in result["sources"] if source.get("title")

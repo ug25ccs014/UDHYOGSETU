@@ -4,6 +4,8 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { ArrowLeft, Building2, CheckCircle2 } from 'lucide-react'
 import AuroraBackground from '@/components/fx/AuroraBackground'
+import LanguageSwitcher from '@/components/LanguageSwitcher'
+import { useLanguage } from '@/lib/language'
 
 /**
  * Shared layout for /login and /register.
@@ -19,6 +21,7 @@ export default function AuthShell({
   children: React.ReactNode
   footer: React.ReactNode
 }) {
+  const { t } = useLanguage()
   return (
     <main className="grid min-h-screen bg-cream lg:grid-cols-[1.05fr_1fr]">
       {/* Story panel */}
@@ -33,7 +36,7 @@ export default function AuthShell({
         </Link>
         <div className="relative z-10 max-w-md">
           <h2 className="text-4xl font-extrabold leading-tight tracking-tight">
-            From idea to industry, <span className="text-sun">one clear path.</span>
+            {t('auth.headline1')} <span className="text-sun">{t('auth.headline2')}</span>
           </h2>
           <ul className="mt-8 space-y-4">
             {points.map((p, i) => (
@@ -49,14 +52,15 @@ export default function AuthShell({
             ))}
           </ul>
         </div>
-        <p className="relative z-10 text-xs text-blue-200">© 2026 UDYOGSETU · Smart India Hackathon prototype</p>
+        <p className="relative z-10 text-xs text-blue-200">{t('auth.copyright')}</p>
       </aside>
 
       {/* Form side */}
       <section className="relative flex items-center justify-center px-5 py-10 sm:px-8">
         <Link href="/" className="absolute left-5 top-5 inline-flex items-center gap-1.5 text-sm font-semibold text-gray-500 transition hover:text-navy sm:left-8 sm:top-8">
-          <ArrowLeft className="h-4 w-4" /> Home
+          <ArrowLeft className="h-4 w-4" /> {t('auth.home')}
         </Link>
+        <LanguageSwitcher className="absolute right-5 top-5 sm:right-8 sm:top-8" />
         <motion.div
           initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}

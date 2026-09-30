@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { apiClient } from '@/services/api'
+import { useLanguage } from '@/lib/language'
 import {
   cacheApprovalGraph,
   cacheProjectApprovals,
@@ -242,9 +243,10 @@ export function useUploadDocument() {
 }
 
 export function useRegulatoryQuery() {
+  const { language } = useLanguage()
   return useMutation({
     mutationFn: ({ question, projectId }: { question: string; projectId?: string }) =>
-      apiClient.queryRegulatoryCopilot(question, projectId),
+      apiClient.queryRegulatoryCopilot(question, projectId, language),
   })
 }
 

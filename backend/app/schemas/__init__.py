@@ -420,6 +420,7 @@ class ChatMessage(BaseModel):
 class ChatQuery(BaseModel):
     question: str = Field(min_length=1)
     project_id: UUID | None = None
+    language: str = "en"  # UI language: en | hi | mr (answer language only)
 
 
 class ChatResponse(BaseModel):

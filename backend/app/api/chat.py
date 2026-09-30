@@ -22,7 +22,7 @@ async def query_regulatory_copilot(
     if query.project_id:
         await require_project_owner(query.project_id, user, db)
     workflow = CopilotWorkflow(db)
-    response = await workflow.route(query.question, query.project_id)
+    response = await workflow.route(query.question, query.project_id, language=query.language)
     return response
 
 @router.get("/history/{project_id}")

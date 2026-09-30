@@ -12,15 +12,18 @@ import { Input } from '@/components/ui/input'
 import AuthShell from '@/components/AuthShell'
 import { apiClient } from '@/services/api'
 import { getRoleFromToken, setSession } from '@/lib/auth'
+import { useLanguage, TKey } from '@/lib/language'
 
+// Messages are translation keys, resolved at render time in the selected language.
 const loginSchema = z.object({
-  email: z.string().email('Enter a valid email address'),
-  password: z.string().min(8, 'Password must be at least 8 characters'),
+  email: z.string().email('auth.vEmail'),
+  password: z.string().min(8, 'auth.vPassword'),
 })
 
 type LoginForm = z.infer<typeof loginSchema>
 
 export default function LoginPage() {
+  const { t } = useLanguage()
   const router = useRouter()
   const [error, setError] = useState<string | null>(null)
   const [justRegistered, setJustRegistered] = useState(false)
@@ -43,29 +46,25 @@ export default function LoginPage() {
       setSession(token, { email: data.email, role })
       router.push(role === 'OFFICER' || role === 'ADMIN' ? '/dashboard/officer' : '/dashboard')
     } catch (err: any) {
-      setError(err.response?.data?.detail || 'Invalid email or password')
+      setError(err.response?.data?.detail || t('auth.invalidLogin'))
     }
   }
 
   return (
     <AuthShell
-      title="Welcome back"
-      subtitle="Sign in to continue your projects and applications."
-      points={[
-        'Pick up exactly where you left off',
-        'See which approvals and documents are pending',
-        'Get alerts for queries, inspections and deadlines',
-      ]}
+      title={t('auth.loginTitle')}
+      subtitle={t('auth.loginSub')}
+      points={[t('auth.loginP1'), t('auth.loginP2'), t('auth.loginP3')]}
       footer={
         <>
-          Don&apos;t have an account?{' '}
-          <Link href="/register" className="font-bold text-blue-600 hover:text-blue-500">Create one</Link>
+          {t('auth.noAccount')}{' '}
+          <Link href="/register" className="font-bold text-blue-600 hover:text-blue-500">{t('auth.createOne')}</Link>
         </>
       }
     >
       {justRegistered && (
         <div role="status" className="mb-5 flex items-start gap-2 rounded-xl border border-teal-100 bg-teal-50 p-3 text-sm text-teal-700">
-          <CheckCircle2 className="mt-0.5 h-4 w-4 flex-none" /> Account created. Please sign in to continue.
+          <CheckCircle2 className="mt-0.5 h-4 w-4 flex-none" /> {t('auth.registered')}
         </div>
       )}
       {error && (
@@ -74,25 +73,25 @@ export default function LoginPage() {
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
         <div>
-          <label htmlFor="email" className="mb-1 block text-sm font-semibold text-gray-700">Email address</label>
+          <label htmlFor="email" className="mb-1 block text-sm font-semibold text-gray-700">{t('auth.email')}</label>
           <div className="relative">
             <Mail className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
             <Input id="email" type="email" placeholder="you@company.com" autoComplete="email" className="pl-10" {...register('email')} />
           </div>
-          {errors.email && <p className="mt-1 text-xs text-red-600">{errors.email.message}</p>}
+          {errors.email && <p className="mt-1 text-xs text-red-600">{t(errors.email.message as TKey)}</p>}
         </div>
 
         <div>
-          <label htmlFor="password" className="mb-1 block text-sm font-semibold text-gray-700">Password</label>
+          <label htmlFor="password" className="mb-1 block text-sm font-semibold text-gray-700">{t('auth.password')}</label>
           <div className="relative">
             <Lock className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
             <Input id="password" type="password" placeholder="••••••••" autoComplete="current-password" className="pl-10" {...register('password')} />
           </div>
-          {errors.password && <p className="mt-1 text-xs text-red-600">{errors.password.message}</p>}
+          {errors.password && <p className="mt-1 text-xs text-red-600">{t(errors.password.message as TKey)}</p>}
         </div>
 
         <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
-          {isSubmitting ? (<><Loader2 className="h-4 w-4 animate-spin" /> Signing in...</>) : 'Sign in'}
+          {isSubmitting ? (<><Loader2 className="h-4 w-4 animate-spin" /> {t('auth.signingIn')}</>) : t('auth.signIn')}
         </Button>
       </form>
     </AuthShell>

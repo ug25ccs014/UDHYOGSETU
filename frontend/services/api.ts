@@ -200,8 +200,13 @@ class ApiClient {
     return response.data
   }
 
-  async queryRegulatoryCopilot(question: string, projectId?: string) {
-    const response = await this.client.post('/chat/query', { question, project_id: projectId })
+  async queryRegulatoryCopilot(question: string, projectId?: string, language?: string) {
+    // `language` (en|hi|mr) only selects the answer language; it is omitted when not provided.
+    const response = await this.client.post('/chat/query', {
+      question,
+      project_id: projectId,
+      ...(language ? { language } : {}),
+    })
     return response.data
   }
 

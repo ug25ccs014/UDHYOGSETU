@@ -18,6 +18,7 @@ import logging
 import re
 from uuid import UUID
 
+from app.rag.language import english_for_retrieval, language_instruction
 from app.services.gateway_service import GatewayService
 from app.services.rag_service import RAGService
 
@@ -90,7 +91,9 @@ class CopilotWorkflow:
                 best, best_score = intent, scores[intent]
         return best
 
-    async def route(self, question: str, project_id: UUID | None) -> dict:
+    async def route(self, question: str, project_id: UUID | None, language: str = "en") -> dict:
+        if language and language != "en":
+            question = await english_for_retrieval(question, language)
         intent = self.detect_intent(question)
         try:
             if intent == "document" and project_id:
@@ -101,8 +104,8 @@ class CopilotWorkflow:
                 return await self._scheme_flow(question, project_id, intent)
             # Default + regulation -> RAG. General queries may use tools.
             if intent == "general" and project_id:
-                return await self._general_flow(question, project_id)
-            return await self._regulation_flow(question, project_id, intent)
+                return await self._general_flow(question, project_id, language)
+            return await self._regulation_flow(question, project_id, intent, language)
         except Exception as exc:
             logger.exception("Copilot workflow routing failed")
             return {
@@ -114,7 +117,7 @@ class CopilotWorkflow:
                 "confidence": 0.0,
             }
 
-    async def _general_flow(self, question: str, project_id: UUID) -> dict:
+    async def _general_flow(self, question: str, project_id: UUID, language: str = "en") -> dict:
         """Answer a general query using controlled tool calls (spec §11).
 
         The model is asked to pick relevant tools (as a structured JSON list);
@@ -173,7 +176,8 @@ class CopilotWorkflow:
         start = _time.perf_counter()
         try:
             answer = await generate_with_fallback(
-                "You are UdyogSetu. Ground every claim in the provided tool results. Do not invent data.",
+                "You are UdyogSetu. Ground every claim in the provided tool results. Do not invent data."
+                + language_instruction(language),
                 answer_prompt,
                 temperature=0.2,
             )
@@ -196,8 +200,11 @@ class CopilotWorkflow:
             "tool_results": outputs,
         }
 
-    async def _regulation_flow(self, question: str, project_id: UUID | None, intent: str) -> dict:
-        result = await self.rag.answer_regulatory_question(question, project_id=project_id)
+    async def _regulation_flow(self, question: str, project_id: UUID | None, intent: str, language: str = "en") -> dict:
+        if language and language != "en":
+            result = await self.rag.answer_regulatory_question(question, project_id=project_id, language=language)
+        else:
+            result = await self.rag.answer_regulatory_question(question, project_id=project_id)
         return {
             "intent": intent,
             "engine": "rag",
