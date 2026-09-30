@@ -54,7 +54,7 @@ function formatDue(days?: number | null) {
 }
 
 function lifecycleLabel(status: string) {
-  return status.replaceAll('_', ' ')
+ return status.split('_').join(' ')
 }
 
 export default function ProjectCompliancePage() {
